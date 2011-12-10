@@ -189,4 +189,13 @@ Public Class frm_main
     Private Sub TvKryptonTextBox2_Load(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
     End Sub
+
+    Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
+        Me._MusicFile.Save()
+    End Sub
+
+    Private Sub kbtn_editing_thumbnail_clear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_clear.Click
+        Me._MusicFile.ClearThumbnail()
+        Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+    End Sub
 End Class

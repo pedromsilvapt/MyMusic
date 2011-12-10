@@ -95,8 +95,13 @@ Public Class MusicFile
             End If
         End Get
         Set(ByVal value As Image)
-            Dim pictures(1) As Picture
-            pictures(0) = New Picture(value)
+            value.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
+
+            Dim pictures(0) As Picture
+            pictures(0) = New Picture(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
+
+            My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
+
             Me.MusicTags.Tag.Pictures = pictures
             Me._Thumbnail = value
         End Set
@@ -110,6 +115,11 @@ Public Class MusicFile
 
         End Set
     End Property
+
+    Public Sub ClearThumbnail()
+        Me._Thumbnail = Nothing
+        Me.MusicTags.Tag.Pictures = Nothing
+    End Sub
 
     Public Sub Save()
         Me.MusicTags.Save()
@@ -128,8 +138,7 @@ Public Class MusicFile
         Me.MusicTags = TagLib.File.Create(music)
 
         If (image <> "") Then
-            Me._Thumbnail = Bitmap.FromFile(image)
-            'Me.Thumbnail = Bitmap.FromFile(image)
+            Me.Thumbnail = Bitmap.FromFile(image)
         End If
     End Sub
 End Class
