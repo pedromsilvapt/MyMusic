@@ -1,0 +1,135 @@
+﻿Imports System.IO
+Imports TagLib
+
+Public Class MusicFile
+    Public MusicPath As String
+    Public _Thumbnail As Image
+    Public MusicTags As TagLib.File
+
+    Public Property Album As String
+        Get
+            Return Me.MusicTags.Tag.Album
+        End Get
+        Set(ByVal value As String)
+            Me.MusicTags.Tag.Album = value
+        End Set
+    End Property
+
+    Public Property Title As String
+        Get
+            Return Me.MusicTags.Tag.Title
+        End Get
+        Set(ByVal value As String)
+            Me.MusicTags.Tag.Title = value
+        End Set
+    End Property
+
+    Public Property Legend As String
+        Get
+            Return Me.MusicTags.Tag.Comment
+        End Get
+        Set(ByVal value As String)
+            Me.MusicTags.Tag.Comment = value
+        End Set
+    End Property
+
+    Public Property Artists As Array
+        Get
+            Return Me.MusicTags.Tag.Performers
+        End Get
+        Set(ByVal value As Array)
+            Me.MusicTags.Tag.Performers = value
+        End Set
+    End Property
+
+    Public Property AlbumArtist As String
+        Get
+            If (Me.MusicTags.Tag.AlbumArtists.Length > 0) Then
+                Return Me.MusicTags.Tag.AlbumArtists(0)
+            Else
+                Return Nothing
+            End If
+        End Get
+        Set(ByVal value As String)
+            Dim temp(0) As String
+            temp(0) = value
+            Me.MusicTags.Tag.AlbumArtists = temp
+        End Set
+    End Property
+
+    Public Property Year As Integer
+        Get
+            Return Me.MusicTags.Tag.Year
+        End Get
+        Set(ByVal value As Integer)
+            Me.MusicTags.Tag.Year = value
+        End Set
+    End Property
+
+    Public Property Number As Integer
+        Get
+            Return Me.MusicTags.Tag.Track
+        End Get
+        Set(ByVal value As Integer)
+            Me.MusicTags.Tag.Track = value
+        End Set
+    End Property
+
+    Public Property Genres As Array
+        Get
+            Return Me.MusicTags.Tag.Genres
+        End Get
+        Set(ByVal value As Array)
+            Me.MusicTags.Tag.Genres = value
+        End Set
+    End Property
+
+    Public Property Thumbnail As Image
+        Get
+            If (Me.MusicTags.Tag.Pictures.Length > 0) Then
+                Dim bin = DirectCast(MusicTags.Tag.Pictures(0).Data.Data, Byte())
+                Me._Thumbnail = Bitmap.FromStream(New MemoryStream(bin))
+                Return Me._Thumbnail
+            Else
+                Return Nothing
+            End If
+        End Get
+        Set(ByVal value As Image)
+            Dim pictures(1) As Picture
+            pictures(0) = New Picture(value)
+            Me.MusicTags.Tag.Pictures = pictures
+            Me._Thumbnail = value
+        End Set
+    End Property
+
+    Public Property Rate As Integer
+        Get
+            'Me.MusicTags.Tag.
+        End Get
+        Set(ByVal value As Integer)
+
+        End Set
+    End Property
+
+    Public Sub Save()
+        Me.MusicTags.Save()
+    End Sub
+
+    Public Sub New(ByVal music As String, Optional ByVal image As String = "")
+        If (Not My.Computer.FileSystem.FileExists(music)) Then
+            Throw New Exception("O ficheiro de música especificado não existe.")
+        End If
+        If (Not My.Computer.FileSystem.FileExists(image) And image <> "") Then
+            Throw New Exception("O thumbnail especificado não existe.")
+        End If
+
+        Me.MusicPath = music
+
+        Me.MusicTags = TagLib.File.Create(music)
+
+        If (image <> "") Then
+            Me._Thumbnail = Bitmap.FromFile(image)
+            'Me.Thumbnail = Bitmap.FromFile(image)
+        End If
+    End Sub
+End Class

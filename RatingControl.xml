@@ -1,0 +1,68 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+RatingControl
+</name>
+</assembly>
+<members>
+<member name="P:Softclean.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Softclean.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Softclean.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="P:Softclean.RatingControl.Value">
+	<summary>
+ Current rating
+ </summary>
+	<returns>The value of selected rating (Integer)</returns>
+</member><member name="E:Softclean.RatingControl.RatingUpdated">
+	<summary>
+ Event raised when the rating is updated
+ </summary>
+	<param name="curRating">The rating</param>
+</member><member name="M:Softclean.RatingControl.#ctor">
+	<summary>
+ Creates a new instance of RatingControl
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Softclean.RatingControl.updateRating(System.Int32)">
+	<summary>
+ Updates the rating, by receiving a value
+ </summary>
+	<param name="i">The nr of stars (must be between 0 and 5)</param>
+</member><member name="M:Softclean.RatingControl.RatingControl_Load(System.Object,System.EventArgs)">
+	<summary>
+ Create the stars and does some more routines
+ </summary>
+</member><member name="M:Softclean.RatingControl.starClick(System.Object,System.EventArgs)">
+	<summary>
+ Handles the click on a star, and set the apropriate rating
+ </summary>
+</member><member name="M:Softclean.RatingControl.cleanRating">
+	<summary>
+ Cleans rating and puts value to 0
+ </summary>
+</member><member name="M:Softclean.RatingControl.toString">
+	<summary>
+ Shows the text representation of this control
+ </summary>
+	<returns>The text representation of RatingControl (String)</returns>
+</member><member name="M:Softclean.RatingControl.equals(System.Object)">
+	<summary>
+ Check if a given object is equals to the current control
+ </summary>
+	<param name="o">The other object to compare</param>
+	<returns>True if object is equal, false otherwise</returns>
+	<remarks>Two RatingControl objects are equal if they have the same value (rating)</remarks>
+</member>
+</members>
+</doc>
