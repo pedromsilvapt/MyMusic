@@ -16,3 +16,4 @@ C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Debu
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Debug\RatingControl.dll
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Debug\RatingControl.xml
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Debug\MyMusic.TVKryptonTextBox.resources
+C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Debug\MyMusic.KLabelToTextBox.resources
