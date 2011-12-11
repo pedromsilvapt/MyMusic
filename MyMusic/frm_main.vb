@@ -46,6 +46,96 @@ Public Class frm_main
 
 #End Region
 
+#Region "Thumbnail"
+
+    Public Sub ChangeThumbnail(ByRef NewThumb As Image, Optional ByVal updateFile As Boolean = True)
+        If (updateFile = True) Then
+            Me._MusicFile.Thumbnail = NewThumb
+        End If
+
+        If (NewThumb Is Nothing) Then
+            Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+        Else
+            Me.pcb_editing_thumbnail.Image = NewThumb
+        End If
+    End Sub
+
+    Private Sub kbtn_editing_thumbnail_clear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_clear.Click
+        Me._MusicFile.ClearThumbnail()
+        Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+    End Sub
+
+    Private Sub kbtn_editing_thumbnail_export_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_export.Click
+        Dim res As Windows.Forms.DialogResult = Me.sfd_export_thumbnail.ShowDialog()
+        If res = Windows.Forms.DialogResult.OK Then
+            Me._MusicFile.Thumbnail.Save(Me.sfd_export_thumbnail.FileName)
+        End If
+    End Sub
+
+    Private Sub kbtn_editing_thumbnail_paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_paste.Click
+        If (My.Computer.Clipboard.ContainsImage) Then
+            Me._MusicFile.Thumbnail = My.Computer.Clipboard.GetImage()
+            Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+        ElseIf My.Computer.Clipboard.ContainsFileDropList Then
+            For Each _File As String In My.Computer.Clipboard.GetFileDropList
+                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                    Me._MusicFile.Thumbnail = Image.FromFile(_File)
+                    Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub kpnl_editing_thumbnail_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_editing_thumbnail.DragDrop
+        Dim paths As DragFiles = New DragFiles
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each _File As String In filePaths
+                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                    Me._MusicFile.Thumbnail = Image.FromFile(_File)
+                    Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub kpnl_editing_thumbnail_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_editing_thumbnail.DragEnter
+        Dim paths As DragFiles = New DragFiles
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each _File As String In filePaths
+                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                    Me.pcb_editing_thumbnail.Image = Image.FromFile(_File)
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub kpnl_editing_thumbnail_DragLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_editing_thumbnail.DragLeave
+        If (Not Me._MusicFile.Thumbnail Is Nothing) Then
+            Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+        Else
+            Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+        End If
+    End Sub
+
+#End Region
+
     Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
         Dim paths As DragFiles = New DragFiles
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
@@ -105,6 +195,8 @@ Public Class frm_main
 
         Me.kpnl_editing_music.Visible = False
         Me.kpnl_loading_music.Visible = True
+
+        Me.sfd_export_thumbnail.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyMusic
     End Sub
 
     Private Sub kpnl_loading_music_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragEnter
@@ -124,11 +216,10 @@ Public Class frm_main
         Me.tvktxt_year.TextBoxValue1 = Me._MusicFile.Year
         Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
         Me.tvktxt_genres.TextBoxValue1 = String.Join("; ", Me._MusicFile.Genres)
-        If (Not Me._MusicFile.Thumbnail Is Nothing) Then
-            Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
-        Else
-            Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+        If (image <> "") Then
+            Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
         End If
+        Me.ChangeThumbnail(Me._MusicFile.Thumbnail)
     End Sub
 
     Public Sub HideLoadingItems()
@@ -186,16 +277,7 @@ Public Class frm_main
         End If
     End Sub
 
-    Private Sub TvKryptonTextBox2_Load(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-    End Sub
-
     Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
         Me._MusicFile.Save()
-    End Sub
-
-    Private Sub kbtn_editing_thumbnail_clear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_clear.Click
-        Me._MusicFile.ClearThumbnail()
-        Me.pcb_editing_thumbnail.Image = My.Resources.MP3
     End Sub
 End Class
