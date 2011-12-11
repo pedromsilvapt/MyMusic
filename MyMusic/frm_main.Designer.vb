@@ -39,6 +39,7 @@ Partial Class frm_main
         Me.klbl_classification = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.rc_classification = New Softclean.RatingControl()
         Me.sfd_export_thumbnail = New System.Windows.Forms.SaveFileDialog()
+        Me.klbl_loading_drag_files = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
         Me.tvktxt_album = New MyMusic.TVKryptonTextBox()
         Me.tvktxt_genres = New MyMusic.TVKryptonTextBox()
@@ -62,6 +63,7 @@ Partial Class frm_main
         'kpnl_loading_music
         '
         Me.kpnl_loading_music.AllowDrop = True
+        Me.kpnl_loading_music.Controls.Add(Me.klbl_loading_drag_files)
         Me.kpnl_loading_music.Controls.Add(Me.kwlbl_loading_thumbnail_name)
         Me.kpnl_loading_music.Controls.Add(Me.pcb_loading_thumbnail)
         Me.kpnl_loading_music.Controls.Add(Me.kwlbl_loading_music_name)
@@ -261,6 +263,16 @@ Partial Class frm_main
         '
         Me.sfd_export_thumbnail.Title = "Exportar Thumbnail"
         '
+        'klbl_loading_drag_files
+        '
+        Me.klbl_loading_drag_files.Location = New System.Drawing.Point(143, 122)
+        Me.klbl_loading_drag_files.Name = "klbl_loading_drag_files"
+        Me.klbl_loading_drag_files.Size = New System.Drawing.Size(488, 53)
+        Me.klbl_loading_drag_files.StateCommon.ShortText.Color1 = System.Drawing.Color.White
+        Me.klbl_loading_drag_files.StateCommon.ShortText.Font = New System.Drawing.Font("Segoe WP", 26.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.klbl_loading_drag_files.TabIndex = 7
+        Me.klbl_loading_drag_files.Values.Text = "Arraste para aqui os ficheiros."
+        '
         'kltt_editing_filename
         '
         Me.kltt_editing_filename.BackColor = System.Drawing.Color.Transparent
@@ -411,8 +423,8 @@ Partial Class frm_main
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(762, 298)
-        Me.Controls.Add(Me.kpnl_editing_music)
         Me.Controls.Add(Me.kpnl_loading_music)
+        Me.Controls.Add(Me.kpnl_editing_music)
         Me.MaximizeBox = False
         Me.Name = "frm_main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -472,4 +484,5 @@ Partial Class frm_main
     Friend WithEvents sfd_export_thumbnail As System.Windows.Forms.SaveFileDialog
     Friend WithEvents kpnl_editing_thumbnail As ComponentFactory.Krypton.Toolkit.KryptonPanel
     Friend WithEvents kltt_editing_filename As MyMusic.KLabelToTextBox
+    Friend WithEvents klbl_loading_drag_files As ComponentFactory.Krypton.Toolkit.KryptonLabel
 End Class

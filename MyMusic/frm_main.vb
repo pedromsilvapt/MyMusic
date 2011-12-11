@@ -237,6 +237,7 @@ Public Class frm_main
 
     Private Sub kpnl_loading_music_DragLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_loading_music.DragLeave
         HideLoadingItems()
+        Me.klbl_loading_drag_files.Visible = True
     End Sub
 
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -254,6 +255,7 @@ Public Class frm_main
     Private Sub kpnl_loading_music_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragEnter
         Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
         If (paths.InvalidDrag = False) Then
+            Me.klbl_loading_drag_files.Visible = False
             Me.ShowLoadingPanel(paths.Music, paths.Image)
         End If
     End Sub
@@ -288,6 +290,9 @@ Public Class frm_main
 
     Public Sub ShowLoadingPanel(ByVal music_path As String, Optional ByVal image_path As String = "")
         Me.HideLoadingItems()
+
+        Dim TempMusicFile As MusicFile = New MusicFile(music_path)
+
         If (image_path <> "") Then
             Me.klbl_loading_music.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 - Me.klbl_loading_music.Size.Width - 50, 20)
             Me.klbl_loading_thumbnail.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 + 50, 20)
@@ -330,6 +335,13 @@ Public Class frm_main
 
             Me.kwlbl_loading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
         End If
+
+        If (Not TempMusicFile.Thumbnail Is Nothing) Then
+            Me.pcb_loading_music.Image = TempMusicFile.Thumbnail
+        Else
+            Me.pcb_loading_music.Image = My.Resources.MP3
+        End If
+
     End Sub
 
     Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
