@@ -208,6 +208,7 @@ Public Class frm_main
 
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
         Me._MusicFile = New MusicFile(music, image)
+        Me.kltt_editing_filename.Text = My.Computer.FileSystem.GetFileInfo(music).Name
         Me.tvktxt_title.TextBoxValue1 = Me._MusicFile.Title
         Me.tvktxt_comments.TextBoxValue1 = Me._MusicFile.Legend
         Me.tvktxt_artists.TextBoxValue1 = String.Join("; ", Me._MusicFile.Artists)
@@ -278,6 +279,10 @@ Public Class frm_main
     End Sub
 
     Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
-        Me._MusicFile.Save()
+        If (Me.kltt_editing_filename.Text = Me._MusicFile.MusicFileName) Then
+            Me._MusicFile.Save()
+        Else
+            Me._MusicFile.MusicFileName = Me.kltt_editing_filename.Text
+        End If
     End Sub
 End Class

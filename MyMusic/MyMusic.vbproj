@@ -103,6 +103,12 @@
       <DependentUpon>frm_main.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="KLabelToTextBox.Designer.vb">
+      <DependentUpon>KLabelToTextBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="KLabelToTextBox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="MusicFile.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -130,6 +136,9 @@
     <EmbeddedResource Include="frm_main.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frm_main.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KLabelToTextBox.resx">
+      <DependentUpon>KLabelToTextBox.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

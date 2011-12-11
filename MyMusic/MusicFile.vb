@@ -6,6 +6,34 @@ Public Class MusicFile
     Public _Thumbnail As Image
     Public MusicTags As TagLib.File
 
+    Public Property MusicFile As String
+        Get
+            Return Me.MusicPath
+        End Get
+        Set(ByVal value As String)
+            If (value <> Me.MusicPath) Then
+                Me.MusicTags.Save()
+                My.Computer.FileSystem.MoveFile(Me.MusicPath, value)
+                Me.MusicTags = TagLib.File.Create(value)
+                Me.MusicPath = value
+            End If
+        End Set
+    End Property
+
+    Public Property MusicFileName As String
+        Get
+            Return My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Name
+        End Get
+        Set(ByVal value As String)
+            If (value <> My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Name) Then
+                Me.MusicTags.Save()
+                My.Computer.FileSystem.RenameFile(Me.MusicPath, value)
+                Me.MusicTags = TagLib.File.Create(My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Directory.FullName & "\" & value)
+                Me.MusicPath = My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Directory.FullName & "\" & value
+            End If
+        End Set
+    End Property
+
     Public Property Album As String
         Get
             Return Me.MusicTags.Tag.Album

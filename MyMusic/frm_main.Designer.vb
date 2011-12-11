@@ -36,6 +36,10 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_export = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_clear = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_save = New ComponentFactory.Krypton.Toolkit.KryptonButton()
+        Me.klbl_classification = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
+        Me.rc_classification = New Softclean.RatingControl()
+        Me.sfd_export_thumbnail = New System.Windows.Forms.SaveFileDialog()
+        Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
         Me.tvktxt_album = New MyMusic.TVKryptonTextBox()
         Me.tvktxt_genres = New MyMusic.TVKryptonTextBox()
         Me.tvktxt_number = New MyMusic.TVKryptonTextBox()
@@ -44,9 +48,6 @@ Partial Class frm_main
         Me.tvktxt_artists = New MyMusic.TVKryptonTextBox()
         Me.tvktxt_comments = New MyMusic.TVKryptonTextBox()
         Me.tvktxt_title = New MyMusic.TVKryptonTextBox()
-        Me.klbl_classification = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
-        Me.rc_classification = New Softclean.RatingControl()
-        Me.sfd_export_thumbnail = New System.Windows.Forms.SaveFileDialog()
         CType(Me.kpnl_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_loading_music.SuspendLayout()
         CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -152,6 +153,7 @@ Partial Class frm_main
         '
         'kpnl_editing_music
         '
+        Me.kpnl_editing_music.Controls.Add(Me.kltt_editing_filename)
         Me.kpnl_editing_music.Controls.Add(Me.kpnl_editing_thumbnail)
         Me.kpnl_editing_music.Controls.Add(Me.KryptonButton2)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_editing_thumbnail_paste)
@@ -237,6 +239,35 @@ Partial Class frm_main
         Me.kbtn_editing_save.TabIndex = 12
         Me.kbtn_editing_save.Values.Image = Global.MyMusic.My.Resources.Resources.accept
         Me.kbtn_editing_save.Values.Text = "Aplicar"
+        '
+        'klbl_classification
+        '
+        Me.klbl_classification.Location = New System.Drawing.Point(76, 218)
+        Me.klbl_classification.Name = "klbl_classification"
+        Me.klbl_classification.Size = New System.Drawing.Size(82, 20)
+        Me.klbl_classification.StateCommon.ShortText.Color1 = System.Drawing.Color.White
+        Me.klbl_classification.TabIndex = 2
+        Me.klbl_classification.Values.Text = "Classificação:"
+        '
+        'rc_classification
+        '
+        Me.rc_classification.BackColor = System.Drawing.Color.Transparent
+        Me.rc_classification.Location = New System.Drawing.Point(65, 243)
+        Me.rc_classification.Name = "rc_classification"
+        Me.rc_classification.Size = New System.Drawing.Size(111, 24)
+        Me.rc_classification.TabIndex = 1
+        '
+        'sfd_export_thumbnail
+        '
+        Me.sfd_export_thumbnail.Title = "Exportar Thumbnail"
+        '
+        'kltt_editing_filename
+        '
+        Me.kltt_editing_filename.BackColor = System.Drawing.Color.Transparent
+        Me.kltt_editing_filename.Location = New System.Drawing.Point(44, 163)
+        Me.kltt_editing_filename.Name = "kltt_editing_filename"
+        Me.kltt_editing_filename.Size = New System.Drawing.Size(145, 47)
+        Me.kltt_editing_filename.TabIndex = 18
         '
         'tvktxt_album
         '
@@ -374,27 +405,6 @@ Partial Class frm_main
         Me.tvktxt_title.TextBoxX = 135.0!
         Me.tvktxt_title.ValueTwoEditable = False
         '
-        'klbl_classification
-        '
-        Me.klbl_classification.Location = New System.Drawing.Point(67, 163)
-        Me.klbl_classification.Name = "klbl_classification"
-        Me.klbl_classification.Size = New System.Drawing.Size(82, 20)
-        Me.klbl_classification.StateCommon.ShortText.Color1 = System.Drawing.Color.White
-        Me.klbl_classification.TabIndex = 2
-        Me.klbl_classification.Values.Text = "Classificação:"
-        '
-        'rc_classification
-        '
-        Me.rc_classification.BackColor = System.Drawing.Color.Transparent
-        Me.rc_classification.Location = New System.Drawing.Point(56, 188)
-        Me.rc_classification.Name = "rc_classification"
-        Me.rc_classification.Size = New System.Drawing.Size(111, 24)
-        Me.rc_classification.TabIndex = 1
-        '
-        'sfd_export_thumbnail
-        '
-        Me.sfd_export_thumbnail.Title = "Exportar Thumbnail"
-        '
         'frm_main
         '
         Me.AllowDrop = True
@@ -461,4 +471,5 @@ Partial Class frm_main
     Friend WithEvents KryptonButton2 As ComponentFactory.Krypton.Toolkit.KryptonButton
     Friend WithEvents sfd_export_thumbnail As System.Windows.Forms.SaveFileDialog
     Friend WithEvents kpnl_editing_thumbnail As ComponentFactory.Krypton.Toolkit.KryptonPanel
+    Friend WithEvents kltt_editing_filename As MyMusic.KLabelToTextBox
 End Class
