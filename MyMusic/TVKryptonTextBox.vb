@@ -94,18 +94,25 @@
         End Set
     End Property
 
+    Public Event AnyTextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
+    Public Event Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs)
+    Public Event Text2Changed(ByVal sender As Object, ByVal e As System.EventArgs)
 
     Private Sub KTextBox_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles KTextBox.TextChanged
         If (Me.KCheckBox.Checked = True) Then
             If (Me.Value2Editable = True) Then
                 Me.TextValue2 = Me.KTextBox.Text
+                RaiseEvent Text2Changed(sender, e)
             Else
                 Me.TextValue1 = Me.KTextBox.Text
                 Me.KCheckBox.Checked = False
+                RaiseEvent Text1Changed(sender, e)
             End If
         Else
             Me.TextValue1 = Me.KTextBox.Text
+            RaiseEvent Text1Changed(sender, e)
         End If
+        RaiseEvent AnyTextChanged(sender, e)
     End Sub
 
     Private Sub KCheckBox_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles KCheckBox.CheckedChanged
