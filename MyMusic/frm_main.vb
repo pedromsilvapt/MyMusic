@@ -18,18 +18,9 @@ Public Class frm_main
 
     Private Loading As Boolean = False
 
+    Private t_moving As Boolean = False
+
     Private WithEvents kpnl_transition_loading_editing As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
-
-    Private Sub kpnl_loading_music_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragDrop
-        Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
-
-        If (paths.InvalidDrag = False) Then
-            Me.music_path = paths.Music
-            Me.image_path = paths.Image
-            Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
-            Me.TransitionLoadingToEditingPanel()
-        End If
-    End Sub
 
 #Region "Transitions"
 
@@ -52,7 +43,11 @@ Public Class frm_main
 
     Public Sub ChangeThumbnail(ByRef NewThumb As Image, Optional ByVal updateFile As Boolean = True)
         If (updateFile = True) Then
-            Me._MusicFile.Thumbnail = NewThumb
+            If (NewThumb Is Nothing) Then
+                Me._MusicFile.ClearThumbnail()
+            Else
+                Me._MusicFile.Thumbnail = NewThumb
+            End If
         End If
 
         If (NewThumb Is Nothing) Then
@@ -63,11 +58,19 @@ Public Class frm_main
     End Sub
 
     Private Sub kbtn_editing_thumbnail_clear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_clear.Click
-        Me._MusicFile.ClearThumbnail()
-        Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+        Dim res As DialogResult = ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("Tem a certeza que pretende apagar o thumbnail da música?", "Apagar Thumbnail", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If (res = DialogResult.Yes) Then
+            Me.ChangeThumbnail(Nothing)
+        End If
     End Sub
 
     Private Sub kbtn_editing_thumbnail_export_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_export.Click
+
+        Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
+        name &= "_thumbnail.png"
+
+        Me.sfd_export_thumbnail.FileName = name
+        Me.sfd_export_thumbnail.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG)|*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG"
         Dim res As Windows.Forms.DialogResult = Me.sfd_export_thumbnail.ShowDialog()
         If res = Windows.Forms.DialogResult.OK Then
             Me._MusicFile.Thumbnail.Save(Me.sfd_export_thumbnail.FileName)
@@ -76,16 +79,22 @@ Public Class frm_main
 
     Private Sub kbtn_editing_thumbnail_paste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_paste.Click
         If (My.Computer.Clipboard.ContainsImage) Then
-            Me._MusicFile.Thumbnail = My.Computer.Clipboard.GetImage()
-            Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+            Me.ChangeThumbnail(My.Computer.Clipboard.GetImage())
         ElseIf My.Computer.Clipboard.ContainsFileDropList Then
+            Dim fileImage As Boolean = False
+
             For Each _File As String In My.Computer.Clipboard.GetFileDropList
                 If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
-                    Me._MusicFile.Thumbnail = Image.FromFile(_File)
-                    Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+                    Me.ChangeThumbnail(Image.FromFile(_File))
+                    fileImage = True
                     Exit For
                 End If
             Next
+            If (fileImage = False) Then
+                ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("Não colou nenhuma imagem.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        Else
+            ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("O tipo de dados colado não é suportado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
@@ -99,13 +108,21 @@ Public Class frm_main
 
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            Dim fileImage As Boolean = False
             For Each _File As String In filePaths
                 If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
-                    Me._MusicFile.Thumbnail = Image.FromFile(_File)
-                    Me.pcb_editing_thumbnail.Image = Me._MusicFile.Thumbnail
+                    Me.ChangeThumbnail(Image.FromFile(_File))
+                    fileImage = True
                     Exit For
                 End If
             Next
+            If (fileImage = False) Then
+                ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("Não arrastou nenhuma imagem.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        ElseIf (e.Data.GetDataPresent(DataFormats.Bitmap)) Then
+            Me.ChangeThumbnail(e.Data.GetData(DataFormats.Bitmap))
+        Else
+            ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("O tipo de dados arrastado não é suportado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 
@@ -121,10 +138,12 @@ Public Class frm_main
             Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             For Each _File As String In filePaths
                 If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
-                    Me.pcb_editing_thumbnail.Image = Image.FromFile(_File)
+                    Me.ChangeThumbnail(Image.FromFile(_File), False)
                     Exit For
                 End If
             Next
+        ElseIf (e.Data.GetDataPresent(DataFormats.Bitmap)) Then
+            Me.ChangeThumbnail(e.Data.GetData(DataFormats.Bitmap), False)
         End If
     End Sub
 
@@ -134,6 +153,31 @@ Public Class frm_main
         Else
             Me.pcb_editing_thumbnail.Image = My.Resources.MP3
         End If
+    End Sub
+
+
+    Private Sub pcb_editing_thumbnail_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles pcb_editing_thumbnail.MouseDown
+        Me.t_moving = True
+    End Sub
+
+    Private Sub pcb_editing_thumbnail_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles pcb_editing_thumbnail.MouseMove
+        If (Me.t_moving) Then
+            Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
+            name &= "_thumbnail.png"
+
+            Me.pcb_editing_thumbnail.Image.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
+
+            Dim fileas As String() = New [String](0) {}
+            fileas(0) = My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name
+            Dim dta = New DataObject(DataFormats.FileDrop, fileas)
+            dta.SetData(DataFormats.StringFormat, fileas)
+            dta.SetData(DataFormats.Bitmap, Me.pcb_editing_thumbnail.Image)
+            kpnl_editing_thumbnail.DoDragDrop(dta, DragDropEffects.Copy)
+
+
+            'kpnl_editing_thumbnail.DoDragDrop(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png", DragDropEffects.Copy)
+        End If
+        Me.t_moving = False
     End Sub
 
 #End Region
@@ -188,6 +232,34 @@ Public Class frm_main
     End Sub
 #End Region
 
+#Region "Startup Loading Panel"
+
+    Private Sub kpnl_loading_music_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragEnter
+        Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
+        If (paths.InvalidDrag = False) Then
+            Me.klbl_loading_drag_files.Visible = False
+            Me.ShowLoadingPanel(paths.Music, paths.Image)
+        End If
+    End Sub
+
+    Private Sub kpnl_loading_music_DragLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_loading_music.DragLeave
+        HideLoadingItems()
+        Me.klbl_loading_drag_files.Visible = True
+    End Sub
+
+    Private Sub kpnl_loading_music_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragDrop
+        Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
+
+        If (paths.InvalidDrag = False) Then
+            Me.music_path = paths.Music
+            Me.image_path = paths.Image
+            Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
+            Me.TransitionLoadingToEditingPanel()
+        End If
+    End Sub
+
+#End Region
+
     Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
         Dim paths As DragFiles = New DragFiles
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
@@ -235,10 +307,7 @@ Public Class frm_main
         Return paths
     End Function
 
-    Private Sub kpnl_loading_music_DragLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_loading_music.DragLeave
-        HideLoadingItems()
-        Me.klbl_loading_drag_files.Visible = True
-    End Sub
+
 
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.ImageFormats.Add(".jpg")
@@ -252,13 +321,7 @@ Public Class frm_main
         Me.sfd_export_thumbnail.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyMusic
     End Sub
 
-    Private Sub kpnl_loading_music_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragEnter
-        Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
-        If (paths.InvalidDrag = False) Then
-            Me.klbl_loading_drag_files.Visible = False
-            Me.ShowLoadingPanel(paths.Music, paths.Image)
-        End If
-    End Sub
+
 
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
         Me.Loading = True
@@ -345,10 +408,12 @@ Public Class frm_main
     End Sub
 
     Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
+        Me.pcb_editing_saving.Visible = True
         If (Me.kltt_editing_filename.Text = Me._MusicFile.MusicFileName) Then
             Me._MusicFile.Save()
         Else
             Me._MusicFile.MusicFileName = Me.kltt_editing_filename.Text
         End If
+        Me.pcb_editing_saving.Visible = False
     End Sub
 End Class
