@@ -16,6 +16,8 @@ Public Class frm_main
 
     Public ImageFormats As List(Of String) = New List(Of String)
 
+    Private Loading As Boolean = False
+
     Private WithEvents kpnl_transition_loading_editing As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
 
     Private Sub kpnl_loading_music_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragDrop
@@ -136,6 +138,56 @@ Public Class frm_main
 
 #End Region
 
+#Region "Tags"
+    Private Sub tvktxt_album_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_album.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Album = Me.tvktxt_album.TextBoxValue1
+        End If
+    End Sub
+
+    Private Sub tvktxt_artists_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_artists.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Artists = Split(Me.tvktxt_artists.TextBoxValue1, ";")
+        End If
+    End Sub
+
+    Private Sub tvktxt_comments_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_comments.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Legend = Me.tvktxt_comments.TextBoxValue1
+        End If
+    End Sub
+
+    Private Sub tvktxt_genres_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_genres.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Genres = Split(Me.tvktxt_genres.TextBoxValue1, ";")
+        End If
+    End Sub
+
+    Private Sub tvktxt_interpret_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_interpret.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.AlbumArtist = Me.tvktxt_interpret.TextBoxValue1
+        End If
+    End Sub
+
+    Private Sub tvktxt_number_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_number.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Number = Me.tvktxt_number.TextBoxValue1
+        End If
+    End Sub
+
+    Private Sub tvktxt_title_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_title.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Title = Me.tvktxt_title.TextBoxValue1
+        End If
+    End Sub
+
+    Private Sub tvktxt_year_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_year.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Year = Convert.ToInt32(Me.tvktxt_year.TextBoxValue1)
+        End If
+    End Sub
+#End Region
+
     Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
         Dim paths As DragFiles = New DragFiles
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
@@ -207,6 +259,7 @@ Public Class frm_main
     End Sub
 
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
+        Me.Loading = True
         Me._MusicFile = New MusicFile(music, image)
         Me.kltt_editing_filename.Text = My.Computer.FileSystem.GetFileInfo(music).Name
         Me.tvktxt_title.TextBoxValue1 = Me._MusicFile.Title
@@ -221,6 +274,7 @@ Public Class frm_main
             Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
         End If
         Me.ChangeThumbnail(Me._MusicFile.Thumbnail)
+        Me.Loading = False
     End Sub
 
     Public Sub HideLoadingItems()
