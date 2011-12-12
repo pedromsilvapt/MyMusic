@@ -17,3 +17,5 @@ C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Rele
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Release\MyMusic.exe
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Release\MyMusic.xml
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Release\MyMusic.pdb
+C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Release\MyMusic.exe.config
+C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Release\ComponentFactory.Krypton.Toolkit.dll
