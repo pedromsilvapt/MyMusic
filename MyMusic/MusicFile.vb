@@ -123,15 +123,20 @@ Public Class MusicFile
             End If
         End Get
         Set(ByVal value As Image)
-            value.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
+            If (value IsNot Nothing) Then
+                value.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
 
-            Dim pictures(0) As Picture
-            pictures(0) = New Picture(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
+                Dim pictures(0) As Picture
+                pictures(0) = New Picture(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
 
-            My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
+                My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
 
-            Me.MusicTags.Tag.Pictures = pictures
-            Me._Thumbnail = value
+                Me.MusicTags.Tag.Pictures = pictures
+                Me._Thumbnail = value
+            Else
+                Me._Thumbnail = Nothing
+                Me.MusicTags.Tag.Pictures = Nothing
+            End If
         End Set
     End Property
 

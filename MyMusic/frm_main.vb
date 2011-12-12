@@ -84,7 +84,7 @@ Public Class frm_main
             Dim fileImage As Boolean = False
 
             For Each _File As String In My.Computer.Clipboard.GetFileDropList
-                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File))
                     fileImage = True
                     Exit For
@@ -110,7 +110,7 @@ Public Class frm_main
             Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Dim fileImage As Boolean = False
             For Each _File As String In filePaths
-                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File))
                     fileImage = True
                     Exit For
@@ -137,7 +137,7 @@ Public Class frm_main
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             For Each _File As String In filePaths
-                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File), False)
                     Exit For
                 End If
@@ -283,10 +283,10 @@ Public Class frm_main
                 End If
 
                 'Then checks the file type, and if it any we are looking for
-                If (My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension = ".mp3" And music = False) Then
+                If (My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower() = ".mp3" And music = False) Then
                     paths.Music = filePaths(i)
                     music = True
-                ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension) And image = False) Then
+                ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And image = False) Then
                     paths.Image = filePaths(i)
                     image = True
                 End If
@@ -335,7 +335,7 @@ Public Class frm_main
         Me.tvktxt_year.TextBoxValue1 = Me._MusicFile.Year
         Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
         Me.tvktxt_genres.TextBoxValue1 = String.Join("; ", Me._MusicFile.Genres)
-        If (image <> "") Then
+        If (image <> "" And (Not image Is Nothing)) Then
             Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
         End If
         Me.ChangeThumbnail(Me._MusicFile.Thumbnail)
