@@ -25,6 +25,8 @@ Partial Class TVKryptonTextBox
         Me.KCheckBox = New ComponentFactory.Krypton.Toolkit.KryptonCheckBox()
         Me.KLabel = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.KTextBox = New ComponentFactory.Krypton.Toolkit.KryptonTextBox()
+        Me.btnsc_clear = New ComponentFactory.Krypton.Toolkit.ButtonSpecAny()
+        Me.btnsc_revert = New ComponentFactory.Krypton.Toolkit.ButtonSpecAny()
         Me.SuspendLayout()
         '
         'KCheckBox
@@ -46,10 +48,24 @@ Partial Class TVKryptonTextBox
         '
         'KTextBox
         '
+        Me.KTextBox.AllowButtonSpecToolTips = True
+        Me.KTextBox.ButtonSpecs.AddRange(New ComponentFactory.Krypton.Toolkit.ButtonSpecAny() {Me.btnsc_revert, Me.btnsc_clear})
         Me.KTextBox.Location = New System.Drawing.Point(59, 1)
         Me.KTextBox.Name = "KTextBox"
         Me.KTextBox.Size = New System.Drawing.Size(100, 20)
         Me.KTextBox.TabIndex = 2
+        '
+        'btnsc_clear
+        '
+        Me.btnsc_clear.ToolTipTitle = "Limpar"
+        Me.btnsc_clear.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.Close
+        Me.btnsc_clear.UniqueName = "84DFB0688EFC4B78A5B63D956F4469BD"
+        Me.btnsc_clear.Visible = False
+        '
+        'btnsc_revert
+        '
+        Me.btnsc_revert.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.ArrowLeft
+        Me.btnsc_revert.UniqueName = "36DB3DF2B384468ADB84D32D883E89C4"
         '
         'TVKryptonTextBox
         '
@@ -67,5 +83,7 @@ Partial Class TVKryptonTextBox
     Friend WithEvents KCheckBox As ComponentFactory.Krypton.Toolkit.KryptonCheckBox
     Friend WithEvents KLabel As ComponentFactory.Krypton.Toolkit.KryptonLabel
     Friend WithEvents KTextBox As ComponentFactory.Krypton.Toolkit.KryptonTextBox
+    Friend WithEvents btnsc_clear As ComponentFactory.Krypton.Toolkit.ButtonSpecAny
+    Friend WithEvents btnsc_revert As ComponentFactory.Krypton.Toolkit.ButtonSpecAny
 
 End Class

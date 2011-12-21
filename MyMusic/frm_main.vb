@@ -16,7 +16,7 @@ Public Class frm_main
 
     Public ImageFormats As List(Of String) = New List(Of String)
 
-    Private Loading As Boolean = False
+    Private Loading As Boolean = True
 
     Private t_moving As Boolean = False
 
@@ -230,6 +230,12 @@ Public Class frm_main
             Me._MusicFile.Year = Convert.ToInt32(Me.tvktxt_year.TextBoxValue1)
         End If
     End Sub
+
+    Private Sub tvktxt_lyrics_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_lyrics.Text1Changed
+        If Not Me.Loading Then
+            Me._MusicFile.Lyrics = Me.tvktxt_lyrics.TextBoxValue1
+        End If
+    End Sub
 #End Region
 
 #Region "Startup Loading Panel"
@@ -327,18 +333,39 @@ Public Class frm_main
         Me.Loading = True
         Me._MusicFile = New MusicFile(music, image)
         Me.kltt_editing_filename.Text = My.Computer.FileSystem.GetFileInfo(music).Name
+
         Me.tvktxt_title.TextBoxValue1 = Me._MusicFile.Title
+        Me.tvktxt_title.RevertText = Me._MusicFile.Title
+
         Me.tvktxt_comments.TextBoxValue1 = Me._MusicFile.Legend
+        Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
+
         Me.tvktxt_artists.TextBoxValue1 = String.Join("; ", Me._MusicFile.Artists)
+        Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
+
         Me.tvktxt_interpret.TextBoxValue1 = Me._MusicFile.AlbumArtist
+        Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
+
         Me.tvktxt_album.TextBoxValue1 = Me._MusicFile.Album
+        Me.tvktxt_album.RevertText = Me._MusicFile.Album
+
         Me.tvktxt_year.TextBoxValue1 = Me._MusicFile.Year
+        Me.tvktxt_year.RevertText = Me._MusicFile.Year
+
         Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
+        Me.tvktxt_number.RevertText = Me._MusicFile.Number
+
         Me.tvktxt_genres.TextBoxValue1 = String.Join("; ", Me._MusicFile.Genres)
+        Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
+
+        Me.tvktxt_lyrics.TextBoxValue1 = Me._MusicFile.Lyrics
+        Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
+
         If (image <> "" And (Not image Is Nothing)) Then
             Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
         End If
         Me.ChangeThumbnail(Me._MusicFile.Thumbnail)
+
         Me.Loading = False
     End Sub
 
@@ -414,6 +441,25 @@ Public Class frm_main
         Else
             Me._MusicFile.MusicFileName = Me.kltt_editing_filename.Text
         End If
+
+        Me.tvktxt_title.RevertText = Me._MusicFile.Title
+
+        Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
+
+        Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
+
+        Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
+
+        Me.tvktxt_album.RevertText = Me._MusicFile.Album
+
+        Me.tvktxt_year.RevertText = Me._MusicFile.Year
+
+        Me.tvktxt_number.RevertText = Me._MusicFile.Number
+
+        Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
+
+        Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
+
         Me.pcb_editing_saving.Visible = False
     End Sub
 End Class

@@ -61,6 +61,15 @@ Public Class MusicFile
         End Set
     End Property
 
+    Public Property Lyrics As String
+        Get
+            Return Me.MusicTags.Tag.Lyrics
+        End Get
+        Set(ByVal value As String)
+            Me.MusicTags.Tag.Lyrics = value
+        End Set
+    End Property
+
     Public Property Artists As Array
         Get
             Return Me.MusicTags.Tag.Performers
@@ -111,6 +120,8 @@ Public Class MusicFile
             Me.MusicTags.Tag.Genres = value
         End Set
     End Property
+
+
 
     Public Property Thumbnail As Image
         Get

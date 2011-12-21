@@ -4,6 +4,47 @@
     Private TextValue2 As String = ""
     Private Value2Editable As Boolean = False
     Private AutoChangeTo1 As Boolean = True
+    Private _RevertText As String
+
+    Private _ShowClear As Boolean = True
+
+    Private _ShowRevert As Boolean = True
+
+
+    Public Property OnlyNumerics As Boolean = False
+
+    Public Property RevertText As String
+        Get
+            Return Me._RevertText
+        End Get
+        Set(ByVal value As String)
+            Me._RevertText = value
+
+            Me.btnsc_revert.Visible = ((Me.TextBoxValue <> Me.RevertText) And (Me._ShowRevert = True))
+        End Set
+    End Property
+
+    Public Property ShowClear As Boolean
+        Get
+            Return Me._ShowClear
+        End Get
+        Set(ByVal value As Boolean)
+            Me._ShowClear = value
+
+            Me.btnsc_clear.Visible = ((Me.TextBoxValue <> "") And (Me._ShowClear))
+        End Set
+    End Property
+
+    Public Property ShowRevert As Boolean
+        Get
+            Return Me._ShowRevert
+        End Get
+        Set(ByVal value As Boolean)
+            Me._ShowRevert = value
+
+            Me.btnsc_revert.Visible = ((Me.TextBoxValue <> Me.RevertText) And (Me._ShowRevert = True))
+        End Set
+    End Property
 
     Public Property TextBoxX As Single
         Get
@@ -46,6 +87,15 @@
             Else
                 Me.TextValue2 = value
             End If
+        End Set
+    End Property
+
+    Public Property TextBoxValue As String
+        Get
+            Return Me.KTextBox.Text
+        End Get
+        Set(ByVal value As String)
+            Me.KTextBox.Text = value
         End Set
     End Property
 
@@ -98,7 +148,22 @@
     Public Event Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs)
     Public Event Text2Changed(ByVal sender As Object, ByVal e As System.EventArgs)
 
+    Private Sub KTextBox_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles KTextBox.KeyPress
+        If (Me.OnlyNumerics) Then
+            If (Microsoft.VisualBasic.Asc(e.KeyChar) < 48) Or (Microsoft.VisualBasic.Asc(e.KeyChar) > 57) Then
+                e.Handled = True
+            End If
+            If (Microsoft.VisualBasic.Asc(e.KeyChar) = 8) Then
+                e.Handled = False
+            End If
+        End If
+    End Sub
+
+
+
     Private Sub KTextBox_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles KTextBox.TextChanged
+        Me.btnsc_clear.Visible = ((Me.TextBoxValue <> "") And (Me._ShowClear))
+
         If (Me.KCheckBox.Checked = True) Then
             If (Me.Value2Editable = True) Then
                 Me.TextValue2 = Me.KTextBox.Text
@@ -106,10 +171,16 @@
             Else
                 Me.TextValue1 = Me.KTextBox.Text
                 Me.KCheckBox.Checked = False
+
+                Me.btnsc_revert.Visible = ((Me.TextBoxValue <> Me.RevertText) And (Me.ShowRevert = True))
+
                 RaiseEvent Text1Changed(sender, e)
             End If
         Else
             Me.TextValue1 = Me.KTextBox.Text
+
+            Me.btnsc_revert.Visible = ((Me.TextBoxValue <> Me.RevertText) And (Me.ShowRevert = True))
+
             RaiseEvent Text1Changed(sender, e)
         End If
         RaiseEvent AnyTextChanged(sender, e)
@@ -127,5 +198,17 @@
         If (Me.AutoChangeTo1 = True And Me.KCheckBox.Visible = False) Then
             Me.KCheckBox.Checked = False
         End If
+    End Sub
+
+    Private Sub ButtonSpecAny1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsc_clear.Click
+        If (Me.OnlyNumerics) Then
+            Me.TextBoxValue = "0"
+        Else
+            Me.TextBoxValue = ""
+        End If
+    End Sub
+
+    Private Sub btnsc_revert_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsc_revert.Click
+        Me.TextBoxValue = Me.RevertText
     End Sub
 End Class

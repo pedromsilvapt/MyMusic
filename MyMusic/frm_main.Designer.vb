@@ -51,6 +51,7 @@ Partial Class frm_main
         Me.klbl_classification = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.rc_classification = New Softclean.RatingControl()
         Me.sfd_export_thumbnail = New System.Windows.Forms.SaveFileDialog()
+        Me.tvktxt_lyrics = New MyMusic.TVKryptonMultiline()
         CType(Me.kpnl_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_loading_music.SuspendLayout()
         CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -168,6 +169,7 @@ Partial Class frm_main
         '
         'kpnl_editing_music
         '
+        Me.kpnl_editing_music.Controls.Add(Me.tvktxt_lyrics)
         Me.kpnl_editing_music.Controls.Add(Me.pcb_editing_saving)
         Me.kpnl_editing_music.Controls.Add(Me.kltt_editing_filename)
         Me.kpnl_editing_music.Controls.Add(Me.kpnl_editing_thumbnail)
@@ -285,8 +287,13 @@ Partial Class frm_main
         Me.tvktxt_album.LabelText = "Álbum:"
         Me.tvktxt_album.Location = New System.Drawing.Point(203, 132)
         Me.tvktxt_album.Name = "tvktxt_album"
+        Me.tvktxt_album.OnlyNumerics = False
+        Me.tvktxt_album.RevertText = Nothing
+        Me.tvktxt_album.ShowClear = True
+        Me.tvktxt_album.ShowRevert = True
         Me.tvktxt_album.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_album.TabIndex = 11
+        Me.tvktxt_album.TextBoxValue = ""
         Me.tvktxt_album.TextBoxValue1 = ""
         Me.tvktxt_album.TextBoxValue2 = ""
         Me.tvktxt_album.TextBoxWidth = 150.0!
@@ -302,8 +309,13 @@ Partial Class frm_main
         Me.tvktxt_genres.LabelText = "Géneros:"
         Me.tvktxt_genres.Location = New System.Drawing.Point(203, 216)
         Me.tvktxt_genres.Name = "tvktxt_genres"
+        Me.tvktxt_genres.OnlyNumerics = False
+        Me.tvktxt_genres.RevertText = Nothing
+        Me.tvktxt_genres.ShowClear = True
+        Me.tvktxt_genres.ShowRevert = True
         Me.tvktxt_genres.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_genres.TabIndex = 10
+        Me.tvktxt_genres.TextBoxValue = ""
         Me.tvktxt_genres.TextBoxValue1 = ""
         Me.tvktxt_genres.TextBoxValue2 = ""
         Me.tvktxt_genres.TextBoxWidth = 150.0!
@@ -319,8 +331,13 @@ Partial Class frm_main
         Me.tvktxt_number.LabelText = "Número:"
         Me.tvktxt_number.Location = New System.Drawing.Point(203, 188)
         Me.tvktxt_number.Name = "tvktxt_number"
+        Me.tvktxt_number.OnlyNumerics = True
+        Me.tvktxt_number.RevertText = Nothing
+        Me.tvktxt_number.ShowClear = True
+        Me.tvktxt_number.ShowRevert = True
         Me.tvktxt_number.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_number.TabIndex = 9
+        Me.tvktxt_number.TextBoxValue = ""
         Me.tvktxt_number.TextBoxValue1 = ""
         Me.tvktxt_number.TextBoxValue2 = ""
         Me.tvktxt_number.TextBoxWidth = 150.0!
@@ -336,8 +353,13 @@ Partial Class frm_main
         Me.tvktxt_year.LabelText = "Ano:"
         Me.tvktxt_year.Location = New System.Drawing.Point(203, 160)
         Me.tvktxt_year.Name = "tvktxt_year"
+        Me.tvktxt_year.OnlyNumerics = True
+        Me.tvktxt_year.RevertText = Nothing
+        Me.tvktxt_year.ShowClear = True
+        Me.tvktxt_year.ShowRevert = True
         Me.tvktxt_year.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_year.TabIndex = 8
+        Me.tvktxt_year.TextBoxValue = ""
         Me.tvktxt_year.TextBoxValue1 = ""
         Me.tvktxt_year.TextBoxValue2 = ""
         Me.tvktxt_year.TextBoxWidth = 150.0!
@@ -353,8 +375,13 @@ Partial Class frm_main
         Me.tvktxt_interpret.LabelText = "Intérprete do Álbum:"
         Me.tvktxt_interpret.Location = New System.Drawing.Point(203, 104)
         Me.tvktxt_interpret.Name = "tvktxt_interpret"
+        Me.tvktxt_interpret.OnlyNumerics = False
+        Me.tvktxt_interpret.RevertText = Nothing
+        Me.tvktxt_interpret.ShowClear = True
+        Me.tvktxt_interpret.ShowRevert = True
         Me.tvktxt_interpret.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_interpret.TabIndex = 7
+        Me.tvktxt_interpret.TextBoxValue = ""
         Me.tvktxt_interpret.TextBoxValue1 = ""
         Me.tvktxt_interpret.TextBoxValue2 = ""
         Me.tvktxt_interpret.TextBoxWidth = 150.0!
@@ -370,8 +397,13 @@ Partial Class frm_main
         Me.tvktxt_artists.LabelText = "Artistas: "
         Me.tvktxt_artists.Location = New System.Drawing.Point(203, 76)
         Me.tvktxt_artists.Name = "tvktxt_artists"
+        Me.tvktxt_artists.OnlyNumerics = False
+        Me.tvktxt_artists.RevertText = Nothing
+        Me.tvktxt_artists.ShowClear = True
+        Me.tvktxt_artists.ShowRevert = True
         Me.tvktxt_artists.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_artists.TabIndex = 6
+        Me.tvktxt_artists.TextBoxValue = ""
         Me.tvktxt_artists.TextBoxValue1 = ""
         Me.tvktxt_artists.TextBoxValue2 = ""
         Me.tvktxt_artists.TextBoxWidth = 150.0!
@@ -387,8 +419,13 @@ Partial Class frm_main
         Me.tvktxt_comments.LabelText = "Comentários:"
         Me.tvktxt_comments.Location = New System.Drawing.Point(203, 48)
         Me.tvktxt_comments.Name = "tvktxt_comments"
+        Me.tvktxt_comments.OnlyNumerics = False
+        Me.tvktxt_comments.RevertText = Nothing
+        Me.tvktxt_comments.ShowClear = True
+        Me.tvktxt_comments.ShowRevert = True
         Me.tvktxt_comments.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_comments.TabIndex = 5
+        Me.tvktxt_comments.TextBoxValue = ""
         Me.tvktxt_comments.TextBoxValue1 = ""
         Me.tvktxt_comments.TextBoxValue2 = ""
         Me.tvktxt_comments.TextBoxWidth = 150.0!
@@ -404,8 +441,13 @@ Partial Class frm_main
         Me.tvktxt_title.LabelText = "Título:"
         Me.tvktxt_title.Location = New System.Drawing.Point(203, 20)
         Me.tvktxt_title.Name = "tvktxt_title"
+        Me.tvktxt_title.OnlyNumerics = False
+        Me.tvktxt_title.RevertText = Nothing
+        Me.tvktxt_title.ShowClear = True
+        Me.tvktxt_title.ShowRevert = True
         Me.tvktxt_title.Size = New System.Drawing.Size(292, 22)
         Me.tvktxt_title.TabIndex = 3
+        Me.tvktxt_title.TextBoxValue = ""
         Me.tvktxt_title.TextBoxValue1 = ""
         Me.tvktxt_title.TextBoxValue2 = ""
         Me.tvktxt_title.TextBoxWidth = 150.0!
@@ -432,6 +474,28 @@ Partial Class frm_main
         'sfd_export_thumbnail
         '
         Me.sfd_export_thumbnail.Title = "Exportar Thumbnail"
+        '
+        'tvktxt_lyrics
+        '
+        Me.tvktxt_lyrics.AutoChangeToFirst = True
+        Me.tvktxt_lyrics.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_lyrics.CheckBoxVisible = False
+        Me.tvktxt_lyrics.KChecked = False
+        Me.tvktxt_lyrics.LabelColor = System.Drawing.Color.Empty
+        Me.tvktxt_lyrics.LabelText = "Lyrics"
+        Me.tvktxt_lyrics.Location = New System.Drawing.Point(501, 12)
+        Me.tvktxt_lyrics.Name = "tvktxt_lyrics"
+        Me.tvktxt_lyrics.RevertText = Nothing
+        Me.tvktxt_lyrics.ShowClear = True
+        Me.tvktxt_lyrics.ShowRevert = True
+        Me.tvktxt_lyrics.Size = New System.Drawing.Size(259, 237)
+        Me.tvktxt_lyrics.TabIndex = 20
+        Me.tvktxt_lyrics.TextBoxValue = ""
+        Me.tvktxt_lyrics.TextBoxValue1 = ""
+        Me.tvktxt_lyrics.TextBoxValue2 = ""
+        Me.tvktxt_lyrics.TextBoxWidth = 253.0!
+        Me.tvktxt_lyrics.TextBoxX = 3.0!
+        Me.tvktxt_lyrics.ValueTwoEditable = False
         '
         'frm_main
         '
@@ -503,4 +567,5 @@ Partial Class frm_main
     Friend WithEvents kltt_editing_filename As MyMusic.KLabelToTextBox
     Friend WithEvents klbl_loading_drag_files As ComponentFactory.Krypton.Toolkit.KryptonLabel
     Friend WithEvents pcb_editing_saving As System.Windows.Forms.PictureBox
+    Friend WithEvents tvktxt_lyrics As MyMusic.TVKryptonMultiline
 End Class
