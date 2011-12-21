@@ -24,23 +24,17 @@ Partial Class frm_main
         Me.kpnl_loading_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.klbl_loading_drag_files = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.kwlbl_loading_thumbnail_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
-        Me.pcb_loading_thumbnail = New System.Windows.Forms.PictureBox()
         Me.kwlbl_loading_music_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
-        Me.pcb_loading_music = New System.Windows.Forms.PictureBox()
         Me.klbl_loading_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.klbl_loading_music = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.KryptonManager = New ComponentFactory.Krypton.Toolkit.KryptonManager(Me.components)
         Me.kpnl_editing_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.kpnl_rloading_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.kwlbl_rloading_thumbnail_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
-        Me.pcb_rloading_thumbnail = New System.Windows.Forms.PictureBox()
         Me.kwlbl_rloading_music_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
-        Me.pcb_rloading_music = New System.Windows.Forms.PictureBox()
         Me.klbl_rloading_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.klbl_rloading_music = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
-        Me.pcb_editing_saving = New System.Windows.Forms.PictureBox()
         Me.kpnl_editing_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
-        Me.pcb_editing_thumbnail = New System.Windows.Forms.PictureBox()
         Me.KryptonButton2 = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_paste = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_export = New ComponentFactory.Krypton.Toolkit.KryptonButton()
@@ -53,6 +47,12 @@ Partial Class frm_main
         Me.ktdlgc_save_open = New ComponentFactory.Krypton.Toolkit.KryptonTaskDialogCommand()
         Me.ktdlgc_close_open = New ComponentFactory.Krypton.Toolkit.KryptonTaskDialogCommand()
         Me.ktdlgc_cancel = New ComponentFactory.Krypton.Toolkit.KryptonTaskDialogCommand()
+        Me.pcb_rloading_thumbnail = New System.Windows.Forms.PictureBox()
+        Me.pcb_rloading_music = New System.Windows.Forms.PictureBox()
+        Me.pcb_editing_saving = New System.Windows.Forms.PictureBox()
+        Me.pcb_editing_thumbnail = New System.Windows.Forms.PictureBox()
+        Me.pcb_loading_thumbnail = New System.Windows.Forms.PictureBox()
+        Me.pcb_loading_music = New System.Windows.Forms.PictureBox()
         Me.tvktxt_lyrics = New MyMusic.TVKryptonMultiline()
         Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
         Me.tvktxt_album = New MyMusic.TVKryptonTextBox()
@@ -65,18 +65,18 @@ Partial Class frm_main
         Me.tvktxt_title = New MyMusic.TVKryptonTextBox()
         CType(Me.kpnl_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_loading_music.SuspendLayout()
-        CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.pcb_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.kpnl_editing_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_editing_music.SuspendLayout()
         CType(Me.kpnl_rloading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_rloading_music.SuspendLayout()
+        CType(Me.kpnl_editing_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.kpnl_editing_thumbnail.SuspendLayout()
         CType(Me.pcb_rloading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pcb_rloading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pcb_editing_saving, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.kpnl_editing_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.kpnl_editing_thumbnail.SuspendLayout()
         CType(Me.pcb_editing_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pcb_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'kpnl_loading_music
@@ -119,18 +119,6 @@ Partial Class frm_main
         Me.kwlbl_loading_thumbnail_name.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.kwlbl_loading_thumbnail_name.Visible = False
         '
-        'pcb_loading_thumbnail
-        '
-        Me.pcb_loading_thumbnail.BackColor = System.Drawing.Color.Transparent
-        Me.pcb_loading_thumbnail.Image = Global.MyMusic.My.Resources.Resources.PNG
-        Me.pcb_loading_thumbnail.Location = New System.Drawing.Point(416, 67)
-        Me.pcb_loading_thumbnail.Name = "pcb_loading_thumbnail"
-        Me.pcb_loading_thumbnail.Size = New System.Drawing.Size(149, 165)
-        Me.pcb_loading_thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pcb_loading_thumbnail.TabIndex = 5
-        Me.pcb_loading_thumbnail.TabStop = False
-        Me.pcb_loading_thumbnail.Visible = False
-        '
         'kwlbl_loading_music_name
         '
         Me.kwlbl_loading_music_name.AutoSize = False
@@ -144,18 +132,6 @@ Partial Class frm_main
         Me.kwlbl_loading_music_name.Text = "Nome do Ficheiro.mp3"
         Me.kwlbl_loading_music_name.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.kwlbl_loading_music_name.Visible = False
-        '
-        'pcb_loading_music
-        '
-        Me.pcb_loading_music.BackColor = System.Drawing.Color.Transparent
-        Me.pcb_loading_music.Image = Global.MyMusic.My.Resources.Resources.MP3
-        Me.pcb_loading_music.Location = New System.Drawing.Point(209, 67)
-        Me.pcb_loading_music.Name = "pcb_loading_music"
-        Me.pcb_loading_music.Size = New System.Drawing.Size(149, 165)
-        Me.pcb_loading_music.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pcb_loading_music.TabIndex = 2
-        Me.pcb_loading_music.TabStop = False
-        Me.pcb_loading_music.Visible = False
         '
         'klbl_loading_thumbnail
         '
@@ -242,18 +218,6 @@ Partial Class frm_main
         Me.kwlbl_rloading_thumbnail_name.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.kwlbl_rloading_thumbnail_name.Visible = False
         '
-        'pcb_rloading_thumbnail
-        '
-        Me.pcb_rloading_thumbnail.BackColor = System.Drawing.Color.Transparent
-        Me.pcb_rloading_thumbnail.Image = Global.MyMusic.My.Resources.Resources.PNG
-        Me.pcb_rloading_thumbnail.Location = New System.Drawing.Point(425, 30)
-        Me.pcb_rloading_thumbnail.Name = "pcb_rloading_thumbnail"
-        Me.pcb_rloading_thumbnail.Size = New System.Drawing.Size(149, 165)
-        Me.pcb_rloading_thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pcb_rloading_thumbnail.TabIndex = 11
-        Me.pcb_rloading_thumbnail.TabStop = False
-        Me.pcb_rloading_thumbnail.Visible = False
-        '
         'kwlbl_rloading_music_name
         '
         Me.kwlbl_rloading_music_name.AutoSize = False
@@ -267,18 +231,6 @@ Partial Class frm_main
         Me.kwlbl_rloading_music_name.Text = "Nome do Ficheiro.mp3"
         Me.kwlbl_rloading_music_name.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.kwlbl_rloading_music_name.Visible = False
-        '
-        'pcb_rloading_music
-        '
-        Me.pcb_rloading_music.BackColor = System.Drawing.Color.Transparent
-        Me.pcb_rloading_music.Image = Global.MyMusic.My.Resources.Resources.MP3
-        Me.pcb_rloading_music.Location = New System.Drawing.Point(218, 30)
-        Me.pcb_rloading_music.Name = "pcb_rloading_music"
-        Me.pcb_rloading_music.Size = New System.Drawing.Size(149, 165)
-        Me.pcb_rloading_music.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pcb_rloading_music.TabIndex = 10
-        Me.pcb_rloading_music.TabStop = False
-        Me.pcb_rloading_music.Visible = False
         '
         'klbl_rloading_thumbnail
         '
@@ -302,18 +254,6 @@ Partial Class frm_main
         Me.klbl_rloading_music.Values.Text = "Música"
         Me.klbl_rloading_music.Visible = False
         '
-        'pcb_editing_saving
-        '
-        Me.pcb_editing_saving.BackColor = System.Drawing.Color.Transparent
-        Me.pcb_editing_saving.Image = CType(resources.GetObject("pcb_editing_saving.Image"), System.Drawing.Image)
-        Me.pcb_editing_saving.Location = New System.Drawing.Point(446, 268)
-        Me.pcb_editing_saving.Name = "pcb_editing_saving"
-        Me.pcb_editing_saving.Size = New System.Drawing.Size(16, 16)
-        Me.pcb_editing_saving.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
-        Me.pcb_editing_saving.TabIndex = 19
-        Me.pcb_editing_saving.TabStop = False
-        Me.pcb_editing_saving.Visible = False
-        '
         'kpnl_editing_thumbnail
         '
         Me.kpnl_editing_thumbnail.AllowDrop = True
@@ -322,17 +262,6 @@ Partial Class frm_main
         Me.kpnl_editing_thumbnail.Name = "kpnl_editing_thumbnail"
         Me.kpnl_editing_thumbnail.Size = New System.Drawing.Size(145, 145)
         Me.kpnl_editing_thumbnail.TabIndex = 17
-        '
-        'pcb_editing_thumbnail
-        '
-        Me.pcb_editing_thumbnail.BackColor = System.Drawing.Color.Transparent
-        Me.pcb_editing_thumbnail.Image = Global.MyMusic.My.Resources.Resources.MP3
-        Me.pcb_editing_thumbnail.Location = New System.Drawing.Point(0, 0)
-        Me.pcb_editing_thumbnail.Name = "pcb_editing_thumbnail"
-        Me.pcb_editing_thumbnail.Size = New System.Drawing.Size(145, 145)
-        Me.pcb_editing_thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pcb_editing_thumbnail.TabIndex = 0
-        Me.pcb_editing_thumbnail.TabStop = False
         '
         'KryptonButton2
         '
@@ -405,6 +334,7 @@ Partial Class frm_main
         Me.ktdlg_open_music.CheckboxText = Nothing
         Me.ktdlg_open_music.CommandButtons.AddRange(New ComponentFactory.Krypton.Toolkit.KryptonTaskDialogCommand() {Me.ktdlgc_save_open, Me.ktdlgc_close_open, Me.ktdlgc_cancel})
         Me.ktdlg_open_music.CommonButtons = ComponentFactory.Krypton.Toolkit.TaskDialogButtons.None
+        Me.ktdlg_open_music.Content = Nothing
         Me.ktdlg_open_music.DefaultRadioButton = Nothing
         Me.ktdlg_open_music.FooterHyperlink = Nothing
         Me.ktdlg_open_music.FooterText = Nothing
@@ -434,6 +364,77 @@ Partial Class frm_main
         Me.ktdlgc_cancel.ExtraText = ""
         Me.ktdlgc_cancel.Image = Nothing
         Me.ktdlgc_cancel.Text = "Cancelar"
+        '
+        'pcb_rloading_thumbnail
+        '
+        Me.pcb_rloading_thumbnail.BackColor = System.Drawing.Color.Transparent
+        Me.pcb_rloading_thumbnail.Image = Global.MyMusic.My.Resources.Resources.PNG
+        Me.pcb_rloading_thumbnail.Location = New System.Drawing.Point(425, 30)
+        Me.pcb_rloading_thumbnail.Name = "pcb_rloading_thumbnail"
+        Me.pcb_rloading_thumbnail.Size = New System.Drawing.Size(149, 165)
+        Me.pcb_rloading_thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pcb_rloading_thumbnail.TabIndex = 11
+        Me.pcb_rloading_thumbnail.TabStop = False
+        Me.pcb_rloading_thumbnail.Visible = False
+        '
+        'pcb_rloading_music
+        '
+        Me.pcb_rloading_music.BackColor = System.Drawing.Color.Transparent
+        Me.pcb_rloading_music.Image = Global.MyMusic.My.Resources.Resources.MP3
+        Me.pcb_rloading_music.Location = New System.Drawing.Point(218, 30)
+        Me.pcb_rloading_music.Name = "pcb_rloading_music"
+        Me.pcb_rloading_music.Size = New System.Drawing.Size(149, 165)
+        Me.pcb_rloading_music.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pcb_rloading_music.TabIndex = 10
+        Me.pcb_rloading_music.TabStop = False
+        Me.pcb_rloading_music.Visible = False
+        '
+        'pcb_editing_saving
+        '
+        Me.pcb_editing_saving.BackColor = System.Drawing.Color.Transparent
+        Me.pcb_editing_saving.Image = CType(resources.GetObject("pcb_editing_saving.Image"), System.Drawing.Image)
+        Me.pcb_editing_saving.Location = New System.Drawing.Point(446, 268)
+        Me.pcb_editing_saving.Name = "pcb_editing_saving"
+        Me.pcb_editing_saving.Size = New System.Drawing.Size(16, 16)
+        Me.pcb_editing_saving.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize
+        Me.pcb_editing_saving.TabIndex = 19
+        Me.pcb_editing_saving.TabStop = False
+        Me.pcb_editing_saving.Visible = False
+        '
+        'pcb_editing_thumbnail
+        '
+        Me.pcb_editing_thumbnail.BackColor = System.Drawing.Color.Transparent
+        Me.pcb_editing_thumbnail.Image = Global.MyMusic.My.Resources.Resources.MP3
+        Me.pcb_editing_thumbnail.Location = New System.Drawing.Point(0, 0)
+        Me.pcb_editing_thumbnail.Name = "pcb_editing_thumbnail"
+        Me.pcb_editing_thumbnail.Size = New System.Drawing.Size(145, 145)
+        Me.pcb_editing_thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pcb_editing_thumbnail.TabIndex = 0
+        Me.pcb_editing_thumbnail.TabStop = False
+        '
+        'pcb_loading_thumbnail
+        '
+        Me.pcb_loading_thumbnail.BackColor = System.Drawing.Color.Transparent
+        Me.pcb_loading_thumbnail.Image = Global.MyMusic.My.Resources.Resources.PNG
+        Me.pcb_loading_thumbnail.Location = New System.Drawing.Point(416, 67)
+        Me.pcb_loading_thumbnail.Name = "pcb_loading_thumbnail"
+        Me.pcb_loading_thumbnail.Size = New System.Drawing.Size(149, 165)
+        Me.pcb_loading_thumbnail.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pcb_loading_thumbnail.TabIndex = 5
+        Me.pcb_loading_thumbnail.TabStop = False
+        Me.pcb_loading_thumbnail.Visible = False
+        '
+        'pcb_loading_music
+        '
+        Me.pcb_loading_music.BackColor = System.Drawing.Color.Transparent
+        Me.pcb_loading_music.Image = Global.MyMusic.My.Resources.Resources.MP3
+        Me.pcb_loading_music.Location = New System.Drawing.Point(209, 67)
+        Me.pcb_loading_music.Name = "pcb_loading_music"
+        Me.pcb_loading_music.Size = New System.Drawing.Size(149, 165)
+        Me.pcb_loading_music.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.pcb_loading_music.TabIndex = 2
+        Me.pcb_loading_music.TabStop = False
+        Me.pcb_loading_music.Visible = False
         '
         'tvktxt_lyrics
         '
@@ -657,20 +658,20 @@ Partial Class frm_main
         CType(Me.kpnl_loading_music, System.ComponentModel.ISupportInitialize).EndInit()
         Me.kpnl_loading_music.ResumeLayout(False)
         Me.kpnl_loading_music.PerformLayout()
-        CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pcb_loading_music, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.kpnl_editing_music, System.ComponentModel.ISupportInitialize).EndInit()
         Me.kpnl_editing_music.ResumeLayout(False)
         Me.kpnl_editing_music.PerformLayout()
         CType(Me.kpnl_rloading_music, System.ComponentModel.ISupportInitialize).EndInit()
         Me.kpnl_rloading_music.ResumeLayout(False)
         Me.kpnl_rloading_music.PerformLayout()
+        CType(Me.kpnl_editing_thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.kpnl_editing_thumbnail.ResumeLayout(False)
         CType(Me.pcb_rloading_thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pcb_rloading_music, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pcb_editing_saving, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.kpnl_editing_thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.kpnl_editing_thumbnail.ResumeLayout(False)
         CType(Me.pcb_editing_thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pcb_loading_music, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

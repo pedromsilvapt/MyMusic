@@ -62,6 +62,7 @@ Public Class MusicFile
             If (value <> Me.MusicTags.Tag.Title) Then
                 Me._Edited = True
             End If
+
             Me.MusicTags.Tag.Title = value
         End Set
     End Property
