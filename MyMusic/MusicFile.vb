@@ -5,6 +5,14 @@ Public Class MusicFile
     Public MusicPath As String
     Public _Thumbnail As Image
     Public MusicTags As TagLib.File
+    Private _Edited As Boolean = False
+
+
+    Public ReadOnly Property Edited As Boolean
+        Get
+            Return Me._Edited
+        End Get
+    End Property
 
     Public Property MusicFile As String
         Get
@@ -39,6 +47,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Album
         End Get
         Set(ByVal value As String)
+            If (value <> Me.MusicTags.Tag.Album) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Album = value
         End Set
     End Property
@@ -48,6 +59,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Title
         End Get
         Set(ByVal value As String)
+            If (value <> Me.MusicTags.Tag.Title) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Title = value
         End Set
     End Property
@@ -57,6 +71,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Comment
         End Get
         Set(ByVal value As String)
+            If (value <> Me.MusicTags.Tag.Comment) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Comment = value
         End Set
     End Property
@@ -66,6 +83,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Lyrics
         End Get
         Set(ByVal value As String)
+            If (value <> Me.MusicTags.Tag.Lyrics) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Lyrics = value
         End Set
     End Property
@@ -75,6 +95,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Performers
         End Get
         Set(ByVal value As Array)
+            If (value IsNot Me.MusicTags.Tag.Performers) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Performers = value
         End Set
     End Property
@@ -90,6 +113,11 @@ Public Class MusicFile
         Set(ByVal value As String)
             Dim temp(0) As String
             temp(0) = value
+
+            If (temp IsNot Me.MusicTags.Tag.AlbumArtists) Then
+                Me._Edited = True
+            End If
+
             Me.MusicTags.Tag.AlbumArtists = temp
         End Set
     End Property
@@ -99,6 +127,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Year
         End Get
         Set(ByVal value As Integer)
+            If (value <> Me.MusicTags.Tag.Year) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Year = value
         End Set
     End Property
@@ -108,6 +139,9 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Track
         End Get
         Set(ByVal value As Integer)
+            If (value <> Me.MusicTags.Tag.Track) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Track = value
         End Set
     End Property
@@ -117,11 +151,12 @@ Public Class MusicFile
             Return Me.MusicTags.Tag.Genres
         End Get
         Set(ByVal value As Array)
+            If (value IsNot Me.MusicTags.Tag.Genres) Then
+                Me._Edited = True
+            End If
             Me.MusicTags.Tag.Genres = value
         End Set
     End Property
-
-
 
     Public Property Thumbnail As Image
         Get
@@ -142,9 +177,16 @@ Public Class MusicFile
 
                 My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png")
 
+                If (Me.MusicTags.Tag.Pictures IsNot pictures) Then
+                    Me._Edited = True
+                End If
+
                 Me.MusicTags.Tag.Pictures = pictures
                 Me._Thumbnail = value
             Else
+                If (Me.MusicTags.Tag.Pictures IsNot Nothing) Then
+                    Me._Edited = True
+                End If
                 Me._Thumbnail = Nothing
                 Me.MusicTags.Tag.Pictures = Nothing
             End If
@@ -161,12 +203,14 @@ Public Class MusicFile
     End Property
 
     Public Sub ClearThumbnail()
+        Me._Edited = True
         Me._Thumbnail = Nothing
         Me.MusicTags.Tag.Pictures = Nothing
     End Sub
 
     Public Sub Save()
         Me.MusicTags.Save()
+        Me._Edited = False
     End Sub
 
     Public Sub New(ByVal music As String, Optional ByVal image As String = "")
