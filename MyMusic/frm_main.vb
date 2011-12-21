@@ -20,7 +20,13 @@ Public Class frm_main
 
     Private t_moving As Boolean = False
 
+    Private terror_showing As Boolean = False
+
+
+    Private WithEvents kpnl_transition_loading_error As Transition = New Transition(New Transitions.TransitionType_Flash(1, 500))
     Private WithEvents kpnl_transition_loading_editing As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
+    Private WithEvents kpnl_transition_loading_color As Transition = New Transition(New TransitionType_EaseInEaseOut(500))
+
 
 #Region "Transitions"
 
@@ -43,10 +49,12 @@ Public Class frm_main
 
     Public Sub ChangeThumbnail(ByRef NewThumb As Image, Optional ByVal updateFile As Boolean = True)
         If (updateFile = True) Then
-            If (NewThumb Is Nothing) Then
-                Me._MusicFile.ClearThumbnail()
-            Else
-                Me._MusicFile.Thumbnail = NewThumb
+            If (Not NewThumb.Equals(Me._MusicFile.Thumbnail)) Then
+                If (NewThumb Is Nothing) Then
+                    Me._MusicFile.ClearThumbnail()
+                Else
+                    Me._MusicFile.Thumbnail = NewThumb
+                End If
             End If
         End If
 
@@ -266,7 +274,182 @@ Public Class frm_main
 
 #End Region
 
-    Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
+#Region "Runtime Loading Panel"
+    Private Sub kpnl_transition_loading_error_TransitionCompletedEvent(ByVal sender As Object, ByVal e As Transitions.Transition.Args) Handles kpnl_transition_loading_error.TransitionCompletedEvent
+        Me.terror_showing = False
+    End Sub
+
+    Private Sub kpnl_rloading_music_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_rloading_music.DragDrop
+        Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
+
+        If paths.InvalidDrag = False Then
+            Me.ktdlg_open_music.Content = paths.Music
+
+            Dim result = DialogResult.OK
+
+            If Me._MusicFile.Edited Then
+                result = Me.ktdlg_open_music.ShowDialog()
+            End If
+
+            If (result = Windows.Forms.DialogResult.Retry) Then
+                Me.kbtn_editing_save_Click(Nothing, Nothing)
+                Me.music_path = paths.Music
+                Me.image_path = paths.Image
+                Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
+            ElseIf (result = Windows.Forms.DialogResult.OK) Then
+                Me.music_path = paths.Music
+                Me.image_path = paths.Image
+                Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
+            End If
+        End If
+
+        Me.RHideLoadingItems()
+
+        Me.kpnl_rloading_music.StateCommon.Image = My.Resources.application_get
+
+        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(200))
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Top", 14)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Left", 727)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Height", 235)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Width", 94)
+        Me.kpnl_transition_loading_color.run()
+    End Sub
+
+    Private Sub kpnl_rloading_music_DragLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_rloading_music.DragLeave
+        Me.RHideLoadingItems()
+
+        Me.kpnl_rloading_music.StateCommon.Image = My.Resources.application_get
+
+        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(200))
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Top", 14)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Left", 727)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Height", 235)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Width", 94)
+        Me.kpnl_transition_loading_color.run()
+    End Sub
+
+    Private Sub kpnl_runtime_loading_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_rloading_music.DragEnter
+        Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
+
+        If (paths.InvalidDrag) Then
+            If (Me.terror_showing = False) Then
+                Me.terror_showing = True
+                Me.kpnl_transition_loading_error = New Transitions.Transition(New Transitions.TransitionType_Flash(1, 500))
+                Me.kpnl_transition_loading_error.add(Me.kpnl_rloading_music.StateCommon, "Color1", Color.FromArgb(255, 255, 160, 160))
+                Me.kpnl_transition_loading_error.run()
+            End If
+        Else
+            Me.kpnl_rloading_music.StateCommon.Image = Nothing
+
+            Me.kpnl_rloading_music.Top = 0
+            Me.kpnl_rloading_music.Left = 0
+            Me.kpnl_rloading_music.Height = Me.kpnl_editing_music.Height
+            Me.kpnl_rloading_music.Width = Me.kpnl_editing_music.Width
+            Me.RShowLoadingPanel(paths.Music, paths.Image)
+        End If
+    End Sub
+
+    Private Sub kpnl_runtime_loading_MouseHover(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_rloading_music.MouseHover
+        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(500))
+
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music.StateCommon, "Color1", Color.DarkGray)
+        Me.kpnl_transition_loading_color.run()
+    End Sub
+
+    Private Sub kpnl_runtime_loading_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_rloading_music.MouseLeave
+        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(500))
+
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music.StateCommon, "Color1", Me.kpnl_editing_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal))
+        Me.kpnl_transition_loading_color.run()
+    End Sub
+
+    Public Sub RHideLoadingItems()
+        Me.klbl_rloading_music.Visible = False
+        Me.klbl_rloading_thumbnail.Visible = False
+        Me.kwlbl_rloading_music_name.Visible = False
+        Me.kwlbl_rloading_thumbnail_name.Visible = False
+        Me.pcb_rloading_music.Visible = False
+        Me.pcb_rloading_thumbnail.Visible = False
+    End Sub
+
+    Public Sub RShowLoadingPanel(ByVal music_path As String, Optional ByVal image_path As String = "")
+        Me.RHideLoadingItems()
+
+        Dim TempMusicFile As MusicFile = New MusicFile(music_path)
+
+        If (image_path <> "") Then
+            Me.klbl_rloading_music.Location = New Point(Me.kpnl_rloading_music.Size.Width / 2 - Me.klbl_rloading_music.Size.Width - 50, 20)
+            Me.klbl_rloading_thumbnail.Location = New Point(Me.kpnl_rloading_music.Size.Width / 2 + 50, 20)
+
+            Me.pcb_rloading_music.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.pcb_rloading_music.Size.Width / 2, 67)
+            Me.pcb_rloading_thumbnail.Location = New Point((Me.klbl_rloading_thumbnail.Location.X + Me.klbl_rloading_thumbnail.Size.Width / 2) - Me.pcb_rloading_thumbnail.Size.Width / 2, 67)
+
+            Me.kwlbl_rloading_music_name.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.kwlbl_rloading_music_name.Size.Width / 2, 235)
+            Me.kwlbl_rloading_thumbnail_name.Location = New Point((Me.klbl_rloading_thumbnail.Location.X + Me.klbl_rloading_thumbnail.Size.Width / 2) - Me.kwlbl_rloading_thumbnail_name.Size.Width / 2, 235)
+
+            Me.klbl_rloading_music.Visible = True
+            Me.klbl_rloading_thumbnail.Visible = True
+
+            Me.pcb_rloading_music.Visible = True
+            Me.pcb_rloading_thumbnail.Visible = True
+
+            Me.kwlbl_rloading_music_name.Visible = True
+            Me.kwlbl_rloading_thumbnail_name.Visible = True
+
+            Me.pcb_rloading_music.BackColor = Me.kpnl_rloading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+            Me.pcb_rloading_thumbnail.BackColor = Me.kpnl_rloading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+            Me.pcb_rloading_thumbnail.Image = Image.FromFile(image_path)
+
+            Me.kwlbl_rloading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
+            Me.kwlbl_rloading_thumbnail_name.Text = My.Computer.FileSystem.GetFileInfo(image_path).Name
+        Else
+            Me.klbl_rloading_music.Location = New Point(Me.kpnl_rloading_music.Size.Width / 2 - Me.klbl_rloading_music.Size.Width / 2, 20)
+
+            Me.pcb_rloading_music.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.pcb_rloading_music.Size.Width / 2, 67)
+
+            Me.kwlbl_rloading_music_name.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.kwlbl_rloading_music_name.Size.Width / 2, 235)
+
+            Me.klbl_rloading_music.Visible = True
+
+            Me.pcb_rloading_music.Visible = True
+
+            Me.kwlbl_rloading_music_name.Visible = True
+
+            Me.pcb_rloading_music.BackColor = Me.kpnl_rloading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+
+            Me.kwlbl_rloading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
+        End If
+
+        If (Not TempMusicFile.Thumbnail Is Nothing) Then
+            Me.pcb_rloading_music.Image = TempMusicFile.Thumbnail
+        Else
+            Me.pcb_rloading_music.Image = My.Resources.MP3
+        End If
+
+    End Sub
+
+    Private Sub kpnl_rloading_music_SizeChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_rloading_music.SizeChanged
+        If (Me.pcb_rloading_music.Visible = True And Me.pcb_rloading_thumbnail.Visible = True) Then
+            Me.klbl_rloading_music.Location = New Point(Me.kpnl_rloading_music.Size.Width / 2 - Me.klbl_rloading_music.Size.Width - 50, 20)
+            Me.klbl_rloading_thumbnail.Location = New Point(Me.kpnl_rloading_music.Size.Width / 2 + 50, 20)
+
+            Me.pcb_rloading_music.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.pcb_rloading_music.Size.Width / 2, 67)
+            Me.pcb_rloading_thumbnail.Location = New Point((Me.klbl_rloading_thumbnail.Location.X + Me.klbl_rloading_thumbnail.Size.Width / 2) - Me.pcb_rloading_thumbnail.Size.Width / 2, 67)
+
+            Me.kwlbl_rloading_music_name.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.kwlbl_rloading_music_name.Size.Width / 2, 235)
+            Me.kwlbl_rloading_thumbnail_name.Location = New Point((Me.klbl_rloading_thumbnail.Location.X + Me.klbl_rloading_thumbnail.Size.Width / 2) - Me.kwlbl_rloading_thumbnail_name.Size.Width / 2, 235)
+        ElseIf (Me.pcb_rloading_music.Visible = True) Then
+            Me.klbl_rloading_music.Location = New Point(Me.kpnl_rloading_music.Size.Width / 2 - Me.klbl_rloading_music.Size.Width / 2, 20)
+
+            Me.pcb_rloading_music.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.pcb_rloading_music.Size.Width / 2, 67)
+
+            Me.kwlbl_rloading_music_name.Location = New Point((Me.klbl_rloading_music.Location.X + Me.klbl_rloading_music.Size.Width / 2) - Me.kwlbl_rloading_music_name.Size.Width / 2, 235)
+        End If
+    End Sub
+
+#End Region
+
+    Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) As DragFiles
         Dim paths As DragFiles = New DragFiles
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             e.Effect = DragDropEffects.Copy
@@ -313,8 +496,6 @@ Public Class frm_main
         Return paths
     End Function
 
-
-
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.ImageFormats.Add(".jpg")
         Me.ImageFormats.Add(".jpeg")
@@ -324,10 +505,10 @@ Public Class frm_main
         Me.kpnl_editing_music.Visible = False
         Me.kpnl_loading_music.Visible = True
 
+        Me.kpnl_rloading_music.StateCommon.Color1 = Me.kpnl_editing_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+
         Me.sfd_export_thumbnail.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyMusic
     End Sub
-
-
 
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
         Me.Loading = True
@@ -363,8 +544,11 @@ Public Class frm_main
 
         If (image <> "" And (Not image Is Nothing)) Then
             Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
+            Me.ChangeThumbnail(Me._MusicFile.Thumbnail, True)
+        Else
+            Dim imageThumb As Image = Me._MusicFile.Thumbnail
+            Me.ChangeThumbnail(imageThumb, False)
         End If
-        Me.ChangeThumbnail(Me._MusicFile.Thumbnail)
 
         Me.Loading = False
     End Sub

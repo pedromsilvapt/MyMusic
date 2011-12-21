@@ -34,10 +34,10 @@ Partial Class TVKryptonMultiline
         Me.KTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.KTextBox.Location = New System.Drawing.Point(3, 40)
+        Me.KTextBox.Location = New System.Drawing.Point(3, 34)
         Me.KTextBox.Multiline = True
         Me.KTextBox.Name = "KTextBox"
-        Me.KTextBox.Size = New System.Drawing.Size(225, 194)
+        Me.KTextBox.Size = New System.Drawing.Size(225, 200)
         Me.KTextBox.TabIndex = 3
         '
         'KHeader

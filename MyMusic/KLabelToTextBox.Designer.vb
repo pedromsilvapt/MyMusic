@@ -41,10 +41,11 @@ Partial Class KLabelToTextBox
         Me.KLabel.AutoSize = False
         Me.KLabel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.KLabel.Font = New System.Drawing.Font("Segoe UI", 9.0!)
-        Me.KLabel.ForeColor = System.Drawing.Color.FromArgb(CType(CType(76, Byte), Integer), CType(CType(83, Byte), Integer), CType(CType(92, Byte), Integer))
+        Me.KLabel.ForeColor = System.Drawing.Color.White
         Me.KLabel.Location = New System.Drawing.Point(0, 0)
         Me.KLabel.Name = "KLabel"
         Me.KLabel.Size = New System.Drawing.Size(190, 75)
+        Me.KLabel.StateCommon.TextColor = System.Drawing.Color.White
         Me.KLabel.Text = "KryptonLabel1"
         '
         'KLabelToTextBox
