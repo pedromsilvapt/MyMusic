@@ -88,6 +88,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property bin() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("bin", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property cross() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("cross", resourceCulture)
