@@ -50,12 +50,10 @@ Public Class frm_main
 
     Public Sub ChangeThumbnail(ByRef NewThumb As Image, Optional ByVal updateFile As Boolean = True)
         If (updateFile = True) Then
-            If (Not NewThumb.Equals(Me._MusicFile.Thumbnail)) Then
-                If (NewThumb Is Nothing) Then
-                    Me._MusicFile.ClearThumbnail()
-                Else
-                    Me._MusicFile.Thumbnail = NewThumb
-                End If
+            If (NewThumb Is Nothing) Then
+                Me._MusicFile.ClearThumbnail()
+            Else
+                Me._MusicFile.Thumbnail = NewThumb
             End If
         End If
 
@@ -497,6 +495,19 @@ Public Class frm_main
         Return paths
     End Function
 
+    Private Sub frm_main_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If (Me._MusicFile.Edited) Then
+            Me.ktdlg_close_window.Content = Me.music_path
+            Dim result As DialogResult = Me.ktdlg_close_window.ShowDialog()
+
+            If (result = Windows.Forms.DialogResult.Cancel) Then
+                e.Cancel = True
+            ElseIf (result = Windows.Forms.DialogResult.OK)
+                Me.kbtn_editing_save_Click(Nothing, Nothing)
+            End If
+        End If
+    End Sub
+
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.ImageFormats.Add(".jpg")
         Me.ImageFormats.Add(".jpeg")
@@ -510,6 +521,8 @@ Public Class frm_main
 
         Me.sfd_export_thumbnail.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyMusic
     End Sub
+
+
 
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
         Me.Loading = True
@@ -647,4 +660,5 @@ Public Class frm_main
 
         Me.pcb_editing_saving.Visible = False
     End Sub
+
 End Class
