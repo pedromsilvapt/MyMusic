@@ -74,6 +74,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property application_get() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("application_get", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property arrow_return_180_left() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("arrow_return_180_left", resourceCulture)
