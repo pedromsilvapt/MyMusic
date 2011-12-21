@@ -19,3 +19,4 @@ C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Debu
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Debug\MyMusic.KLabelToTextBox.resources
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Debug\MyMusic.exe.config
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Debug\ComponentFactory.Krypton.Toolkit.dll
+C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Debug\MyMusic.TVKryptonMultiline.resources
