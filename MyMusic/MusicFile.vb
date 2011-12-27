@@ -3,10 +3,46 @@ Imports TagLib
 
 Public Class MusicFile
     Public MusicPath As String
+    Public NewMusicPath As String
+
     Public _Thumbnail As Image
     Public MusicTags As TagLib.File
     Private _Edited As Boolean = False
 
+    Private tag As TagLib.Tag
+
+    Private PopM As TagLib.Id3v2.PopularimeterFrame
+
+    Private _rates As Dictionary(Of Integer, Integer) = New Dictionary(Of Integer, Integer)
+
+    Public ReadOnly Property RateByte(ByVal Rate As Integer) As Integer
+        Get
+            If (Rate < 0) Then
+                Rate = 0
+            ElseIf (Rate > 5) Then
+                Rate = 5
+            End If
+            Return Me._rates(Rate)
+        End Get
+    End Property
+
+    Public ReadOnly Property RateStars(ByVal _Byte As Integer) As Integer
+        Get
+            If (_Byte <= 0) Then
+                Return 0
+            ElseIf (_Byte >= 1 And _Byte <= 63) Then
+                Return 1
+            ElseIf (_Byte >= 64 And _Byte <= 127) Then
+                Return 2
+            ElseIf (_Byte >= 128 And _Byte <= 191) Then
+                Return 3
+            ElseIf (_Byte >= 192 And _Byte <= 254) Then
+                Return 4
+            Else
+                Return 5
+            End If
+        End Get
+    End Property
 
     Public ReadOnly Property Edited As Boolean
         Get
@@ -16,28 +52,30 @@ Public Class MusicFile
 
     Public Property MusicFile As String
         Get
-            Return Me.MusicPath
+            Return Me.NewMusicPath
         End Get
         Set(ByVal value As String)
-            If (value <> Me.MusicPath) Then
-                Me.MusicTags.Save()
-                My.Computer.FileSystem.MoveFile(Me.MusicPath, value)
-                Me.MusicTags = TagLib.File.Create(value)
-                Me.MusicPath = value
+            If (value <> Me.NewMusicPath) Then
+                If (My.Computer.FileSystem.FileExists(value)) Then
+                    Throw New Exception(String.Format("O ficheiro com o nome {0} já existe.", value))
+                Else
+                    Me.NewMusicPath = value
+                End If
             End If
         End Set
     End Property
 
     Public Property MusicFileName As String
         Get
-            Return My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Name
+            Return My.Computer.FileSystem.GetFileInfo(Me.NewMusicPath).Name
         End Get
         Set(ByVal value As String)
-            If (value <> My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Name) Then
-                Me.MusicTags.Save()
-                My.Computer.FileSystem.RenameFile(Me.MusicPath, value)
-                Me.MusicTags = TagLib.File.Create(My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Directory.FullName & "\" & value)
-                Me.MusicPath = My.Computer.FileSystem.GetFileInfo(Me.MusicPath).Directory.FullName & "\" & value
+            If (value <> My.Computer.FileSystem.GetFileInfo(Me.NewMusicPath).Name) Then
+                If (My.Computer.FileSystem.FileExists(My.Computer.FileSystem.GetFileInfo(Me.MusicPath).DirectoryName & "\" & value)) Then
+                    Throw New Exception(String.Format("O ficheiro com o nome {0} já existe.", My.Computer.FileSystem.GetFileInfo(Me.MusicPath).DirectoryName & "\" & value))
+                Else
+                    Me.NewMusicPath = My.Computer.FileSystem.GetFileInfo(Me.MusicPath).DirectoryName & "\" & value
+                End If
             End If
         End Set
     End Property
@@ -196,10 +234,13 @@ Public Class MusicFile
 
     Public Property Rate As Integer
         Get
-            'Me.MusicTags.Tag.
+            Return Me.RateStars(Me.PopM.Rating)
         End Get
         Set(ByVal value As Integer)
-
+            If (value < Me.RateStars(Me.PopM.Rating)) Then
+                Me._Edited = True
+            End If
+            Me.PopM.Rating = Me.RateByte(value)
         End Set
     End Property
 
@@ -211,6 +252,11 @@ Public Class MusicFile
 
     Public Sub Save()
         Me.MusicTags.Save()
+        If (NewMusicPath <> MusicPath) Then
+            My.Computer.FileSystem.MoveFile(Me.MusicPath, NewMusicPath)
+            Me.MusicTags = TagLib.File.Create(NewMusicPath)
+            Me.MusicPath = NewMusicPath
+        End If
         Me._Edited = False
     End Sub
 
@@ -223,11 +269,25 @@ Public Class MusicFile
         End If
 
         Me.MusicPath = music
+        Me.NewMusicPath = music
 
         Me.MusicTags = TagLib.File.Create(music)
+
+        TagLib.Id3v2.Tag.DefaultVersion = 3
+        TagLib.Id3v2.Tag.ForceDefaultVersion = True
 
         If (image <> "") Then
             Me.Thumbnail = Bitmap.FromFile(image)
         End If
+
+        Me.tag = MusicTags.GetTag(TagLib.TagTypes.Id3v2)
+        Me.PopM = TagLib.Id3v2.PopularimeterFrame.Get(tag, My.User.Name, True)
+
+        Me._rates.Add(0, 0)
+        Me._rates.Add(1, 62)
+        Me._rates.Add(2, 65)
+        Me._rates.Add(3, 129)
+        Me._rates.Add(4, 193)
+        Me._rates.Add(5, 255)
     End Sub
 End Class

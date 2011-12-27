@@ -66,7 +66,11 @@
 
     Public Property TextBoxValue1 As String
         Get
-            Return Me.TextValue1
+            If Me.OnlyNumerics And Me.KTextBox.Text = "" Then
+                Return 0
+            Else
+                Return Me.TextValue1
+            End If
         End Get
         Set(ByVal value As String)
             If (Me.KCheckBox.Checked) Then
@@ -79,7 +83,11 @@
 
     Public Property TextBoxValue2 As String
         Get
-            Return Me.TextValue2
+            If Me.OnlyNumerics And Me.KTextBox.Text = "" Then
+                Return 0
+            Else
+                Return Me.TextValue2
+            End If
         End Get
         Set(ByVal value As String)
             If (Me.KCheckBox.Checked) Then
@@ -92,7 +100,11 @@
 
     Public Property TextBoxValue As String
         Get
-            Return Me.KTextBox.Text
+            If Me.OnlyNumerics And Me.KTextBox.Text = "" Then
+                Return 0
+            Else
+                Return Me.KTextBox.Text
+            End If
         End Get
         Set(ByVal value As String)
             Me.KTextBox.Text = value

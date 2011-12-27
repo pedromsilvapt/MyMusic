@@ -37,6 +37,7 @@ Partial Class TVKryptonMultiline
         Me.KTextBox.Location = New System.Drawing.Point(3, 34)
         Me.KTextBox.Multiline = True
         Me.KTextBox.Name = "KTextBox"
+        Me.KTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.KTextBox.Size = New System.Drawing.Size(225, 200)
         Me.KTextBox.TabIndex = 3
         '

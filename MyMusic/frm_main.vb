@@ -162,26 +162,55 @@ Public Class frm_main
         End If
     End Sub
 
+    Private Sub pcb_editing_thumbnail_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles pcb_editing_thumbnail.MouseClick
+        If e.Button = Windows.Forms.MouseButtons.Right Then
+            Me.kcmd_thumbnail.Show(Me.pcb_editing_thumbnail, New Point(frm_main.MousePosition.X, frm_main.MousePosition.Y))
+        End If
+    End Sub
+
+    'Copy thumbnail to clipboard
+    Private Sub KryptonContextMenuItem1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles KryptonContextMenuItem1.Click
+        My.Computer.Clipboard.SetImage(Me.pcb_editing_thumbnail.Image)
+
+        Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
+        name &= "_thumbnail.png"
+
+        Me.pcb_editing_thumbnail.Image.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
+
+        Dim fileas As Collections.Specialized.StringCollection = New Collections.Specialized.StringCollection()
+        fileas.Add(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
+
+        My.Computer.Clipboard.SetFileDropList(fileas)
+    End Sub
+
+    Private Sub pcb_editing_thumbnail_MouseEnter(ByVal sender As Object, ByVal e As System.EventArgs) Handles pcb_editing_thumbnail.MouseEnter
+        Me.t_moving = False
+    End Sub
 
     Private Sub pcb_editing_thumbnail_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles pcb_editing_thumbnail.MouseDown
-        Me.t_moving = True
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            Me.t_moving = True
+        End If
     End Sub
 
     Private Sub pcb_editing_thumbnail_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles pcb_editing_thumbnail.MouseMove
         If (Me.t_moving) Then
-            Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
-            name &= "_thumbnail.png"
+            Try
+                Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
+                name &= "_thumbnail.png"
 
-            Me.pcb_editing_thumbnail.Image.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
+                Me.pcb_editing_thumbnail.Image.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
 
-            Dim fileas As String() = New [String](0) {}
-            fileas(0) = My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name
-            Dim dta = New DataObject(DataFormats.FileDrop, fileas)
-            dta.SetData(DataFormats.StringFormat, fileas)
-            dta.SetData(DataFormats.Bitmap, Me.pcb_editing_thumbnail.Image)
-            kpnl_editing_thumbnail.DoDragDrop(dta, DragDropEffects.Copy)
-
-
+                Dim fileas As String() = New [String](0) {}
+                fileas(0) = My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name
+                Dim dta = New DataObject(DataFormats.FileDrop, fileas)
+                dta.SetData(DataFormats.StringFormat, fileas)
+                dta.SetData(DataFormats.Bitmap, Me.pcb_editing_thumbnail.Image)
+                kpnl_editing_thumbnail.DoDragDrop(dta, DragDropEffects.Copy)
+            Catch ex As Exception
+                Me.t_moving = False
+                ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show(ex.Message, "Erro de GDI+", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
             'kpnl_editing_thumbnail.DoDragDrop(My.Computer.FileSystem.SpecialDirectories.Temp & "\tempthumb_mymusic.png", DragDropEffects.Copy)
         End If
         Me.t_moving = False
@@ -243,6 +272,29 @@ Public Class frm_main
             Me._MusicFile.Lyrics = Me.tvktxt_lyrics.TextBoxValue1
         End If
     End Sub
+
+    Private Sub rc_classification_RatingUpdated(ByVal curRating As Integer) Handles rc_classification.RatingUpdated
+        If Not Me.Loading Then
+            Me._MusicFile.Rate = Me.rc_classification.Value
+        End If
+    End Sub
+
+    Private Sub kbtn_clear_rating_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_clear_rating.Click
+        Me.rc_classification.cleanRating()
+    End Sub
+
+    Private Sub kltt_editing_filename_TextBoxLostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles kltt_editing_filename.TextBoxLostFocus
+        Try
+            Me._MusicFile.MusicFileName = Me.kltt_editing_filename.Text
+        Catch ex As Exception
+            Dim res As DialogResult = ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show(ex.Message, "Erro ao mudar o nome", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
+            If res = Windows.Forms.DialogResult.Retry Then
+                kltt_editing_filename_TextBoxLostFocus(Nothing, Nothing)
+            Else
+                Me.kltt_editing_filename.Text = Me._MusicFile.MusicFileName
+            End If
+        End Try
+    End Sub
 #End Region
 
 #Region "Startup Loading Panel"
@@ -276,6 +328,21 @@ Public Class frm_main
 #Region "Runtime Loading Panel"
     Private Sub kpnl_transition_loading_error_TransitionCompletedEvent(ByVal sender As Object, ByVal e As Transitions.Transition.Args) Handles kpnl_transition_loading_error.TransitionCompletedEvent
         Me.terror_showing = False
+    End Sub
+
+    Private Sub kpnl_rloading_music_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles kpnl_rloading_music.MouseClick
+        Dim files As Collections.Specialized.StringCollection = My.Computer.Clipboard.GetFileDropList()
+
+        Dim filesDrop As DragFiles = Me.CheckFileOpens(files)
+
+        If (filesDrop.InvalidDrag) Then
+            Dim res As DialogResult = ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("Os ficheiros que copiou são inválidos.", "Erro ao abrir", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
+            If (res = DialogResult.Retry) Then
+                Me.kpnl_rloading_music_MouseClick(sender, e)
+            End If
+        Else
+            LoadMusicFileIntoGUI(filesDrop.Music, filesDrop.Image)
+        End If
     End Sub
 
     Private Sub kpnl_rloading_music_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_rloading_music.DragDrop
@@ -448,6 +515,41 @@ Public Class frm_main
 
 #End Region
 
+    Public Function CheckFileOpens(ByVal files As Collections.Specialized.StringCollection) As DragFiles
+        Dim paths As DragFiles = New DragFiles
+
+            Dim i As Integer = 0
+            Dim music As Boolean = False
+            Dim image As Boolean = False
+
+        While ((music = False Or image = False) And i < files.Count)
+
+            'Checks if the dropped file exists
+            If (Not File.Exists(files(i))) Then
+                Continue While
+            End If
+
+            'Then checks the file type, and if it any we are looking for
+            If (My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower() = ".mp3" And music = False) Then
+                paths.Music = files(i)
+                music = True
+            ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And image = False) Then
+                paths.Image = files(i)
+                image = True
+            End If
+
+            'Checks if there is any music, otherwise it will be an invalid drag
+            If (music = True) Then
+                paths.InvalidDrag = False
+            Else
+                paths.InvalidDrag = True
+            End If
+            i += 1
+        End While
+
+        Return (paths)
+    End Function
+
     Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) As DragFiles
         Dim paths As DragFiles = New DragFiles
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
@@ -496,14 +598,16 @@ Public Class frm_main
     End Function
 
     Private Sub frm_main_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        If (Me._MusicFile.Edited) Then
-            Me.ktdlg_close_window.Content = Me.music_path
-            Dim result As DialogResult = Me.ktdlg_close_window.ShowDialog()
+        If Me._MusicFile IsNot Nothing Then
+            If (Me._MusicFile.Edited) Then
+                Me.ktdlg_close_window.Content = Me.music_path
+                Dim result As DialogResult = Me.ktdlg_close_window.ShowDialog()
 
-            If (result = Windows.Forms.DialogResult.Cancel) Then
-                e.Cancel = True
-            ElseIf (result = Windows.Forms.DialogResult.OK)
-                Me.kbtn_editing_save_Click(Nothing, Nothing)
+                If (result = Windows.Forms.DialogResult.Cancel) Then
+                    e.Cancel = True
+                ElseIf (result = Windows.Forms.DialogResult.OK) Then
+                    Me.kbtn_editing_save_Click(Nothing, Nothing)
+                End If
             End If
         End If
     End Sub
@@ -555,6 +659,8 @@ Public Class frm_main
 
         Me.tvktxt_lyrics.TextBoxValue1 = Me._MusicFile.Lyrics
         Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
+
+        Me.rc_classification.Value = Me._MusicFile.Rate
 
         If (image <> "" And (Not image Is Nothing)) Then
             Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
@@ -634,31 +740,39 @@ Public Class frm_main
 
     Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
         Me.pcb_editing_saving.Visible = True
-        If (Me.kltt_editing_filename.Text = Me._MusicFile.MusicFileName) Then
+        'If (Me.kltt_editing_filename.Text = Me._MusicFile.MusicFileName) Then
+        '    Me._MusicFile.Save()
+        'Else
+        '    Me._MusicFile.MusicFileName = Me.kltt_editing_filename.Text
+        'End If
+        Try
             Me._MusicFile.Save()
-        Else
-            Me._MusicFile.MusicFileName = Me.kltt_editing_filename.Text
-        End If
 
-        Me.tvktxt_title.RevertText = Me._MusicFile.Title
+            Me.tvktxt_title.RevertText = Me._MusicFile.Title
 
-        Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
+            Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
 
-        Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
+            Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
 
-        Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
+            Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
 
-        Me.tvktxt_album.RevertText = Me._MusicFile.Album
+            Me.tvktxt_album.RevertText = Me._MusicFile.Album
 
-        Me.tvktxt_year.RevertText = Me._MusicFile.Year
+            Me.tvktxt_year.RevertText = Me._MusicFile.Year
 
-        Me.tvktxt_number.RevertText = Me._MusicFile.Number
+            Me.tvktxt_number.RevertText = Me._MusicFile.Number
 
-        Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
+            Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
 
-        Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
+            Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
+
+        Catch ex As Exception
+            Dim res As DialogResult = ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show(ex.Message, "Erro ao guardar", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
+            If (res = DialogResult.Retry) Then
+                Me.kbtn_editing_save.PerformClick()
+            End If
+        End Try
 
         Me.pcb_editing_saving.Visible = False
     End Sub
-
 End Class

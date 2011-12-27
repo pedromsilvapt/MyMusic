@@ -29,6 +29,8 @@
         End Set
     End Property
 
+    Public Event TextBoxLostFocus(ByVal sender As Object, ByVal e As System.EventArgs)
+
 
     Private Sub KLabel_MouseClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles KLabel.MouseClick
         Me.KTextBox.Visible = True
@@ -39,6 +41,7 @@
     Private Sub KTextBox_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles KTextBox.LostFocus
         Me.KLabel.Visible = True
         Me.KTextBox.Visible = False
+        RaiseEvent TextBoxLostFocus(sender, e)
     End Sub
 
     Private Sub KLabel_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles KLabel.TextChanged
