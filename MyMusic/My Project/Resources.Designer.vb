@@ -116,6 +116,13 @@ Namespace My.Resources
             End Get
         End Property
         
+        Friend ReadOnly Property page_white_copy() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("page_white_copy", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         Friend ReadOnly Property paste_plain() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("paste_plain", resourceCulture)
