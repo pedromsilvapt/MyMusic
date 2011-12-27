@@ -31,6 +31,7 @@ Partial Class frm_main
         Me.klbl_loading_music = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.KryptonManager = New ComponentFactory.Krypton.Toolkit.KryptonManager(Me.components)
         Me.kpnl_editing_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
+        Me.kbtn_info = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kpnl_rloading_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.kwlbl_rloading_thumbnail_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
         Me.pcb_rloading_thumbnail = New System.Windows.Forms.PictureBox()
@@ -44,7 +45,7 @@ Partial Class frm_main
         Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
         Me.kpnl_editing_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.pcb_editing_thumbnail = New System.Windows.Forms.PictureBox()
-        Me.KryptonButton2 = New ComponentFactory.Krypton.Toolkit.KryptonButton()
+        Me.kbtn_thumbnail_open = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_paste = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_export = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_clear = New ComponentFactory.Krypton.Toolkit.KryptonButton()
@@ -71,6 +72,7 @@ Partial Class frm_main
         Me.kcmd_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonContextMenu()
         Me.KryptonContextMenuItems1 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems()
         Me.KryptonContextMenuItem1 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem()
+        Me.ofd_thumbnail = New System.Windows.Forms.OpenFileDialog()
         CType(Me.kpnl_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_loading_music.SuspendLayout()
         CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -193,13 +195,14 @@ Partial Class frm_main
         '
         'kpnl_editing_music
         '
+        Me.kpnl_editing_music.Controls.Add(Me.kbtn_info)
         Me.kpnl_editing_music.Controls.Add(Me.kpnl_rloading_music)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_clear_rating)
         Me.kpnl_editing_music.Controls.Add(Me.tvktxt_lyrics)
         Me.kpnl_editing_music.Controls.Add(Me.pcb_editing_saving)
         Me.kpnl_editing_music.Controls.Add(Me.kltt_editing_filename)
         Me.kpnl_editing_music.Controls.Add(Me.kpnl_editing_thumbnail)
-        Me.kpnl_editing_music.Controls.Add(Me.KryptonButton2)
+        Me.kpnl_editing_music.Controls.Add(Me.kbtn_thumbnail_open)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_editing_thumbnail_paste)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_editing_thumbnail_export)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_editing_thumbnail_clear)
@@ -219,6 +222,15 @@ Partial Class frm_main
         Me.kpnl_editing_music.Name = "kpnl_editing_music"
         Me.kpnl_editing_music.Size = New System.Drawing.Size(821, 298)
         Me.kpnl_editing_music.TabIndex = 7
+        '
+        'kbtn_info
+        '
+        Me.kbtn_info.Location = New System.Drawing.Point(774, 259)
+        Me.kbtn_info.Name = "kbtn_info"
+        Me.kbtn_info.Size = New System.Drawing.Size(35, 30)
+        Me.kbtn_info.TabIndex = 23
+        Me.kbtn_info.Values.Image = Global.MyMusic.My.Resources.Resources.information
+        Me.kbtn_info.Values.Text = ""
         '
         'kpnl_rloading_music
         '
@@ -383,14 +395,14 @@ Partial Class frm_main
         Me.pcb_editing_thumbnail.TabIndex = 0
         Me.pcb_editing_thumbnail.TabStop = False
         '
-        'KryptonButton2
+        'kbtn_thumbnail_open
         '
-        Me.KryptonButton2.Location = New System.Drawing.Point(3, 122)
-        Me.KryptonButton2.Name = "KryptonButton2"
-        Me.KryptonButton2.Size = New System.Drawing.Size(35, 30)
-        Me.KryptonButton2.TabIndex = 16
-        Me.KryptonButton2.Values.Image = Global.MyMusic.My.Resources.Resources.magnifier
-        Me.KryptonButton2.Values.Text = ""
+        Me.kbtn_thumbnail_open.Location = New System.Drawing.Point(3, 122)
+        Me.kbtn_thumbnail_open.Name = "kbtn_thumbnail_open"
+        Me.kbtn_thumbnail_open.Size = New System.Drawing.Size(35, 30)
+        Me.kbtn_thumbnail_open.TabIndex = 16
+        Me.kbtn_thumbnail_open.Values.Image = Global.MyMusic.My.Resources.Resources.magnifier
+        Me.kbtn_thumbnail_open.Values.Text = ""
         '
         'kbtn_editing_thumbnail_paste
         '
@@ -709,6 +721,10 @@ Partial Class frm_main
         Me.KryptonContextMenuItem1.Image = Global.MyMusic.My.Resources.Resources.page_white_copy
         Me.KryptonContextMenuItem1.Text = "Copiar"
         '
+        'ofd_thumbnail
+        '
+        Me.ofd_thumbnail.Title = "Abrir Thumbnail"
+        '
         'frm_main
         '
         Me.AllowDrop = True
@@ -779,7 +795,7 @@ Partial Class frm_main
     Friend WithEvents kbtn_editing_thumbnail_clear As ComponentFactory.Krypton.Toolkit.KryptonButton
     Friend WithEvents kbtn_editing_thumbnail_export As ComponentFactory.Krypton.Toolkit.KryptonButton
     Friend WithEvents kbtn_editing_thumbnail_paste As ComponentFactory.Krypton.Toolkit.KryptonButton
-    Friend WithEvents KryptonButton2 As ComponentFactory.Krypton.Toolkit.KryptonButton
+    Friend WithEvents kbtn_thumbnail_open As ComponentFactory.Krypton.Toolkit.KryptonButton
     Friend WithEvents sfd_export_thumbnail As System.Windows.Forms.SaveFileDialog
     Friend WithEvents kpnl_editing_thumbnail As ComponentFactory.Krypton.Toolkit.KryptonPanel
     Friend WithEvents kltt_editing_filename As MyMusic.KLabelToTextBox
@@ -805,4 +821,6 @@ Partial Class frm_main
     Friend WithEvents kcmd_thumbnail As ComponentFactory.Krypton.Toolkit.KryptonContextMenu
     Friend WithEvents KryptonContextMenuItems1 As ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems
     Friend WithEvents KryptonContextMenuItem1 As ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem
+    Friend WithEvents kbtn_info As ComponentFactory.Krypton.Toolkit.KryptonButton
+    Friend WithEvents ofd_thumbnail As System.Windows.Forms.OpenFileDialog
 End Class

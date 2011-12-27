@@ -105,6 +105,14 @@ Public Class frm_main
         End If
     End Sub
 
+    Private Sub kbtn_thumbnail_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_thumbnail_open.Click
+        Me.ofd_thumbnail.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG)|*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG"
+        Dim res As Windows.Forms.DialogResult = Me.ofd_thumbnail.ShowDialog()
+        If res = Windows.Forms.DialogResult.OK Then
+            Me.ChangeThumbnail(Image.FromFile(Me.ofd_thumbnail.FileName))
+        End If
+    End Sub
+
     Private Sub kpnl_editing_thumbnail_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_editing_thumbnail.DragDrop
         Dim paths As DragFiles = New DragFiles
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
