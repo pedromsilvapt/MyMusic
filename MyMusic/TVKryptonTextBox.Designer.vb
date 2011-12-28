@@ -25,8 +25,8 @@ Partial Class TVKryptonTextBox
         Me.KCheckBox = New ComponentFactory.Krypton.Toolkit.KryptonCheckBox()
         Me.KLabel = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.KTextBox = New ComponentFactory.Krypton.Toolkit.KryptonTextBox()
-        Me.btnsc_clear = New ComponentFactory.Krypton.Toolkit.ButtonSpecAny()
         Me.btnsc_revert = New ComponentFactory.Krypton.Toolkit.ButtonSpecAny()
+        Me.btnsc_clear = New ComponentFactory.Krypton.Toolkit.ButtonSpecAny()
         Me.SuspendLayout()
         '
         'KCheckBox
@@ -40,6 +40,7 @@ Partial Class TVKryptonTextBox
         '
         'KLabel
         '
+        Me.KLabel.AllowDrop = True
         Me.KLabel.Location = New System.Drawing.Point(16, 1)
         Me.KLabel.Name = "KLabel"
         Me.KLabel.Size = New System.Drawing.Size(39, 20)
@@ -49,11 +50,17 @@ Partial Class TVKryptonTextBox
         'KTextBox
         '
         Me.KTextBox.AllowButtonSpecToolTips = True
+        Me.KTextBox.AllowDrop = True
         Me.KTextBox.ButtonSpecs.AddRange(New ComponentFactory.Krypton.Toolkit.ButtonSpecAny() {Me.btnsc_revert, Me.btnsc_clear})
         Me.KTextBox.Location = New System.Drawing.Point(59, 1)
         Me.KTextBox.Name = "KTextBox"
         Me.KTextBox.Size = New System.Drawing.Size(100, 20)
         Me.KTextBox.TabIndex = 2
+        '
+        'btnsc_revert
+        '
+        Me.btnsc_revert.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.ArrowLeft
+        Me.btnsc_revert.UniqueName = "36DB3DF2B384468ADB84D32D883E89C4"
         '
         'btnsc_clear
         '
@@ -62,13 +69,9 @@ Partial Class TVKryptonTextBox
         Me.btnsc_clear.UniqueName = "84DFB0688EFC4B78A5B63D956F4469BD"
         Me.btnsc_clear.Visible = False
         '
-        'btnsc_revert
-        '
-        Me.btnsc_revert.Type = ComponentFactory.Krypton.Toolkit.PaletteButtonSpecStyle.ArrowLeft
-        Me.btnsc_revert.UniqueName = "36DB3DF2B384468ADB84D32D883E89C4"
-        '
         'TVKryptonTextBox
         '
+        Me.AllowDrop = True
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.KTextBox)

@@ -149,6 +149,7 @@
     <Compile Include="TVKryptonTextBox.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Utils.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frm_about.resx">

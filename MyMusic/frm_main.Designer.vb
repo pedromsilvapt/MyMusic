@@ -41,9 +41,7 @@ Partial Class frm_main
         Me.klbl_rloading_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.klbl_rloading_music = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.kbtn_clear_rating = New ComponentFactory.Krypton.Toolkit.KryptonButton()
-        Me.tvktxt_lyrics = New MyMusic.TVKryptonMultiline()
         Me.pcb_editing_saving = New System.Windows.Forms.PictureBox()
-        Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
         Me.kpnl_editing_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.pcb_editing_thumbnail = New System.Windows.Forms.PictureBox()
         Me.kbtn_thumbnail_open = New ComponentFactory.Krypton.Toolkit.KryptonButton()
@@ -51,14 +49,6 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_export = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_thumbnail_clear = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_editing_save = New ComponentFactory.Krypton.Toolkit.KryptonButton()
-        Me.tvktxt_album = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_genres = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_number = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_year = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_interpret = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_artists = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_comments = New MyMusic.TVKryptonTextBox()
-        Me.tvktxt_title = New MyMusic.TVKryptonTextBox()
         Me.klbl_classification = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.rc_classification = New Softclean.RatingControl()
         Me.sfd_export_thumbnail = New System.Windows.Forms.SaveFileDialog()
@@ -74,6 +64,16 @@ Partial Class frm_main
         Me.KryptonContextMenuItems1 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems()
         Me.KryptonContextMenuItem1 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem()
         Me.ofd_thumbnail = New System.Windows.Forms.OpenFileDialog()
+        Me.tvktxt_lyrics = New MyMusic.TVKryptonMultiline()
+        Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
+        Me.tvktxt_album = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_genres = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_number = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_year = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_interpret = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_artists = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_comments = New MyMusic.TVKryptonTextBox()
+        Me.tvktxt_title = New MyMusic.TVKryptonTextBox()
         CType(Me.kpnl_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_loading_music.SuspendLayout()
         CType(Me.pcb_loading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -344,28 +344,6 @@ Partial Class frm_main
         Me.kbtn_clear_rating.Values.Image = Global.MyMusic.My.Resources.Resources.cross
         Me.kbtn_clear_rating.Values.Text = ""
         '
-        'tvktxt_lyrics
-        '
-        Me.tvktxt_lyrics.AutoChangeToFirst = True
-        Me.tvktxt_lyrics.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_lyrics.CheckBoxVisible = False
-        Me.tvktxt_lyrics.KChecked = False
-        Me.tvktxt_lyrics.LabelColor = System.Drawing.Color.Empty
-        Me.tvktxt_lyrics.LabelText = "Lyrics"
-        Me.tvktxt_lyrics.Location = New System.Drawing.Point(501, 12)
-        Me.tvktxt_lyrics.Name = "tvktxt_lyrics"
-        Me.tvktxt_lyrics.RevertText = Nothing
-        Me.tvktxt_lyrics.ShowClear = True
-        Me.tvktxt_lyrics.ShowRevert = True
-        Me.tvktxt_lyrics.Size = New System.Drawing.Size(220, 237)
-        Me.tvktxt_lyrics.TabIndex = 9
-        Me.tvktxt_lyrics.TextBoxValue = ""
-        Me.tvktxt_lyrics.TextBoxValue1 = ""
-        Me.tvktxt_lyrics.TextBoxValue2 = ""
-        Me.tvktxt_lyrics.TextBoxWidth = 214.0!
-        Me.tvktxt_lyrics.TextBoxX = 3.0!
-        Me.tvktxt_lyrics.ValueTwoEditable = False
-        '
         'pcb_editing_saving
         '
         Me.pcb_editing_saving.BackColor = System.Drawing.Color.Transparent
@@ -377,14 +355,6 @@ Partial Class frm_main
         Me.pcb_editing_saving.TabIndex = 19
         Me.pcb_editing_saving.TabStop = False
         Me.pcb_editing_saving.Visible = False
-        '
-        'kltt_editing_filename
-        '
-        Me.kltt_editing_filename.BackColor = System.Drawing.Color.Transparent
-        Me.kltt_editing_filename.Location = New System.Drawing.Point(44, 163)
-        Me.kltt_editing_filename.Name = "kltt_editing_filename"
-        Me.kltt_editing_filename.Size = New System.Drawing.Size(145, 33)
-        Me.kltt_editing_filename.TabIndex = 18
         '
         'kpnl_editing_thumbnail
         '
@@ -450,182 +420,6 @@ Partial Class frm_main
         Me.kbtn_editing_save.TabIndex = 16
         Me.kbtn_editing_save.Values.Image = Global.MyMusic.My.Resources.Resources.accept
         Me.kbtn_editing_save.Values.Text = "Aplicar"
-        '
-        'tvktxt_album
-        '
-        Me.tvktxt_album.AutoChangeToFirst = True
-        Me.tvktxt_album.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_album.CheckBoxVisible = False
-        Me.tvktxt_album.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_album.LabelText = "Álbum:"
-        Me.tvktxt_album.Location = New System.Drawing.Point(203, 132)
-        Me.tvktxt_album.Name = "tvktxt_album"
-        Me.tvktxt_album.OnlyNumerics = False
-        Me.tvktxt_album.RevertText = Nothing
-        Me.tvktxt_album.ShowClear = True
-        Me.tvktxt_album.ShowRevert = True
-        Me.tvktxt_album.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_album.TabIndex = 5
-        Me.tvktxt_album.TextBoxValue = ""
-        Me.tvktxt_album.TextBoxValue1 = ""
-        Me.tvktxt_album.TextBoxValue2 = ""
-        Me.tvktxt_album.TextBoxWidth = 150.0!
-        Me.tvktxt_album.TextBoxX = 135.0!
-        Me.tvktxt_album.ValueTwoEditable = False
-        '
-        'tvktxt_genres
-        '
-        Me.tvktxt_genres.AutoChangeToFirst = True
-        Me.tvktxt_genres.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_genres.CheckBoxVisible = False
-        Me.tvktxt_genres.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_genres.LabelText = "Géneros:"
-        Me.tvktxt_genres.Location = New System.Drawing.Point(203, 216)
-        Me.tvktxt_genres.Name = "tvktxt_genres"
-        Me.tvktxt_genres.OnlyNumerics = False
-        Me.tvktxt_genres.RevertText = Nothing
-        Me.tvktxt_genres.ShowClear = True
-        Me.tvktxt_genres.ShowRevert = True
-        Me.tvktxt_genres.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_genres.TabIndex = 8
-        Me.tvktxt_genres.TextBoxValue = ""
-        Me.tvktxt_genres.TextBoxValue1 = ""
-        Me.tvktxt_genres.TextBoxValue2 = ""
-        Me.tvktxt_genres.TextBoxWidth = 150.0!
-        Me.tvktxt_genres.TextBoxX = 135.0!
-        Me.tvktxt_genres.ValueTwoEditable = False
-        '
-        'tvktxt_number
-        '
-        Me.tvktxt_number.AutoChangeToFirst = True
-        Me.tvktxt_number.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_number.CheckBoxVisible = False
-        Me.tvktxt_number.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_number.LabelText = "Número:"
-        Me.tvktxt_number.Location = New System.Drawing.Point(203, 188)
-        Me.tvktxt_number.Name = "tvktxt_number"
-        Me.tvktxt_number.OnlyNumerics = True
-        Me.tvktxt_number.RevertText = Nothing
-        Me.tvktxt_number.ShowClear = True
-        Me.tvktxt_number.ShowRevert = True
-        Me.tvktxt_number.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_number.TabIndex = 7
-        Me.tvktxt_number.TextBoxValue = "0"
-        Me.tvktxt_number.TextBoxValue1 = "0"
-        Me.tvktxt_number.TextBoxValue2 = "0"
-        Me.tvktxt_number.TextBoxWidth = 150.0!
-        Me.tvktxt_number.TextBoxX = 135.0!
-        Me.tvktxt_number.ValueTwoEditable = False
-        '
-        'tvktxt_year
-        '
-        Me.tvktxt_year.AutoChangeToFirst = True
-        Me.tvktxt_year.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_year.CheckBoxVisible = False
-        Me.tvktxt_year.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_year.LabelText = "Ano:"
-        Me.tvktxt_year.Location = New System.Drawing.Point(203, 160)
-        Me.tvktxt_year.Name = "tvktxt_year"
-        Me.tvktxt_year.OnlyNumerics = True
-        Me.tvktxt_year.RevertText = Nothing
-        Me.tvktxt_year.ShowClear = True
-        Me.tvktxt_year.ShowRevert = True
-        Me.tvktxt_year.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_year.TabIndex = 6
-        Me.tvktxt_year.TextBoxValue = "0"
-        Me.tvktxt_year.TextBoxValue1 = "0"
-        Me.tvktxt_year.TextBoxValue2 = "0"
-        Me.tvktxt_year.TextBoxWidth = 150.0!
-        Me.tvktxt_year.TextBoxX = 135.0!
-        Me.tvktxt_year.ValueTwoEditable = False
-        '
-        'tvktxt_interpret
-        '
-        Me.tvktxt_interpret.AutoChangeToFirst = True
-        Me.tvktxt_interpret.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_interpret.CheckBoxVisible = False
-        Me.tvktxt_interpret.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_interpret.LabelText = "Intérprete do Álbum:"
-        Me.tvktxt_interpret.Location = New System.Drawing.Point(203, 104)
-        Me.tvktxt_interpret.Name = "tvktxt_interpret"
-        Me.tvktxt_interpret.OnlyNumerics = False
-        Me.tvktxt_interpret.RevertText = Nothing
-        Me.tvktxt_interpret.ShowClear = True
-        Me.tvktxt_interpret.ShowRevert = True
-        Me.tvktxt_interpret.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_interpret.TabIndex = 4
-        Me.tvktxt_interpret.TextBoxValue = ""
-        Me.tvktxt_interpret.TextBoxValue1 = ""
-        Me.tvktxt_interpret.TextBoxValue2 = ""
-        Me.tvktxt_interpret.TextBoxWidth = 150.0!
-        Me.tvktxt_interpret.TextBoxX = 135.0!
-        Me.tvktxt_interpret.ValueTwoEditable = False
-        '
-        'tvktxt_artists
-        '
-        Me.tvktxt_artists.AutoChangeToFirst = True
-        Me.tvktxt_artists.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_artists.CheckBoxVisible = False
-        Me.tvktxt_artists.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_artists.LabelText = "Artistas: "
-        Me.tvktxt_artists.Location = New System.Drawing.Point(203, 76)
-        Me.tvktxt_artists.Name = "tvktxt_artists"
-        Me.tvktxt_artists.OnlyNumerics = False
-        Me.tvktxt_artists.RevertText = Nothing
-        Me.tvktxt_artists.ShowClear = True
-        Me.tvktxt_artists.ShowRevert = True
-        Me.tvktxt_artists.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_artists.TabIndex = 3
-        Me.tvktxt_artists.TextBoxValue = ""
-        Me.tvktxt_artists.TextBoxValue1 = ""
-        Me.tvktxt_artists.TextBoxValue2 = ""
-        Me.tvktxt_artists.TextBoxWidth = 150.0!
-        Me.tvktxt_artists.TextBoxX = 135.0!
-        Me.tvktxt_artists.ValueTwoEditable = False
-        '
-        'tvktxt_comments
-        '
-        Me.tvktxt_comments.AutoChangeToFirst = True
-        Me.tvktxt_comments.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_comments.CheckBoxVisible = False
-        Me.tvktxt_comments.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_comments.LabelText = "Comentários:"
-        Me.tvktxt_comments.Location = New System.Drawing.Point(203, 48)
-        Me.tvktxt_comments.Name = "tvktxt_comments"
-        Me.tvktxt_comments.OnlyNumerics = False
-        Me.tvktxt_comments.RevertText = Nothing
-        Me.tvktxt_comments.ShowClear = True
-        Me.tvktxt_comments.ShowRevert = True
-        Me.tvktxt_comments.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_comments.TabIndex = 2
-        Me.tvktxt_comments.TextBoxValue = ""
-        Me.tvktxt_comments.TextBoxValue1 = ""
-        Me.tvktxt_comments.TextBoxValue2 = ""
-        Me.tvktxt_comments.TextBoxWidth = 150.0!
-        Me.tvktxt_comments.TextBoxX = 135.0!
-        Me.tvktxt_comments.ValueTwoEditable = False
-        '
-        'tvktxt_title
-        '
-        Me.tvktxt_title.AutoChangeToFirst = True
-        Me.tvktxt_title.BackColor = System.Drawing.Color.Transparent
-        Me.tvktxt_title.CheckBoxVisible = False
-        Me.tvktxt_title.LabelColor = System.Drawing.Color.White
-        Me.tvktxt_title.LabelText = "Título:"
-        Me.tvktxt_title.Location = New System.Drawing.Point(203, 20)
-        Me.tvktxt_title.Name = "tvktxt_title"
-        Me.tvktxt_title.OnlyNumerics = False
-        Me.tvktxt_title.RevertText = Nothing
-        Me.tvktxt_title.ShowClear = True
-        Me.tvktxt_title.ShowRevert = True
-        Me.tvktxt_title.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_title.TabIndex = 1
-        Me.tvktxt_title.TextBoxValue = ""
-        Me.tvktxt_title.TextBoxValue1 = ""
-        Me.tvktxt_title.TextBoxValue2 = ""
-        Me.tvktxt_title.TextBoxWidth = 150.0!
-        Me.tvktxt_title.TextBoxX = 135.0!
-        Me.tvktxt_title.ValueTwoEditable = False
         '
         'klbl_classification
         '
@@ -735,6 +529,228 @@ Partial Class frm_main
         'ofd_thumbnail
         '
         Me.ofd_thumbnail.Title = "Abrir Thumbnail"
+        '
+        'tvktxt_lyrics
+        '
+        Me.tvktxt_lyrics.AutoChangeToFirst = True
+        Me.tvktxt_lyrics.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_lyrics.CheckBoxVisible = False
+        Me.tvktxt_lyrics.KChecked = False
+        Me.tvktxt_lyrics.LabelColor = System.Drawing.Color.Empty
+        Me.tvktxt_lyrics.LabelText = "Lyrics"
+        Me.tvktxt_lyrics.Location = New System.Drawing.Point(501, 12)
+        Me.tvktxt_lyrics.Name = "tvktxt_lyrics"
+        Me.tvktxt_lyrics.RevertText = Nothing
+        Me.tvktxt_lyrics.ShowClear = True
+        Me.tvktxt_lyrics.ShowRevert = True
+        Me.tvktxt_lyrics.Size = New System.Drawing.Size(220, 237)
+        Me.tvktxt_lyrics.TabIndex = 9
+        Me.tvktxt_lyrics.TextBoxValue = ""
+        Me.tvktxt_lyrics.TextBoxValue1 = ""
+        Me.tvktxt_lyrics.TextBoxValue2 = ""
+        Me.tvktxt_lyrics.TextBoxWidth = 214.0!
+        Me.tvktxt_lyrics.TextBoxX = 3.0!
+        Me.tvktxt_lyrics.ValueTwoEditable = False
+        '
+        'kltt_editing_filename
+        '
+        Me.kltt_editing_filename.BackColor = System.Drawing.Color.Transparent
+        Me.kltt_editing_filename.Location = New System.Drawing.Point(44, 163)
+        Me.kltt_editing_filename.Name = "kltt_editing_filename"
+        Me.kltt_editing_filename.Size = New System.Drawing.Size(145, 33)
+        Me.kltt_editing_filename.TabIndex = 18
+        '
+        'tvktxt_album
+        '
+        Me.tvktxt_album.AllowDrop = True
+        Me.tvktxt_album.AutoChangeToFirst = True
+        Me.tvktxt_album.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_album.CheckBoxVisible = False
+        Me.tvktxt_album.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_album.LabelText = "Álbum:"
+        Me.tvktxt_album.Location = New System.Drawing.Point(203, 132)
+        Me.tvktxt_album.Name = "tvktxt_album"
+        Me.tvktxt_album.OnlyNumerics = False
+        Me.tvktxt_album.PropertyName = "Album"
+        Me.tvktxt_album.RevertText = Nothing
+        Me.tvktxt_album.ShowClear = True
+        Me.tvktxt_album.ShowRevert = True
+        Me.tvktxt_album.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_album.TabIndex = 5
+        Me.tvktxt_album.TextBoxValue = ""
+        Me.tvktxt_album.TextBoxValue1 = ""
+        Me.tvktxt_album.TextBoxValue2 = ""
+        Me.tvktxt_album.TextBoxWidth = 150.0!
+        Me.tvktxt_album.TextBoxX = 135.0!
+        Me.tvktxt_album.ValueTwoEditable = False
+        '
+        'tvktxt_genres
+        '
+        Me.tvktxt_genres.AllowDrop = True
+        Me.tvktxt_genres.AutoChangeToFirst = True
+        Me.tvktxt_genres.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_genres.CheckBoxVisible = False
+        Me.tvktxt_genres.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_genres.LabelText = "Géneros:"
+        Me.tvktxt_genres.Location = New System.Drawing.Point(203, 216)
+        Me.tvktxt_genres.Name = "tvktxt_genres"
+        Me.tvktxt_genres.OnlyNumerics = False
+        Me.tvktxt_genres.PropertyName = "GenresString"
+        Me.tvktxt_genres.RevertText = Nothing
+        Me.tvktxt_genres.ShowClear = True
+        Me.tvktxt_genres.ShowRevert = True
+        Me.tvktxt_genres.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_genres.TabIndex = 8
+        Me.tvktxt_genres.TextBoxValue = ""
+        Me.tvktxt_genres.TextBoxValue1 = ""
+        Me.tvktxt_genres.TextBoxValue2 = ""
+        Me.tvktxt_genres.TextBoxWidth = 150.0!
+        Me.tvktxt_genres.TextBoxX = 135.0!
+        Me.tvktxt_genres.ValueTwoEditable = False
+        '
+        'tvktxt_number
+        '
+        Me.tvktxt_number.AllowDrop = True
+        Me.tvktxt_number.AutoChangeToFirst = True
+        Me.tvktxt_number.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_number.CheckBoxVisible = False
+        Me.tvktxt_number.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_number.LabelText = "Número:"
+        Me.tvktxt_number.Location = New System.Drawing.Point(203, 188)
+        Me.tvktxt_number.Name = "tvktxt_number"
+        Me.tvktxt_number.OnlyNumerics = True
+        Me.tvktxt_number.PropertyName = "Number"
+        Me.tvktxt_number.RevertText = "0"
+        Me.tvktxt_number.ShowClear = True
+        Me.tvktxt_number.ShowRevert = True
+        Me.tvktxt_number.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_number.TabIndex = 7
+        Me.tvktxt_number.TextBoxValue = "0"
+        Me.tvktxt_number.TextBoxValue1 = "0"
+        Me.tvktxt_number.TextBoxValue2 = "0"
+        Me.tvktxt_number.TextBoxWidth = 150.0!
+        Me.tvktxt_number.TextBoxX = 135.0!
+        Me.tvktxt_number.ValueTwoEditable = False
+        '
+        'tvktxt_year
+        '
+        Me.tvktxt_year.AllowDrop = True
+        Me.tvktxt_year.AutoChangeToFirst = True
+        Me.tvktxt_year.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_year.CheckBoxVisible = False
+        Me.tvktxt_year.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_year.LabelText = "Ano:"
+        Me.tvktxt_year.Location = New System.Drawing.Point(203, 160)
+        Me.tvktxt_year.Name = "tvktxt_year"
+        Me.tvktxt_year.OnlyNumerics = True
+        Me.tvktxt_year.PropertyName = "Year"
+        Me.tvktxt_year.RevertText = "0"
+        Me.tvktxt_year.ShowClear = True
+        Me.tvktxt_year.ShowRevert = True
+        Me.tvktxt_year.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_year.TabIndex = 6
+        Me.tvktxt_year.TextBoxValue = "0"
+        Me.tvktxt_year.TextBoxValue1 = "0"
+        Me.tvktxt_year.TextBoxValue2 = "0"
+        Me.tvktxt_year.TextBoxWidth = 150.0!
+        Me.tvktxt_year.TextBoxX = 135.0!
+        Me.tvktxt_year.ValueTwoEditable = False
+        '
+        'tvktxt_interpret
+        '
+        Me.tvktxt_interpret.AllowDrop = True
+        Me.tvktxt_interpret.AutoChangeToFirst = True
+        Me.tvktxt_interpret.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_interpret.CheckBoxVisible = False
+        Me.tvktxt_interpret.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_interpret.LabelText = "Intérprete do Álbum:"
+        Me.tvktxt_interpret.Location = New System.Drawing.Point(203, 104)
+        Me.tvktxt_interpret.Name = "tvktxt_interpret"
+        Me.tvktxt_interpret.OnlyNumerics = False
+        Me.tvktxt_interpret.PropertyName = "AlbumArtist"
+        Me.tvktxt_interpret.RevertText = Nothing
+        Me.tvktxt_interpret.ShowClear = True
+        Me.tvktxt_interpret.ShowRevert = True
+        Me.tvktxt_interpret.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_interpret.TabIndex = 4
+        Me.tvktxt_interpret.TextBoxValue = ""
+        Me.tvktxt_interpret.TextBoxValue1 = ""
+        Me.tvktxt_interpret.TextBoxValue2 = ""
+        Me.tvktxt_interpret.TextBoxWidth = 150.0!
+        Me.tvktxt_interpret.TextBoxX = 135.0!
+        Me.tvktxt_interpret.ValueTwoEditable = False
+        '
+        'tvktxt_artists
+        '
+        Me.tvktxt_artists.AllowDrop = True
+        Me.tvktxt_artists.AutoChangeToFirst = True
+        Me.tvktxt_artists.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_artists.CheckBoxVisible = False
+        Me.tvktxt_artists.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_artists.LabelText = "Artistas: "
+        Me.tvktxt_artists.Location = New System.Drawing.Point(203, 76)
+        Me.tvktxt_artists.Name = "tvktxt_artists"
+        Me.tvktxt_artists.OnlyNumerics = False
+        Me.tvktxt_artists.PropertyName = "ArtistsString"
+        Me.tvktxt_artists.RevertText = Nothing
+        Me.tvktxt_artists.ShowClear = True
+        Me.tvktxt_artists.ShowRevert = True
+        Me.tvktxt_artists.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_artists.TabIndex = 3
+        Me.tvktxt_artists.TextBoxValue = ""
+        Me.tvktxt_artists.TextBoxValue1 = ""
+        Me.tvktxt_artists.TextBoxValue2 = ""
+        Me.tvktxt_artists.TextBoxWidth = 150.0!
+        Me.tvktxt_artists.TextBoxX = 135.0!
+        Me.tvktxt_artists.ValueTwoEditable = False
+        '
+        'tvktxt_comments
+        '
+        Me.tvktxt_comments.AllowDrop = True
+        Me.tvktxt_comments.AutoChangeToFirst = True
+        Me.tvktxt_comments.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_comments.CheckBoxVisible = False
+        Me.tvktxt_comments.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_comments.LabelText = "Comentários:"
+        Me.tvktxt_comments.Location = New System.Drawing.Point(203, 48)
+        Me.tvktxt_comments.Name = "tvktxt_comments"
+        Me.tvktxt_comments.OnlyNumerics = False
+        Me.tvktxt_comments.PropertyName = "Legend"
+        Me.tvktxt_comments.RevertText = Nothing
+        Me.tvktxt_comments.ShowClear = True
+        Me.tvktxt_comments.ShowRevert = True
+        Me.tvktxt_comments.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_comments.TabIndex = 2
+        Me.tvktxt_comments.TextBoxValue = ""
+        Me.tvktxt_comments.TextBoxValue1 = ""
+        Me.tvktxt_comments.TextBoxValue2 = ""
+        Me.tvktxt_comments.TextBoxWidth = 150.0!
+        Me.tvktxt_comments.TextBoxX = 135.0!
+        Me.tvktxt_comments.ValueTwoEditable = False
+        '
+        'tvktxt_title
+        '
+        Me.tvktxt_title.AllowDrop = True
+        Me.tvktxt_title.AutoChangeToFirst = True
+        Me.tvktxt_title.BackColor = System.Drawing.Color.Transparent
+        Me.tvktxt_title.CheckBoxVisible = False
+        Me.tvktxt_title.LabelColor = System.Drawing.Color.White
+        Me.tvktxt_title.LabelText = "Título:"
+        Me.tvktxt_title.Location = New System.Drawing.Point(203, 20)
+        Me.tvktxt_title.Name = "tvktxt_title"
+        Me.tvktxt_title.OnlyNumerics = False
+        Me.tvktxt_title.PropertyName = "title"
+        Me.tvktxt_title.RevertText = Nothing
+        Me.tvktxt_title.ShowClear = True
+        Me.tvktxt_title.ShowRevert = True
+        Me.tvktxt_title.Size = New System.Drawing.Size(292, 22)
+        Me.tvktxt_title.TabIndex = 1
+        Me.tvktxt_title.TextBoxValue = ""
+        Me.tvktxt_title.TextBoxValue1 = ""
+        Me.tvktxt_title.TextBoxValue2 = ""
+        Me.tvktxt_title.TextBoxWidth = 150.0!
+        Me.tvktxt_title.TextBoxX = 135.0!
+        Me.tvktxt_title.ValueTwoEditable = False
         '
         'frm_main
         '

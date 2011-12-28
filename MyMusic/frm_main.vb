@@ -15,8 +15,8 @@ Public Class frm_main
     Public music_path As String = ""
     Public image_path As String = ""
 
-    Public ImageFormats As List(Of String) = New List(Of String)
-    Public MusicFormats As List(Of String) = New List(Of String)
+    Public Shared ImageFormats As List(Of String) = New List(Of String)
+    Public Shared MusicFormats As List(Of String) = New List(Of String)
 
     Private Loading As Boolean = True
 
@@ -245,7 +245,7 @@ Public Class frm_main
 
     Private Sub tvktxt_artists_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_artists.Text1Changed
         If Not Me.Loading Then
-            Me._MusicFile.Artists = Split(Me.tvktxt_artists.TextBoxValue1, ";")
+            Me._MusicFile.ArtistsString = Me.tvktxt_artists.TextBoxValue
         End If
     End Sub
 
@@ -257,7 +257,7 @@ Public Class frm_main
 
     Private Sub tvktxt_genres_Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvktxt_genres.Text1Changed
         If Not Me.Loading Then
-            Me._MusicFile.Genres = Split(Me.tvktxt_genres.TextBoxValue1, ";")
+            Me._MusicFile.GenresString = Me.tvktxt_genres.TextBoxValue
         End If
     End Sub
 
@@ -634,13 +634,13 @@ Public Class frm_main
     End Sub
 
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Me.ImageFormats.Add(".jpg")
-        Me.ImageFormats.Add(".jpeg")
-        Me.ImageFormats.Add(".png")
-        Me.ImageFormats.Add(".bmp")
+        frm_main.ImageFormats.Add(".jpg")
+        frm_main.ImageFormats.Add(".jpeg")
+        frm_main.ImageFormats.Add(".png")
+        frm_main.ImageFormats.Add(".bmp")
 
-        Me.MusicFormats.Add(".mp3")
-        Me.MusicFormats.Add(".wav")
+        frm_main.MusicFormats.Add(".mp3")
+        frm_main.MusicFormats.Add(".wav")
 
         Me.kpnl_editing_music.Visible = False
         Me.kpnl_loading_music.Visible = True
@@ -664,8 +664,8 @@ Public Class frm_main
             Me.tvktxt_comments.TextBoxValue1 = Me._MusicFile.Legend
             Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
 
-            Me.tvktxt_artists.TextBoxValue1 = String.Join("; ", Me._MusicFile.Artists)
-            Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
+            Me.tvktxt_artists.TextBoxValue1 = Me._MusicFile.ArtistsString
+            Me.tvktxt_artists.RevertText = Me._MusicFile.ArtistsString
 
             Me.tvktxt_interpret.TextBoxValue1 = Me._MusicFile.AlbumArtist
             Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
@@ -679,8 +679,8 @@ Public Class frm_main
             Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
             Me.tvktxt_number.RevertText = Me._MusicFile.Number
 
-            Me.tvktxt_genres.TextBoxValue1 = String.Join("; ", Me._MusicFile.Genres)
-            Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
+            Me.tvktxt_genres.TextBoxValue1 = Me._MusicFile.GenresString
+            Me.tvktxt_genres.RevertText = Me._MusicFile.GenresString
 
             Me.tvktxt_lyrics.TextBoxValue1 = Me._MusicFile.Lyrics
             Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
@@ -781,22 +781,31 @@ Public Class frm_main
         Try
             Me._MusicFile.Save()
 
+            Me.tvktxt_title.TextBoxValue1 = Me._MusicFile.Title
             Me.tvktxt_title.RevertText = Me._MusicFile.Title
 
+            Me.tvktxt_comments.TextBoxValue1 = Me._MusicFile.Legend
             Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
 
-            Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
+            Me.tvktxt_artists.TextBoxValue1 = Me._MusicFile.ArtistsString
+            Me.tvktxt_artists.RevertText = Me._MusicFile.ArtistsString
 
+            Me.tvktxt_interpret.TextBoxValue1 = Me._MusicFile.AlbumArtist
             Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
 
+            Me.tvktxt_album.TextBoxValue1 = Me._MusicFile.Album
             Me.tvktxt_album.RevertText = Me._MusicFile.Album
 
+            Me.tvktxt_year.TextBoxValue1 = Me._MusicFile.Year
             Me.tvktxt_year.RevertText = Me._MusicFile.Year
 
+            Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
             Me.tvktxt_number.RevertText = Me._MusicFile.Number
 
-            Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
+            Me.tvktxt_genres.TextBoxValue1 = Me._MusicFile.GenresString
+            Me.tvktxt_genres.RevertText = Me._MusicFile.GenresString
 
+            Me.tvktxt_lyrics.TextBoxValue1 = Me._MusicFile.Lyrics
             Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
 
         Catch ex As Exception

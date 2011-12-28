@@ -10,6 +10,7 @@
 
     Private _ShowRevert As Boolean = True
 
+    Private t_moving As Boolean = False
 
     Public Property OnlyNumerics As Boolean = False
 
@@ -18,7 +19,11 @@
             Return Me._RevertText
         End Get
         Set(ByVal value As String)
-            Me._RevertText = value
+            If (Me.OnlyNumerics = True And value = "") Then
+                Me._RevertText = "0"
+            Else
+                Me._RevertText = value
+            End If
 
             Me.btnsc_revert.Visible = ((Me.TextBoxValue <> Me.RevertText) And (Me._ShowRevert = True))
         End Set
@@ -156,6 +161,8 @@
         End Set
     End Property
 
+    Public Property PropertyName As String
+
     Public Event AnyTextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
     Public Event Text1Changed(ByVal sender As Object, ByVal e As System.EventArgs)
     Public Event Text2Changed(ByVal sender As Object, ByVal e As System.EventArgs)
@@ -170,8 +177,6 @@
             End If
         End If
     End Sub
-
-
 
     Private Sub KTextBox_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles KTextBox.TextChanged
         Me.btnsc_clear.Visible = ((Me.TextBoxValue <> "") And (Me._ShowClear))
@@ -222,5 +227,72 @@
 
     Private Sub btnsc_revert_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnsc_revert.Click
         Me.TextBoxValue = Me.RevertText
+    End Sub
+
+
+
+    Private Sub KLabel_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles KLabel.MouseDown
+        If e.Button = Windows.Forms.MouseButtons.Left Then
+            Me.t_moving = True
+        End If
+    End Sub
+
+    Private Sub KTextBox_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles KTextBox.DragDrop
+        If e.Data.GetDataPresent(DataFormats.Text) Then
+            Me.TextBoxValue = e.Data.GetData(DataFormats.Text)
+        ElseIf (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+
+            Dim music As Boolean = False
+            Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each _File As String In filePaths
+
+                If (frm_main.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+
+                    Dim tempMeta As MusicFile = New MusicFile(_File)
+                    Me.TextBoxValue = CallByName(tempMeta, Me.PropertyName, CallType.Get)
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Sub KTextBox_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles KTextBox.DragEnter
+        If (e.Data.GetDataPresent(DataFormats.Text)) Then
+            If (Me.OnlyNumerics) Then
+                Dim text As String = e.Data.GetData(DataFormats.Text)
+
+                If (Not Integer.TryParse(e.Data.GetData(DataFormats.Text), Nothing)) Then
+                    e.Effect = DragDropEffects.None
+                Else
+                    e.Effect = DragDropEffects.Copy
+                End If
+            Else
+                e.Effect = DragDropEffects.Copy
+            End If
+        ElseIf (e.Data.GetDataPresent(DataFormats.FileDrop) And Me.PropertyName <> "") Then
+            Dim music As Boolean = False
+            Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            For Each _File As String In filePaths
+                If (frm_main.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension)) Then
+                    e.Effect = DragDropEffects.Copy
+                    music = True
+                    Exit For
+                End If
+            Next
+            If (music = False) Then
+                e.Effect = DragDropEffects.None
+            End If
+        Else
+                e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub KLabel_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles KLabel.MouseMove
+        If (Me.t_moving) Then
+            Dim dta = New DataObject()
+            dta.SetData(DataFormats.Text, Me.TextBoxValue)
+            DoDragDrop(dta, DragDropEffects.Copy)
+            Me.t_moving = False
+        End If
     End Sub
 End Class
