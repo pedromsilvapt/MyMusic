@@ -20,3 +20,4 @@ C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Rele
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Release\MyMusic.exe.config
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\bin\Release\ComponentFactory.Krypton.Toolkit.dll
 C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Release\MyMusic.TVKryptonMultiline.resources
+C:\Users\Clarinha\documents\visual studio 2010\Projects\MyMusic\MyMusic\obj\Release\MyMusic.frm_about.resources

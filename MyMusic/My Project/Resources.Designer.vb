@@ -69,7 +69,7 @@ Namespace My.Resources
         
         Friend ReadOnly Property ajax_loader() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("ajax-loader", resourceCulture)
+                Dim obj As Object = ResourceManager.GetObject("ajax_loader", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -119,6 +119,13 @@ Namespace My.Resources
         Friend ReadOnly Property MP3() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("MP3", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        Friend ReadOnly Property mymusic() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("mymusic", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
