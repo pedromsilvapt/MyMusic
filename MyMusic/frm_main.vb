@@ -16,6 +16,7 @@ Public Class frm_main
     Public image_path As String = ""
 
     Public ImageFormats As List(Of String) = New List(Of String)
+    Public MusicFormats As List(Of String) = New List(Of String)
 
     Private Loading As Boolean = True
 
@@ -126,7 +127,12 @@ Public Class frm_main
             Dim fileImage As Boolean = False
             For Each _File As String In filePaths
                 If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
-                    Me.ChangeThumbnail(Image.FromFile(_File))
+                    Me.ChangeThumbnail(Image.FromFile(_File), True)
+                    fileImage = True
+                    Exit For
+                ElseIf (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                    Dim tempMeta As MusicFile = New MusicFile(_File)
+                    Me.ChangeThumbnail(tempMeta.Thumbnail, True)
                     fileImage = True
                     Exit For
                 End If
@@ -154,6 +160,10 @@ Public Class frm_main
             For Each _File As String In filePaths
                 If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File), False)
+                    Exit For
+                ElseIf (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                    Dim tempMeta As MusicFile = New MusicFile(_File)
+                    Me.ChangeThumbnail(tempMeta.Thumbnail, False)
                     Exit For
                 End If
             Next
@@ -339,17 +349,19 @@ Public Class frm_main
     End Sub
 
     Private Sub kpnl_rloading_music_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles kpnl_rloading_music.MouseClick
-        Dim files As Collections.Specialized.StringCollection = My.Computer.Clipboard.GetFileDropList()
+        If (My.Computer.Clipboard.ContainsFileDropList) Then
+            Dim files As Collections.Specialized.StringCollection = My.Computer.Clipboard.GetFileDropList()
 
-        Dim filesDrop As DragFiles = Me.CheckFileOpens(files)
+            Dim filesDrop As DragFiles = Me.CheckFileOpens(files)
 
-        If (filesDrop.InvalidDrag) Then
-            Dim res As DialogResult = ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("Os ficheiros que copiou são inválidos.", "Erro ao abrir", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
-            If (res = DialogResult.Retry) Then
-                Me.kpnl_rloading_music_MouseClick(sender, e)
+            If (filesDrop.InvalidDrag) Then
+                Dim res As DialogResult = ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show("Os ficheiros que copiou são inválidos.", "Erro ao abrir", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error)
+                If (res = DialogResult.Retry) Then
+                    Me.kpnl_rloading_music_MouseClick(sender, e)
+                End If
+            Else
+                LoadMusicFileIntoGUI(filesDrop.Music, filesDrop.Image)
             End If
-        Else
-            LoadMusicFileIntoGUI(filesDrop.Music, filesDrop.Image)
         End If
     End Sub
 
@@ -538,7 +550,7 @@ Public Class frm_main
             End If
 
             'Then checks the file type, and if it any we are looking for
-            If (My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower() = ".mp3" And music = False) Then
+            If (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And music = False) Then
                 paths.Music = files(i)
                 music = True
             ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And image = False) Then
@@ -560,6 +572,7 @@ Public Class frm_main
 
     Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) As DragFiles
         Dim paths As DragFiles = New DragFiles
+        paths.InvalidDrag = True
         If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
             e.Effect = DragDropEffects.Copy
         Else
@@ -581,7 +594,7 @@ Public Class frm_main
                 End If
 
                 'Then checks the file type, and if it any we are looking for
-                If (My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower() = ".mp3" And music = False) Then
+                If (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And music = False) Then
                     paths.Music = filePaths(i)
                     music = True
                 ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And image = False) Then
@@ -626,6 +639,9 @@ Public Class frm_main
         Me.ImageFormats.Add(".png")
         Me.ImageFormats.Add(".bmp")
 
+        Me.MusicFormats.Add(".mp3")
+        Me.MusicFormats.Add(".wav")
+
         Me.kpnl_editing_music.Visible = False
         Me.kpnl_loading_music.Visible = True
 
@@ -635,48 +651,53 @@ Public Class frm_main
     End Sub
 
 
-
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
         Me.Loading = True
-        Me._MusicFile = New MusicFile(music, image)
-        Me.kltt_editing_filename.Text = My.Computer.FileSystem.GetFileInfo(music).Name
+        Try
+            Me._MusicFile = New MusicFile(music, image)
 
-        Me.tvktxt_title.TextBoxValue1 = Me._MusicFile.Title
-        Me.tvktxt_title.RevertText = Me._MusicFile.Title
+            Me.kltt_editing_filename.Text = My.Computer.FileSystem.GetFileInfo(music).Name
 
-        Me.tvktxt_comments.TextBoxValue1 = Me._MusicFile.Legend
-        Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
+            Me.tvktxt_title.TextBoxValue1 = Me._MusicFile.Title
+            Me.tvktxt_title.RevertText = Me._MusicFile.Title
 
-        Me.tvktxt_artists.TextBoxValue1 = String.Join("; ", Me._MusicFile.Artists)
-        Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
+            Me.tvktxt_comments.TextBoxValue1 = Me._MusicFile.Legend
+            Me.tvktxt_comments.RevertText = Me._MusicFile.Legend
 
-        Me.tvktxt_interpret.TextBoxValue1 = Me._MusicFile.AlbumArtist
-        Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
+            Me.tvktxt_artists.TextBoxValue1 = String.Join("; ", Me._MusicFile.Artists)
+            Me.tvktxt_artists.RevertText = String.Join("; ", Me._MusicFile.Artists)
 
-        Me.tvktxt_album.TextBoxValue1 = Me._MusicFile.Album
-        Me.tvktxt_album.RevertText = Me._MusicFile.Album
+            Me.tvktxt_interpret.TextBoxValue1 = Me._MusicFile.AlbumArtist
+            Me.tvktxt_interpret.RevertText = Me._MusicFile.AlbumArtist
 
-        Me.tvktxt_year.TextBoxValue1 = Me._MusicFile.Year
-        Me.tvktxt_year.RevertText = Me._MusicFile.Year
+            Me.tvktxt_album.TextBoxValue1 = Me._MusicFile.Album
+            Me.tvktxt_album.RevertText = Me._MusicFile.Album
 
-        Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
-        Me.tvktxt_number.RevertText = Me._MusicFile.Number
+            Me.tvktxt_year.TextBoxValue1 = Me._MusicFile.Year
+            Me.tvktxt_year.RevertText = Me._MusicFile.Year
 
-        Me.tvktxt_genres.TextBoxValue1 = String.Join("; ", Me._MusicFile.Genres)
-        Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
+            Me.tvktxt_number.TextBoxValue1 = Me._MusicFile.Number
+            Me.tvktxt_number.RevertText = Me._MusicFile.Number
 
-        Me.tvktxt_lyrics.TextBoxValue1 = Me._MusicFile.Lyrics
-        Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
+            Me.tvktxt_genres.TextBoxValue1 = String.Join("; ", Me._MusicFile.Genres)
+            Me.tvktxt_genres.RevertText = String.Join("; ", Me._MusicFile.Genres)
 
-        Me.rc_classification.Value = Me._MusicFile.Rate
+            Me.tvktxt_lyrics.TextBoxValue1 = Me._MusicFile.Lyrics
+            Me.tvktxt_lyrics.RevertText = Me._MusicFile.Lyrics
 
-        If (image <> "" And (Not image Is Nothing)) Then
-            Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
-            Me.ChangeThumbnail(Me._MusicFile.Thumbnail, True)
-        Else
-            Dim imageThumb As Image = Me._MusicFile.Thumbnail
-            Me.ChangeThumbnail(imageThumb, False)
-        End If
+            Me.rc_classification.Value = Me._MusicFile.Rate
+
+            If (image <> "" And (Not image Is Nothing)) Then
+                Me._MusicFile.Thumbnail = Drawing.Image.FromFile(image)
+                Me.ChangeThumbnail(Me._MusicFile.Thumbnail, True)
+            Else
+                Dim imageThumb As Image = Me._MusicFile.Thumbnail
+                Me.ChangeThumbnail(imageThumb, False)
+            End If
+
+        Catch ex As Exception
+            ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show(ex.Message, "Erro ao abrir", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
 
         Me.Loading = False
     End Sub
@@ -692,57 +713,61 @@ Public Class frm_main
 
     Public Sub ShowLoadingPanel(ByVal music_path As String, Optional ByVal image_path As String = "")
         Me.HideLoadingItems()
+        Try
+            Dim TempMusicFile As MusicFile = New MusicFile(music_path)
 
-        Dim TempMusicFile As MusicFile = New MusicFile(music_path)
+            If (image_path <> "") Then
+                Me.klbl_loading_music.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 - Me.klbl_loading_music.Size.Width - 50, 20)
+                Me.klbl_loading_thumbnail.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 + 50, 20)
 
-        If (image_path <> "") Then
-            Me.klbl_loading_music.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 - Me.klbl_loading_music.Size.Width - 50, 20)
-            Me.klbl_loading_thumbnail.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 + 50, 20)
+                Me.pcb_loading_music.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.pcb_loading_music.Size.Width / 2, 67)
+                Me.pcb_loading_thumbnail.Location = New Point((Me.klbl_loading_thumbnail.Location.X + Me.klbl_loading_thumbnail.Size.Width / 2) - Me.pcb_loading_thumbnail.Size.Width / 2, 67)
 
-            Me.pcb_loading_music.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.pcb_loading_music.Size.Width / 2, 67)
-            Me.pcb_loading_thumbnail.Location = New Point((Me.klbl_loading_thumbnail.Location.X + Me.klbl_loading_thumbnail.Size.Width / 2) - Me.pcb_loading_thumbnail.Size.Width / 2, 67)
+                Me.kwlbl_loading_music_name.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.kwlbl_loading_music_name.Size.Width / 2, 235)
+                Me.kwlbl_loading_thumbnail_name.Location = New Point((Me.klbl_loading_thumbnail.Location.X + Me.klbl_loading_thumbnail.Size.Width / 2) - Me.kwlbl_loading_thumbnail_name.Size.Width / 2, 235)
 
-            Me.kwlbl_loading_music_name.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.kwlbl_loading_music_name.Size.Width / 2, 235)
-            Me.kwlbl_loading_thumbnail_name.Location = New Point((Me.klbl_loading_thumbnail.Location.X + Me.klbl_loading_thumbnail.Size.Width / 2) - Me.kwlbl_loading_thumbnail_name.Size.Width / 2, 235)
+                Me.klbl_loading_music.Visible = True
+                Me.klbl_loading_thumbnail.Visible = True
 
-            Me.klbl_loading_music.Visible = True
-            Me.klbl_loading_thumbnail.Visible = True
+                Me.pcb_loading_music.Visible = True
+                Me.pcb_loading_thumbnail.Visible = True
 
-            Me.pcb_loading_music.Visible = True
-            Me.pcb_loading_thumbnail.Visible = True
+                Me.kwlbl_loading_music_name.Visible = True
+                Me.kwlbl_loading_thumbnail_name.Visible = True
 
-            Me.kwlbl_loading_music_name.Visible = True
-            Me.kwlbl_loading_thumbnail_name.Visible = True
+                Me.pcb_loading_music.BackColor = Me.kpnl_loading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+                Me.pcb_loading_thumbnail.BackColor = Me.kpnl_loading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+                Me.pcb_loading_thumbnail.Image = Image.FromFile(image_path)
 
-            Me.pcb_loading_music.BackColor = Me.kpnl_loading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
-            Me.pcb_loading_thumbnail.BackColor = Me.kpnl_loading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
-            Me.pcb_loading_thumbnail.Image = Image.FromFile(image_path)
+                Me.kwlbl_loading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
+                Me.kwlbl_loading_thumbnail_name.Text = My.Computer.FileSystem.GetFileInfo(image_path).Name
+            Else
+                Me.klbl_loading_music.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 - Me.klbl_loading_music.Size.Width / 2, 20)
 
-            Me.kwlbl_loading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
-            Me.kwlbl_loading_thumbnail_name.Text = My.Computer.FileSystem.GetFileInfo(image_path).Name
-        Else
-            Me.klbl_loading_music.Location = New Point(Me.kpnl_loading_music.Size.Width / 2 - Me.klbl_loading_music.Size.Width / 2, 20)
+                Me.pcb_loading_music.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.pcb_loading_music.Size.Width / 2, 67)
 
-            Me.pcb_loading_music.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.pcb_loading_music.Size.Width / 2, 67)
+                Me.kwlbl_loading_music_name.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.kwlbl_loading_music_name.Size.Width / 2, 235)
 
-            Me.kwlbl_loading_music_name.Location = New Point((Me.klbl_loading_music.Location.X + Me.klbl_loading_music.Size.Width / 2) - Me.kwlbl_loading_music_name.Size.Width / 2, 235)
+                Me.klbl_loading_music.Visible = True
 
-            Me.klbl_loading_music.Visible = True
+                Me.pcb_loading_music.Visible = True
 
-            Me.pcb_loading_music.Visible = True
+                Me.kwlbl_loading_music_name.Visible = True
 
-            Me.kwlbl_loading_music_name.Visible = True
+                Me.pcb_loading_music.BackColor = Me.kpnl_loading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
 
-            Me.pcb_loading_music.BackColor = Me.kpnl_loading_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+                Me.kwlbl_loading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
+            End If
 
-            Me.kwlbl_loading_music_name.Text = My.Computer.FileSystem.GetFileInfo(music_path).Name
-        End If
-
-        If (Not TempMusicFile.Thumbnail Is Nothing) Then
-            Me.pcb_loading_music.Image = TempMusicFile.Thumbnail
-        Else
-            Me.pcb_loading_music.Image = My.Resources.MP3
-        End If
+            If (Not TempMusicFile.Thumbnail Is Nothing) Then
+                Me.pcb_loading_music.Image = TempMusicFile.Thumbnail
+            Else
+                Me.pcb_loading_music.Image = My.Resources.MP3
+            End If
+        Catch ex As Exception
+            Me.HideLoadingItems()
+            ComponentFactory.Krypton.Toolkit.KryptonMessageBox.Show(ex.Message, "Erro ao abrir", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
 
     End Sub
 
@@ -782,5 +807,13 @@ Public Class frm_main
         End Try
 
         Me.pcb_editing_saving.Visible = False
+    End Sub
+
+    Private Sub kbtn_info_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_info.Click
+        frm_about.ShowDialog()
+    End Sub
+
+    Private Sub kbtn_loading_info_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_loading_info.Click
+        frm_about.ShowDialog()
     End Sub
 End Class

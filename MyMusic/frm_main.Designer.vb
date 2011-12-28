@@ -22,6 +22,7 @@ Partial Class frm_main
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frm_main))
         Me.kpnl_loading_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
+        Me.kbtn_loading_info = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.klbl_loading_drag_files = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.kwlbl_loading_thumbnail_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
         Me.pcb_loading_thumbnail = New System.Windows.Forms.PictureBox()
@@ -92,6 +93,7 @@ Partial Class frm_main
         'kpnl_loading_music
         '
         Me.kpnl_loading_music.AllowDrop = True
+        Me.kpnl_loading_music.Controls.Add(Me.kbtn_loading_info)
         Me.kpnl_loading_music.Controls.Add(Me.klbl_loading_drag_files)
         Me.kpnl_loading_music.Controls.Add(Me.kwlbl_loading_thumbnail_name)
         Me.kpnl_loading_music.Controls.Add(Me.pcb_loading_thumbnail)
@@ -104,6 +106,15 @@ Partial Class frm_main
         Me.kpnl_loading_music.Name = "kpnl_loading_music"
         Me.kpnl_loading_music.Size = New System.Drawing.Size(821, 298)
         Me.kpnl_loading_music.TabIndex = 0
+        '
+        'kbtn_loading_info
+        '
+        Me.kbtn_loading_info.Location = New System.Drawing.Point(774, 259)
+        Me.kbtn_loading_info.Name = "kbtn_loading_info"
+        Me.kbtn_loading_info.Size = New System.Drawing.Size(35, 30)
+        Me.kbtn_loading_info.TabIndex = 24
+        Me.kbtn_loading_info.Values.Image = Global.MyMusic.My.Resources.Resources.information
+        Me.kbtn_loading_info.Values.Text = ""
         '
         'klbl_loading_drag_files
         '
@@ -228,7 +239,7 @@ Partial Class frm_main
         Me.kbtn_info.Location = New System.Drawing.Point(774, 259)
         Me.kbtn_info.Name = "kbtn_info"
         Me.kbtn_info.Size = New System.Drawing.Size(35, 30)
-        Me.kbtn_info.TabIndex = 23
+        Me.kbtn_info.TabIndex = 17
         Me.kbtn_info.Values.Image = Global.MyMusic.My.Resources.Resources.information
         Me.kbtn_info.Values.Text = ""
         '
@@ -329,7 +340,7 @@ Partial Class frm_main
         Me.kbtn_clear_rating.Location = New System.Drawing.Point(47, 227)
         Me.kbtn_clear_rating.Name = "kbtn_clear_rating"
         Me.kbtn_clear_rating.Size = New System.Drawing.Size(22, 22)
-        Me.kbtn_clear_rating.TabIndex = 22
+        Me.kbtn_clear_rating.TabIndex = 10
         Me.kbtn_clear_rating.Values.Image = Global.MyMusic.My.Resources.Resources.cross
         Me.kbtn_clear_rating.Values.Text = ""
         '
@@ -347,7 +358,7 @@ Partial Class frm_main
         Me.tvktxt_lyrics.ShowClear = True
         Me.tvktxt_lyrics.ShowRevert = True
         Me.tvktxt_lyrics.Size = New System.Drawing.Size(220, 237)
-        Me.tvktxt_lyrics.TabIndex = 20
+        Me.tvktxt_lyrics.TabIndex = 9
         Me.tvktxt_lyrics.TextBoxValue = ""
         Me.tvktxt_lyrics.TextBoxValue1 = ""
         Me.tvktxt_lyrics.TextBoxValue2 = ""
@@ -400,7 +411,7 @@ Partial Class frm_main
         Me.kbtn_thumbnail_open.Location = New System.Drawing.Point(3, 122)
         Me.kbtn_thumbnail_open.Name = "kbtn_thumbnail_open"
         Me.kbtn_thumbnail_open.Size = New System.Drawing.Size(35, 30)
-        Me.kbtn_thumbnail_open.TabIndex = 16
+        Me.kbtn_thumbnail_open.TabIndex = 15
         Me.kbtn_thumbnail_open.Values.Image = Global.MyMusic.My.Resources.Resources.magnifier
         Me.kbtn_thumbnail_open.Values.Text = ""
         '
@@ -409,7 +420,7 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_paste.Location = New System.Drawing.Point(3, 86)
         Me.kbtn_editing_thumbnail_paste.Name = "kbtn_editing_thumbnail_paste"
         Me.kbtn_editing_thumbnail_paste.Size = New System.Drawing.Size(35, 30)
-        Me.kbtn_editing_thumbnail_paste.TabIndex = 15
+        Me.kbtn_editing_thumbnail_paste.TabIndex = 14
         Me.kbtn_editing_thumbnail_paste.Values.Image = Global.MyMusic.My.Resources.Resources.paste_plain
         Me.kbtn_editing_thumbnail_paste.Values.Text = ""
         '
@@ -418,7 +429,7 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_export.Location = New System.Drawing.Point(2, 50)
         Me.kbtn_editing_thumbnail_export.Name = "kbtn_editing_thumbnail_export"
         Me.kbtn_editing_thumbnail_export.Size = New System.Drawing.Size(35, 30)
-        Me.kbtn_editing_thumbnail_export.TabIndex = 14
+        Me.kbtn_editing_thumbnail_export.TabIndex = 13
         Me.kbtn_editing_thumbnail_export.Values.Image = Global.MyMusic.My.Resources.Resources.picture_go
         Me.kbtn_editing_thumbnail_export.Values.Text = ""
         '
@@ -427,7 +438,7 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_clear.Location = New System.Drawing.Point(3, 14)
         Me.kbtn_editing_thumbnail_clear.Name = "kbtn_editing_thumbnail_clear"
         Me.kbtn_editing_thumbnail_clear.Size = New System.Drawing.Size(35, 30)
-        Me.kbtn_editing_thumbnail_clear.TabIndex = 13
+        Me.kbtn_editing_thumbnail_clear.TabIndex = 12
         Me.kbtn_editing_thumbnail_clear.Values.Image = Global.MyMusic.My.Resources.Resources.cross
         Me.kbtn_editing_thumbnail_clear.Values.Text = ""
         '
@@ -436,7 +447,7 @@ Partial Class frm_main
         Me.kbtn_editing_save.Location = New System.Drawing.Point(369, 264)
         Me.kbtn_editing_save.Name = "kbtn_editing_save"
         Me.kbtn_editing_save.Size = New System.Drawing.Size(71, 25)
-        Me.kbtn_editing_save.TabIndex = 12
+        Me.kbtn_editing_save.TabIndex = 16
         Me.kbtn_editing_save.Values.Image = Global.MyMusic.My.Resources.Resources.accept
         Me.kbtn_editing_save.Values.Text = "Aplicar"
         '
@@ -454,7 +465,7 @@ Partial Class frm_main
         Me.tvktxt_album.ShowClear = True
         Me.tvktxt_album.ShowRevert = True
         Me.tvktxt_album.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_album.TabIndex = 11
+        Me.tvktxt_album.TabIndex = 5
         Me.tvktxt_album.TextBoxValue = ""
         Me.tvktxt_album.TextBoxValue1 = ""
         Me.tvktxt_album.TextBoxValue2 = ""
@@ -476,7 +487,7 @@ Partial Class frm_main
         Me.tvktxt_genres.ShowClear = True
         Me.tvktxt_genres.ShowRevert = True
         Me.tvktxt_genres.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_genres.TabIndex = 10
+        Me.tvktxt_genres.TabIndex = 8
         Me.tvktxt_genres.TextBoxValue = ""
         Me.tvktxt_genres.TextBoxValue1 = ""
         Me.tvktxt_genres.TextBoxValue2 = ""
@@ -498,7 +509,7 @@ Partial Class frm_main
         Me.tvktxt_number.ShowClear = True
         Me.tvktxt_number.ShowRevert = True
         Me.tvktxt_number.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_number.TabIndex = 9
+        Me.tvktxt_number.TabIndex = 7
         Me.tvktxt_number.TextBoxValue = "0"
         Me.tvktxt_number.TextBoxValue1 = "0"
         Me.tvktxt_number.TextBoxValue2 = "0"
@@ -520,7 +531,7 @@ Partial Class frm_main
         Me.tvktxt_year.ShowClear = True
         Me.tvktxt_year.ShowRevert = True
         Me.tvktxt_year.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_year.TabIndex = 8
+        Me.tvktxt_year.TabIndex = 6
         Me.tvktxt_year.TextBoxValue = "0"
         Me.tvktxt_year.TextBoxValue1 = "0"
         Me.tvktxt_year.TextBoxValue2 = "0"
@@ -542,7 +553,7 @@ Partial Class frm_main
         Me.tvktxt_interpret.ShowClear = True
         Me.tvktxt_interpret.ShowRevert = True
         Me.tvktxt_interpret.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_interpret.TabIndex = 7
+        Me.tvktxt_interpret.TabIndex = 4
         Me.tvktxt_interpret.TextBoxValue = ""
         Me.tvktxt_interpret.TextBoxValue1 = ""
         Me.tvktxt_interpret.TextBoxValue2 = ""
@@ -564,7 +575,7 @@ Partial Class frm_main
         Me.tvktxt_artists.ShowClear = True
         Me.tvktxt_artists.ShowRevert = True
         Me.tvktxt_artists.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_artists.TabIndex = 6
+        Me.tvktxt_artists.TabIndex = 3
         Me.tvktxt_artists.TextBoxValue = ""
         Me.tvktxt_artists.TextBoxValue1 = ""
         Me.tvktxt_artists.TextBoxValue2 = ""
@@ -586,7 +597,7 @@ Partial Class frm_main
         Me.tvktxt_comments.ShowClear = True
         Me.tvktxt_comments.ShowRevert = True
         Me.tvktxt_comments.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_comments.TabIndex = 5
+        Me.tvktxt_comments.TabIndex = 2
         Me.tvktxt_comments.TextBoxValue = ""
         Me.tvktxt_comments.TextBoxValue1 = ""
         Me.tvktxt_comments.TextBoxValue2 = ""
@@ -608,7 +619,7 @@ Partial Class frm_main
         Me.tvktxt_title.ShowClear = True
         Me.tvktxt_title.ShowRevert = True
         Me.tvktxt_title.Size = New System.Drawing.Size(292, 22)
-        Me.tvktxt_title.TabIndex = 3
+        Me.tvktxt_title.TabIndex = 1
         Me.tvktxt_title.TextBoxValue = ""
         Me.tvktxt_title.TextBoxValue1 = ""
         Me.tvktxt_title.TextBoxValue2 = ""
@@ -631,7 +642,7 @@ Partial Class frm_main
         Me.rc_classification.Location = New System.Drawing.Point(71, 227)
         Me.rc_classification.Name = "rc_classification"
         Me.rc_classification.Size = New System.Drawing.Size(111, 24)
-        Me.rc_classification.TabIndex = 1
+        Me.rc_classification.TabIndex = 11
         '
         'sfd_export_thumbnail
         '
@@ -734,6 +745,7 @@ Partial Class frm_main
         Me.Controls.Add(Me.kpnl_editing_music)
         Me.Controls.Add(Me.kpnl_loading_music)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MaximizeBox = False
         Me.Name = "frm_main"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -823,4 +835,5 @@ Partial Class frm_main
     Friend WithEvents KryptonContextMenuItem1 As ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem
     Friend WithEvents kbtn_info As ComponentFactory.Krypton.Toolkit.KryptonButton
     Friend WithEvents ofd_thumbnail As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents kbtn_loading_info As ComponentFactory.Krypton.Toolkit.KryptonButton
 End Class
