@@ -141,6 +141,15 @@ Public Class MusicFile
         End Set
     End Property
 
+    Public Property ArtistsString As String
+        Get
+            Return JoinKeywords(Me.Artists, "; ")
+        End Get
+        Set(ByVal value As String)
+            Me.Artists = SplitKeywords(value, ";")
+        End Set
+    End Property
+
     Public Property AlbumArtist As String
         Get
             If (Me.MusicTags.Tag.AlbumArtists.Length > 0) Then
@@ -194,6 +203,15 @@ Public Class MusicFile
                 Me._Edited = True
             End If
             Me.MusicTags.Tag.Genres = value
+        End Set
+    End Property
+
+    Public Property GenresString As String
+        Get
+            Return JoinKeywords(Me.Genres, "; ")
+        End Get
+        Set(ByVal value As String)
+            Me.Genres = SplitKeywords(value, ";")
         End Set
     End Property
 
