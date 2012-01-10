@@ -24,10 +24,14 @@ Public Class frm_main
 
     Private terror_showing As Boolean = False
 
+    Private history As List(Of String) = New List(Of String)
+    Private history_pos As Integer = -1
 
-    Private WithEvents kpnl_transition_loading_error As Transition = New Transition(New Transitions.TransitionType_Flash(1, 500))
+    Private WithEvents kpnl_transition_loading_error As Transition = New Transition(New TransitionType_Flash(1, 500))
     Private WithEvents kpnl_transition_loading_editing As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
     Private WithEvents kpnl_transition_loading_color As Transition = New Transition(New TransitionType_EaseInEaseOut(500))
+    Private WithEvents kpnl_transition_show_loading As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
+    Private WithEvents kpnl_transition_show_editing As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
 
 
 #Region "Transitions"
@@ -52,8 +56,10 @@ Public Class frm_main
     Public Sub ChangeThumbnail(ByRef NewThumb As Image, Optional ByVal updateFile As Boolean = True)
         If (updateFile = True) Then
             If (NewThumb Is Nothing) Then
+                Me.kbtn_editing_thumbnail_export.Enabled = False
                 Me._MusicFile.ClearThumbnail()
             Else
+                Me.kbtn_editing_thumbnail_export.Enabled = True
                 Me._MusicFile.Thumbnail = NewThumb
             End If
         End If
@@ -73,15 +79,18 @@ Public Class frm_main
     End Sub
 
     Private Sub kbtn_editing_thumbnail_export_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_thumbnail_export.Click
+        If (Me._MusicFile.Thumbnail IsNot Nothing) Then
+            Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
+            name &= "_thumbnail.png"
 
-        Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
-        name &= "_thumbnail.png"
-
-        Me.sfd_export_thumbnail.FileName = name
-        Me.sfd_export_thumbnail.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG)|*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG"
-        Dim res As Windows.Forms.DialogResult = Me.sfd_export_thumbnail.ShowDialog()
-        If res = Windows.Forms.DialogResult.OK Then
-            Me._MusicFile.Thumbnail.Save(Me.sfd_export_thumbnail.FileName)
+            Me.sfd_export_thumbnail.FileName = name
+            Me.sfd_export_thumbnail.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG)|*.BMP;*.JPG;*.GIF;*.JPEG;*.PNG"
+            Dim res As Windows.Forms.DialogResult = Me.sfd_export_thumbnail.ShowDialog()
+            If res = Windows.Forms.DialogResult.OK Then
+                Using img As Image = Me._MusicFile.Thumbnail.Clone()
+                    img.Save(Me.sfd_export_thumbnail.FileName, Imaging.ImageFormat.Png)
+                End Using
+            End If
         End If
     End Sub
 
@@ -92,7 +101,7 @@ Public Class frm_main
             Dim fileImage As Boolean = False
 
             For Each _File As String In My.Computer.Clipboard.GetFileDropList
-                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                If (frm_main.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File))
                     fileImage = True
                     Exit For
@@ -126,11 +135,11 @@ Public Class frm_main
             Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Dim fileImage As Boolean = False
             For Each _File As String In filePaths
-                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                If (frm_main.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File), True)
                     fileImage = True
                     Exit For
-                ElseIf (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                ElseIf (frm_main.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Dim tempMeta As MusicFile = New MusicFile(_File)
                     Me.ChangeThumbnail(tempMeta.Thumbnail, True)
                     fileImage = True
@@ -158,10 +167,10 @@ Public Class frm_main
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             For Each _File As String In filePaths
-                If (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                If (frm_main.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Me.ChangeThumbnail(Image.FromFile(_File), False)
                     Exit For
-                ElseIf (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
+                ElseIf (frm_main.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(_File).Extension.ToLower())) Then
                     Dim tempMeta As MusicFile = New MusicFile(_File)
                     Me.ChangeThumbnail(tempMeta.Thumbnail, False)
                     Exit For
@@ -182,6 +191,13 @@ Public Class frm_main
 
     Private Sub pcb_editing_thumbnail_MouseClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles pcb_editing_thumbnail.MouseClick
         If e.Button = Windows.Forms.MouseButtons.Right Then
+            If (Me._MusicFile.Thumbnail Is Nothing) Then
+                Me.KryptonContextMenuItem1.Enabled = False
+                Me.KryptonContextMenuItem2.Enabled = False
+            Else
+                Me.KryptonContextMenuItem1.Enabled = True
+                Me.KryptonContextMenuItem2.Enabled = True
+            End If
             Me.kcmd_thumbnail.Show(Me.pcb_editing_thumbnail, New Point(frm_main.MousePosition.X, frm_main.MousePosition.Y))
         End If
     End Sub
@@ -193,7 +209,9 @@ Public Class frm_main
         Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
         name &= "_thumbnail.png"
 
-        Me.pcb_editing_thumbnail.Image.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
+        Using img As Image = Me.pcb_editing_thumbnail.Image.Clone()
+            img.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name, Imaging.ImageFormat.Png)
+        End Using
 
         Dim fileas As Collections.Specialized.StringCollection = New Collections.Specialized.StringCollection()
         fileas.Add(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
@@ -217,7 +235,9 @@ Public Class frm_main
                 Dim name As String = Me._MusicFile.MusicFileName.Substring(0, Me._MusicFile.MusicFileName.Length - My.Computer.FileSystem.GetFileInfo(Me._MusicFile.MusicFile).Extension.Length)
                 name &= "_thumbnail.png"
 
-                Me.pcb_editing_thumbnail.Image.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name)
+                Using img As Image = Me.pcb_editing_thumbnail.Image.Clone()
+                    img.Save(My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name, Imaging.ImageFormat.Png)
+                End Using
 
                 Dim fileas As String() = New [String](0) {}
                 fileas(0) = My.Computer.FileSystem.SpecialDirectories.Temp & "\" & name
@@ -336,14 +356,14 @@ Public Class frm_main
         If (paths.InvalidDrag = False) Then
             Me.music_path = paths.Music
             Me.image_path = paths.Image
-            Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
-            Me.TransitionLoadingToEditingPanel()
+            Me.OpenFile(paths.Music, paths.Image)
         End If
     End Sub
 
 #End Region
 
 #Region "Runtime Loading Panel"
+
     Private Sub kpnl_transition_loading_error_TransitionCompletedEvent(ByVal sender As Object, ByVal e As Transitions.Transition.Args) Handles kpnl_transition_loading_error.TransitionCompletedEvent
         Me.terror_showing = False
     End Sub
@@ -360,7 +380,7 @@ Public Class frm_main
                     Me.kpnl_rloading_music_MouseClick(sender, e)
                 End If
             Else
-                LoadMusicFileIntoGUI(filesDrop.Music, filesDrop.Image)
+                Me.OpenFile(filesDrop.Music, filesDrop.Image)
             End If
         End If
     End Sub
@@ -379,13 +399,9 @@ Public Class frm_main
 
             If (result = Windows.Forms.DialogResult.Retry) Then
                 Me.kbtn_editing_save_Click(Nothing, Nothing)
-                Me.music_path = paths.Music
-                Me.image_path = paths.Image
-                Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
+                Me.OpenFile(paths.Music, paths.Image)
             ElseIf (result = Windows.Forms.DialogResult.OK) Then
-                Me.music_path = paths.Music
-                Me.image_path = paths.Image
-                Me.LoadMusicFileIntoGUI(paths.Music, paths.Image)
+                Me.OpenFile(paths.Music, paths.Image)
             End If
         End If
 
@@ -535,121 +551,122 @@ Public Class frm_main
 
 #End Region
 
-    Public Function CheckFileOpens(ByVal files As Collections.Specialized.StringCollection) As DragFiles
-        Dim paths As DragFiles = New DragFiles
+#Region "File"
 
-            Dim i As Integer = 0
-            Dim music As Boolean = False
-            Dim image As Boolean = False
-
-        While ((music = False Or image = False) And i < files.Count)
-
-            'Checks if the dropped file exists
-            If (Not File.Exists(files(i))) Then
-                Continue While
-            End If
-
-            'Then checks the file type, and if it any we are looking for
-            If (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And music = False) Then
-                paths.Music = files(i)
-                music = True
-            ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And image = False) Then
-                paths.Image = files(i)
-                image = True
-            End If
-
-            'Checks if there is any music, otherwise it will be an invalid drag
-            If (music = True) Then
-                paths.InvalidDrag = False
-            Else
-                paths.InvalidDrag = True
-            End If
-            i += 1
-        End While
-
-        Return (paths)
-    End Function
-
-    Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) As DragFiles
-        Dim paths As DragFiles = New DragFiles
-        paths.InvalidDrag = True
-        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
-            e.Effect = DragDropEffects.Copy
-        Else
-            e.Effect = DragDropEffects.None
-        End If
-
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-
-            Dim i As Integer = 0
-            Dim music As Boolean = False
-            Dim image As Boolean = False
-
-            While ((music = False Or image = False) And i < filePaths.Length)
-
-                'Checks if the dropped file exists
-                If (Not File.Exists(filePaths(i))) Then
-                    Continue While
-                End If
-
-                'Then checks the file type, and if it any we are looking for
-                If (Me.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And music = False) Then
-                    paths.Music = filePaths(i)
-                    music = True
-                ElseIf (Me.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And image = False) Then
-                    paths.Image = filePaths(i)
-                    image = True
-                End If
-
-                'Checks if there is any music, otherwise it will be an invalid drag
-                If (music = True) Then
-                    paths.InvalidDrag = False
-                Else
-                    paths.InvalidDrag = True
-                End If
-                i += 1
-            End While
-
-            Return (paths)
-        End If
-
-        paths.InvalidDrag = True
-        Return paths
-    End Function
-
-    Private Sub frm_main_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        If Me._MusicFile IsNot Nothing Then
-            If (Me._MusicFile.Edited) Then
-                Me.ktdlg_close_window.Content = Me.music_path
-                Dim result As DialogResult = Me.ktdlg_close_window.ShowDialog()
-
-                If (result = Windows.Forms.DialogResult.Cancel) Then
-                    e.Cancel = True
-                ElseIf (result = Windows.Forms.DialogResult.OK) Then
-                    Me.kbtn_editing_save_Click(Nothing, Nothing)
-                End If
-            End If
-        End If
-    End Sub
-
-    Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        frm_main.ImageFormats.Add(".jpg")
-        frm_main.ImageFormats.Add(".jpeg")
-        frm_main.ImageFormats.Add(".png")
-        frm_main.ImageFormats.Add(".bmp")
-
-        frm_main.MusicFormats.Add(".mp3")
-        frm_main.MusicFormats.Add(".wav")
-
+    Private Sub kpnl_transition_show_loading_TransitionCompletedEvent(ByVal sender As Object, ByVal e As Transitions.Transition.Args) Handles kpnl_transition_show_loading.TransitionCompletedEvent
         Me.kpnl_editing_music.Visible = False
-        Me.kpnl_loading_music.Visible = True
-
-        Me.kpnl_rloading_music.StateCommon.Color1 = Me.kpnl_editing_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
-
-        Me.sfd_export_thumbnail.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyMusic
     End Sub
 
+    Private Sub kpnl_transition_show_editing_TransitionCompletedEvent(ByVal sender As Object, ByVal e As Transitions.Transition.Args) Handles kpnl_transition_show_editing.TransitionCompletedEvent
+        Me.kpnl_loading_music.Visible = False
+    End Sub
+
+    Public Sub ShowLoading()
+        If (Not Me.kpnl_loading_music.Visible And Me.kpnl_editing_music.Visible) Then
+            Me.kpnl_loading_music.Location = New Point(0, Me.kpnl_editing_music.Size.Height)
+            Me.kpnl_loading_music.Visible = True
+            Me.HideLoadingItems()
+            Me.kpnl_loading_music.SendToBack()
+
+            Me.kpnl_editing_music.Location = New Point(0, 0)
+
+            Me.kpnl_transition_show_loading = New Transition(New TransitionType_EaseInEaseOut(200))
+            Me.kpnl_transition_show_loading.add(Me.kpnl_editing_music, "Top", Me.kpnl_editing_music.Size.Height * -1)
+            Me.kpnl_transition_show_loading.add(Me.kpnl_loading_music, "Top", 0)
+            Me.kpnl_transition_show_loading.run()
+        End If
+    End Sub
+
+    Public Sub ShowEditing()
+        If (Me.kpnl_loading_music.Visible And Not Me.kpnl_editing_music.Visible) Then
+            Me.kpnl_editing_music.Location = New Point(0, Me.kpnl_loading_music.Size.Height)
+            Me.kpnl_editing_music.Visible = True
+            Me.kpnl_editing_music.SendToBack()
+
+            Me.kpnl_loading_music.Location = New Point(0, 0)
+
+            Me.kpnl_transition_show_editing = New Transition(New TransitionType_EaseInEaseOut(200))
+            Me.kpnl_transition_show_editing.add(Me.kpnl_loading_music, "Top", Me.kpnl_editing_music.Size.Height * -1)
+            Me.kpnl_transition_show_editing.add(Me.kpnl_editing_music, "Top", 0)
+            Me.kpnl_transition_show_editing.run()
+        End If
+    End Sub
+
+    Public Sub AddToHistory(ByVal file As String)
+        If (Me.history.Count - 1 > Me.history_pos + 1) Then
+            Dim l As Integer = Me.history.Count
+            For i As Integer = Me.history_pos To l Step 1
+                Me.history.RemoveAt(i)
+            Next
+        End If
+        Me.history.Add(file)
+        Me.history_pos += 1
+    End Sub
+
+    Public Sub CloseFile(Optional ByVal ShowLoadingPanel As Boolean = True)
+        Me.Loading = True
+        Me.ClearEditingGUI()
+
+        If (ShowLoadingPanel) Then
+            Me.ShowLoading()
+        End If
+
+        Me.music_path = ""
+        Me.image_path = ""
+        Me._MusicFile = Nothing
+    End Sub
+
+    Public Sub OpenFile(ByVal MusicPath As String, Optional ByVal ImagePath As String = "", Optional ByVal UpdateHistory As Boolean = True)
+        Me.CloseFile(False)
+
+        Me.music_path = MusicPath
+        Me.image_path = ImagePath
+
+        Me.LoadMusicFileIntoGUI(MusicPath, ImagePath)
+        Me.ActivateEditingGUI()
+        Me.Loading = False
+
+        If (UpdateHistory) Then
+            Me.AddToHistory(MusicPath)
+        End If
+
+        Me.ShowEditing()
+    End Sub
+
+    Public Sub ClearEditingGUI()
+        Me.pcb_editing_thumbnail.Image = My.Resources.MP3
+        Me.kbtn_editing_thumbnail_clear.Enabled = False
+        Me.kbtn_editing_thumbnail_export.Enabled = False
+        Me.kbtn_editing_thumbnail_paste.Enabled = False
+        Me.kbtn_thumbnail_open.Enabled = False
+        Me.kbtn_clear_rating.Enabled = False
+        Me.kbtn_editing_save.Enabled = False
+
+        Me.tvktxt_album.TextBoxValue = ""
+        Me.tvktxt_artists.TextBoxValue = ""
+        Me.tvktxt_comments.TextBoxValue = ""
+        Me.tvktxt_genres.TextBoxValue = ""
+        Me.tvktxt_interpret.TextBoxValue = ""
+        Me.tvktxt_lyrics.TextBoxValue = ""
+        Me.tvktxt_number.TextBoxValue = ""
+        Me.tvktxt_title.TextBoxValue = ""
+        Me.tvktxt_year.TextBoxValue = ""
+    End Sub
+
+    Public Sub ActivateEditingGUI()
+        If (Me._MusicFile IsNot Nothing) Then
+            Me.kbtn_editing_thumbnail_clear.Enabled = True
+
+            If (Me._MusicFile.Thumbnail IsNot Nothing) Then
+                Me.kbtn_editing_thumbnail_export.Enabled = True
+            End If
+
+            Me.kbtn_editing_thumbnail_paste.Enabled = True
+            Me.kbtn_thumbnail_open.Enabled = True
+            Me.kbtn_clear_rating.Enabled = True
+            Me.kbtn_editing_save.Enabled = True
+        End If
+    End Sub
 
     Public Sub LoadMusicFileIntoGUI(ByVal music As String, Optional ByVal image As String = "")
         Me.Loading = True
@@ -700,15 +717,6 @@ Public Class frm_main
         End Try
 
         Me.Loading = False
-    End Sub
-
-    Public Sub HideLoadingItems()
-        Me.klbl_loading_music.Visible = False
-        Me.klbl_loading_thumbnail.Visible = False
-        Me.kwlbl_loading_music_name.Visible = False
-        Me.kwlbl_loading_thumbnail_name.Visible = False
-        Me.pcb_loading_music.Visible = False
-        Me.pcb_loading_thumbnail.Visible = False
     End Sub
 
     Public Sub ShowLoadingPanel(ByVal music_path As String, Optional ByVal image_path As String = "")
@@ -771,6 +779,135 @@ Public Class frm_main
 
     End Sub
 
+#End Region
+
+    Public Function CheckFileOpens(ByVal files As Collections.Specialized.StringCollection) As DragFiles
+        Dim paths As DragFiles = New DragFiles
+
+        Dim i As Integer = 0
+        Dim music As Boolean = False
+        Dim image As Boolean = False
+
+        While ((music = False Or image = False) And i < files.Count)
+
+            'Checks if the dropped file exists
+            If (Not File.Exists(files(i))) Then
+                Continue While
+            End If
+
+            'Then checks the file type, and if it any we are looking for
+            If (frm_main.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And music = False) Then
+                paths.Music = files(i)
+                music = True
+            ElseIf (frm_main.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(files(i)).Extension.ToLower()) And image = False) Then
+                paths.Image = files(i)
+                image = True
+            End If
+
+            'Checks if there is any music, otherwise it will be an invalid drag
+            If (music = True) Then
+                paths.InvalidDrag = False
+            Else
+                paths.InvalidDrag = True
+            End If
+            i += 1
+        End While
+
+        Return (paths)
+    End Function
+
+    Public Function CheckFileDrags(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) As DragFiles
+        Dim paths As DragFiles = New DragFiles
+        paths.InvalidDrag = True
+        If (e.Data.GetDataPresent(DataFormats.FileDrop)) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim filePaths As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+
+            Dim i As Integer = 0
+            Dim music As Boolean = False
+            Dim image As Boolean = False
+
+            While ((music = False Or image = False) And i < filePaths.Length)
+
+                'Checks if the dropped file exists
+                If (Not File.Exists(filePaths(i))) Then
+                    Continue While
+                End If
+
+                'Then checks the file type, and if it any we are looking for
+                If (frm_main.MusicFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And music = False) Then
+                    paths.Music = filePaths(i)
+                    music = True
+                ElseIf (frm_main.ImageFormats.Contains(My.Computer.FileSystem.GetFileInfo(filePaths(i)).Extension.ToLower()) And image = False) Then
+                    paths.Image = filePaths(i)
+                    image = True
+                End If
+
+                'Checks if there is any music, otherwise it will be an invalid drag
+                If (music = True) Then
+                    paths.InvalidDrag = False
+                Else
+                    paths.InvalidDrag = True
+                End If
+                i += 1
+            End While
+
+            Return (paths)
+        End If
+
+        paths.InvalidDrag = True
+        Return paths
+    End Function
+
+    Private Sub frm_main_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        If Me._MusicFile IsNot Nothing Then
+            If (Me._MusicFile.Edited) Then
+                Me.ktdlg_close_window.Content = Me.music_path
+                Dim result As DialogResult = Me.ktdlg_close_window.ShowDialog()
+
+                If (result = Windows.Forms.DialogResult.Cancel) Then
+                    e.Cancel = True
+                ElseIf (result = Windows.Forms.DialogResult.OK) Then
+                    Me.kbtn_editing_save_Click(Nothing, Nothing)
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        frm_main.ImageFormats.Add(".jpg")
+        frm_main.ImageFormats.Add(".jpeg")
+        frm_main.ImageFormats.Add(".png")
+        frm_main.ImageFormats.Add(".bmp")
+
+        frm_main.MusicFormats.Add(".mp3")
+        frm_main.MusicFormats.Add(".wav")
+
+        Me.kpnl_editing_music.Visible = False
+        Me.kpnl_loading_music.Visible = True
+
+        Me.kpnl_rloading_music.StateCommon.Color1 = Me.kpnl_editing_music.StateCommon.GetBackColor1(ComponentFactory.Krypton.Toolkit.PaletteState.Normal)
+
+        Me.sfd_export_thumbnail.InitialDirectory = My.Computer.FileSystem.SpecialDirectories.MyMusic
+    End Sub
+
+
+    Public Sub HideLoadingItems()
+        Me.klbl_loading_music.Visible = False
+        Me.klbl_loading_thumbnail.Visible = False
+        Me.kwlbl_loading_music_name.Visible = False
+        Me.kwlbl_loading_thumbnail_name.Visible = False
+        Me.pcb_loading_music.Visible = False
+        Me.pcb_loading_thumbnail.Visible = False
+
+        Me.klbl_loading_drag_files.Visible = True
+    End Sub
+
     Private Sub kbtn_editing_save_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_editing_save.Click
         Me.pcb_editing_saving.Visible = True
         'If (Me.kltt_editing_filename.Text = Me._MusicFile.MusicFileName) Then
@@ -824,5 +961,28 @@ Public Class frm_main
 
     Private Sub kbtn_loading_info_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_loading_info.Click
         frm_about.ShowDialog()
+    End Sub
+
+    Private Sub KryptonContextMenuItem2_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles KryptonContextMenuItem2.Click
+        frm_edit_thumbnail.Thumbnail = Me._MusicFile.Thumbnail
+        frm_edit_thumbnail.ShowDialog()
+    End Sub
+
+    Private Sub kbtn_close_music_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_close_music.Click
+        Me.CloseFile(True)
+    End Sub
+
+    Private Sub kbtn_history_back_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_history_back.Click
+        If (Me.history_pos > 0) Then
+            Me.history_pos -= 1
+            Me.OpenFile(Me.history(Me.history_pos), "", False)
+        End If
+    End Sub
+
+    Private Sub kbtn_history_forward_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_history_forward.Click
+        If (Me.history_pos < Me.history.Count - 1) Then
+            Me.history_pos += 1
+            Me.OpenFile(Me.history(Me.history_pos), "", False)
+        End If
     End Sub
 End Class

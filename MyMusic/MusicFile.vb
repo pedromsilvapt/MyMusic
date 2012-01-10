@@ -7,13 +7,22 @@ Public Class MusicFile
 
     Public _Thumbnail As Image
     Public MusicTags As TagLib.File
-    Private _Edited As Boolean = False
+    Private __Edited As Boolean = False
 
     Private tag As TagLib.Tag
 
     Private PopM As TagLib.Id3v2.PopularimeterFrame
 
     Private _rates As Dictionary(Of Integer, Integer) = New Dictionary(Of Integer, Integer)
+
+    Public Property _Edited As Boolean
+        Get
+            Return Me.__Edited
+        End Get
+        Set(ByVal value As Boolean)
+            Me.__Edited = value
+        End Set
+    End Property
 
     Public ReadOnly Property RateByte(ByVal Rate As Integer) As Integer
         Get
@@ -143,7 +152,8 @@ Public Class MusicFile
 
     Public Property ArtistsString As String
         Get
-            Return JoinKeywords(Me.Artists, "; ")
+            Dim _artists As String() = Me.Artists
+            Return JoinKeywords(_artists, "; ")
         End Get
         Set(ByVal value As String)
             Me.Artists = SplitKeywords(value, ";")
@@ -208,7 +218,8 @@ Public Class MusicFile
 
     Public Property GenresString As String
         Get
-            Return JoinKeywords(Me.Genres, "; ")
+            Dim _genres As String() = Me.Genres
+            Return JoinKeywords(_genres, "; ")
         End Get
         Set(ByVal value As String)
             Me.Genres = SplitKeywords(value, ";")

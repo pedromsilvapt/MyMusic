@@ -32,6 +32,11 @@ Partial Class frm_main
         Me.klbl_loading_music = New ComponentFactory.Krypton.Toolkit.KryptonLabel()
         Me.KryptonManager = New ComponentFactory.Krypton.Toolkit.KryptonManager(Me.components)
         Me.kpnl_editing_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
+        Me.kpnl_history_interface = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
+        Me.KryptonBorderEdge1 = New ComponentFactory.Krypton.Toolkit.KryptonBorderEdge()
+        Me.kbtn_history_back = New ComponentFactory.Krypton.Toolkit.KryptonButton()
+        Me.kbtn_history_forward = New ComponentFactory.Krypton.Toolkit.KryptonButton()
+        Me.kbtn_close_music = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_info = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kpnl_rloading_music = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.kwlbl_rloading_thumbnail_name = New ComponentFactory.Krypton.Toolkit.KryptonWrapLabel()
@@ -63,7 +68,9 @@ Partial Class frm_main
         Me.kcmd_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonContextMenu()
         Me.KryptonContextMenuItems1 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItems()
         Me.KryptonContextMenuItem1 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem()
+        Me.KryptonContextMenuItem2 = New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem()
         Me.ofd_thumbnail = New System.Windows.Forms.OpenFileDialog()
+        Me.tt_thumbnail_clear = New System.Windows.Forms.ToolTip(Me.components)
         Me.tvktxt_lyrics = New MyMusic.TVKryptonMultiline()
         Me.kltt_editing_filename = New MyMusic.KLabelToTextBox()
         Me.tvktxt_album = New MyMusic.TVKryptonTextBox()
@@ -80,6 +87,8 @@ Partial Class frm_main
         CType(Me.pcb_loading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.kpnl_editing_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_editing_music.SuspendLayout()
+        CType(Me.kpnl_history_interface, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.kpnl_history_interface.SuspendLayout()
         CType(Me.kpnl_rloading_music, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.kpnl_rloading_music.SuspendLayout()
         CType(Me.pcb_rloading_thumbnail, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -206,6 +215,8 @@ Partial Class frm_main
         '
         'kpnl_editing_music
         '
+        Me.kpnl_editing_music.Controls.Add(Me.kpnl_history_interface)
+        Me.kpnl_editing_music.Controls.Add(Me.kbtn_close_music)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_info)
         Me.kpnl_editing_music.Controls.Add(Me.kpnl_rloading_music)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_clear_rating)
@@ -234,6 +245,61 @@ Partial Class frm_main
         Me.kpnl_editing_music.Size = New System.Drawing.Size(821, 298)
         Me.kpnl_editing_music.TabIndex = 7
         '
+        'kpnl_history_interface
+        '
+        Me.kpnl_history_interface.Controls.Add(Me.KryptonBorderEdge1)
+        Me.kpnl_history_interface.Controls.Add(Me.kbtn_history_back)
+        Me.kpnl_history_interface.Controls.Add(Me.kbtn_history_forward)
+        Me.kpnl_history_interface.Location = New System.Drawing.Point(73, 257)
+        Me.kpnl_history_interface.Name = "kpnl_history_interface"
+        Me.kpnl_history_interface.Size = New System.Drawing.Size(83, 35)
+        Me.kpnl_history_interface.TabIndex = 25
+        '
+        'KryptonBorderEdge1
+        '
+        Me.KryptonBorderEdge1.AutoSize = False
+        Me.KryptonBorderEdge1.Location = New System.Drawing.Point(39, 4)
+        Me.KryptonBorderEdge1.Name = "KryptonBorderEdge1"
+        Me.KryptonBorderEdge1.Orientation = System.Windows.Forms.Orientation.Vertical
+        Me.KryptonBorderEdge1.Size = New System.Drawing.Size(1, 29)
+        Me.KryptonBorderEdge1.Text = "KryptonBorderEdge1"
+        '
+        'kbtn_history_back
+        '
+        Me.kbtn_history_back.Location = New System.Drawing.Point(4, 3)
+        Me.kbtn_history_back.Name = "kbtn_history_back"
+        Me.kbtn_history_back.Size = New System.Drawing.Size(35, 30)
+        Me.kbtn_history_back.StateCommon.Border.DrawBorders = CType(((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top Or ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) _
+                    Or ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left), ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)
+        Me.kbtn_history_back.StateCommon.Border.Rounding = 5
+        Me.kbtn_history_back.TabIndex = 23
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_history_back, "Música Anterior")
+        Me.kbtn_history_back.Values.Image = Global.MyMusic.My.Resources.Resources.arrow_180
+        Me.kbtn_history_back.Values.Text = ""
+        '
+        'kbtn_history_forward
+        '
+        Me.kbtn_history_forward.Location = New System.Drawing.Point(40, 3)
+        Me.kbtn_history_forward.Name = "kbtn_history_forward"
+        Me.kbtn_history_forward.Size = New System.Drawing.Size(35, 30)
+        Me.kbtn_history_forward.StateCommon.Border.DrawBorders = CType(((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Top Or ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom) _
+                    Or ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right), ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)
+        Me.kbtn_history_forward.StateCommon.Border.Rounding = 5
+        Me.kbtn_history_forward.TabIndex = 24
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_history_forward, "Próxima Música")
+        Me.kbtn_history_forward.Values.Image = Global.MyMusic.My.Resources.Resources.arrow
+        Me.kbtn_history_forward.Values.Text = ""
+        '
+        'kbtn_close_music
+        '
+        Me.kbtn_close_music.Location = New System.Drawing.Point(783, 3)
+        Me.kbtn_close_music.Name = "kbtn_close_music"
+        Me.kbtn_close_music.Size = New System.Drawing.Size(35, 30)
+        Me.kbtn_close_music.TabIndex = 22
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_close_music, "Fechar Música")
+        Me.kbtn_close_music.Values.Image = Global.MyMusic.My.Resources.Resources.cross
+        Me.kbtn_close_music.Values.Text = ""
+        '
         'kbtn_info
         '
         Me.kbtn_info.Location = New System.Drawing.Point(774, 259)
@@ -253,9 +319,9 @@ Partial Class frm_main
         Me.kpnl_rloading_music.Controls.Add(Me.klbl_rloading_thumbnail)
         Me.kpnl_rloading_music.Controls.Add(Me.klbl_rloading_music)
         Me.kpnl_rloading_music.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.kpnl_rloading_music.Location = New System.Drawing.Point(727, 14)
+        Me.kpnl_rloading_music.Location = New System.Drawing.Point(727, 48)
         Me.kpnl_rloading_music.Name = "kpnl_rloading_music"
-        Me.kpnl_rloading_music.Size = New System.Drawing.Size(94, 235)
+        Me.kpnl_rloading_music.Size = New System.Drawing.Size(94, 174)
         Me.kpnl_rloading_music.StateCommon.Image = Global.MyMusic.My.Resources.Resources.application_get
         Me.kpnl_rloading_music.StateCommon.ImageAlign = ComponentFactory.Krypton.Toolkit.PaletteRectangleAlign.Control
         Me.kpnl_rloading_music.StateCommon.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.CenterMiddle
@@ -341,6 +407,7 @@ Partial Class frm_main
         Me.kbtn_clear_rating.Name = "kbtn_clear_rating"
         Me.kbtn_clear_rating.Size = New System.Drawing.Size(22, 22)
         Me.kbtn_clear_rating.TabIndex = 10
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_clear_rating, "Apagar Classificação")
         Me.kbtn_clear_rating.Values.Image = Global.MyMusic.My.Resources.Resources.cross
         Me.kbtn_clear_rating.Values.Text = ""
         '
@@ -382,6 +449,7 @@ Partial Class frm_main
         Me.kbtn_thumbnail_open.Name = "kbtn_thumbnail_open"
         Me.kbtn_thumbnail_open.Size = New System.Drawing.Size(35, 30)
         Me.kbtn_thumbnail_open.TabIndex = 15
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_thumbnail_open, "Procurar Thumbnail")
         Me.kbtn_thumbnail_open.Values.Image = Global.MyMusic.My.Resources.Resources.magnifier
         Me.kbtn_thumbnail_open.Values.Text = ""
         '
@@ -391,6 +459,7 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_paste.Name = "kbtn_editing_thumbnail_paste"
         Me.kbtn_editing_thumbnail_paste.Size = New System.Drawing.Size(35, 30)
         Me.kbtn_editing_thumbnail_paste.TabIndex = 14
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_editing_thumbnail_paste, "Colar Thumbnail")
         Me.kbtn_editing_thumbnail_paste.Values.Image = Global.MyMusic.My.Resources.Resources.paste_plain
         Me.kbtn_editing_thumbnail_paste.Values.Text = ""
         '
@@ -400,6 +469,7 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_export.Name = "kbtn_editing_thumbnail_export"
         Me.kbtn_editing_thumbnail_export.Size = New System.Drawing.Size(35, 30)
         Me.kbtn_editing_thumbnail_export.TabIndex = 13
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_editing_thumbnail_export, "Exportar Thumbnail")
         Me.kbtn_editing_thumbnail_export.Values.Image = Global.MyMusic.My.Resources.Resources.picture_go
         Me.kbtn_editing_thumbnail_export.Values.Text = ""
         '
@@ -409,6 +479,7 @@ Partial Class frm_main
         Me.kbtn_editing_thumbnail_clear.Name = "kbtn_editing_thumbnail_clear"
         Me.kbtn_editing_thumbnail_clear.Size = New System.Drawing.Size(35, 30)
         Me.kbtn_editing_thumbnail_clear.TabIndex = 12
+        Me.tt_thumbnail_clear.SetToolTip(Me.kbtn_editing_thumbnail_clear, "Apagar Thumbnail")
         Me.kbtn_editing_thumbnail_clear.Values.Image = Global.MyMusic.My.Resources.Resources.cross
         Me.kbtn_editing_thumbnail_clear.Values.Text = ""
         '
@@ -519,12 +590,17 @@ Partial Class frm_main
         '
         'KryptonContextMenuItems1
         '
-        Me.KryptonContextMenuItems1.Items.AddRange(New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItemBase() {Me.KryptonContextMenuItem1})
+        Me.KryptonContextMenuItems1.Items.AddRange(New ComponentFactory.Krypton.Toolkit.KryptonContextMenuItemBase() {Me.KryptonContextMenuItem1, Me.KryptonContextMenuItem2})
         '
         'KryptonContextMenuItem1
         '
         Me.KryptonContextMenuItem1.Image = Global.MyMusic.My.Resources.Resources.page_white_copy
         Me.KryptonContextMenuItem1.Text = "Copiar"
+        '
+        'KryptonContextMenuItem2
+        '
+        Me.KryptonContextMenuItem2.Image = Global.MyMusic.My.Resources.Resources.image_edit
+        Me.KryptonContextMenuItem2.Text = "Editar Imagem"
         '
         'ofd_thumbnail
         '
@@ -774,6 +850,8 @@ Partial Class frm_main
         CType(Me.kpnl_editing_music, System.ComponentModel.ISupportInitialize).EndInit()
         Me.kpnl_editing_music.ResumeLayout(False)
         Me.kpnl_editing_music.PerformLayout()
+        CType(Me.kpnl_history_interface, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.kpnl_history_interface.ResumeLayout(False)
         CType(Me.kpnl_rloading_music, System.ComponentModel.ISupportInitialize).EndInit()
         Me.kpnl_rloading_music.ResumeLayout(False)
         Me.kpnl_rloading_music.PerformLayout()
@@ -852,4 +930,11 @@ Partial Class frm_main
     Friend WithEvents kbtn_info As ComponentFactory.Krypton.Toolkit.KryptonButton
     Friend WithEvents ofd_thumbnail As System.Windows.Forms.OpenFileDialog
     Friend WithEvents kbtn_loading_info As ComponentFactory.Krypton.Toolkit.KryptonButton
+    Friend WithEvents KryptonContextMenuItem2 As ComponentFactory.Krypton.Toolkit.KryptonContextMenuItem
+    Friend WithEvents kbtn_close_music As ComponentFactory.Krypton.Toolkit.KryptonButton
+    Friend WithEvents kbtn_history_back As ComponentFactory.Krypton.Toolkit.KryptonButton
+    Friend WithEvents kbtn_history_forward As ComponentFactory.Krypton.Toolkit.KryptonButton
+    Friend WithEvents kpnl_history_interface As ComponentFactory.Krypton.Toolkit.KryptonPanel
+    Friend WithEvents KryptonBorderEdge1 As ComponentFactory.Krypton.Toolkit.KryptonBorderEdge
+    Friend WithEvents tt_thumbnail_clear As System.Windows.Forms.ToolTip
 End Class
