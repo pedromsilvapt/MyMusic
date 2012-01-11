@@ -265,21 +265,14 @@
         Dim sourceWidth As Integer = imgToResize.Width
         Dim sourceHeight As Integer = imgToResize.Height
 
-        Dim nPercent As Single = 0
         Dim nPercentW As Single = 0
         Dim nPercentH As Single = 0
 
         nPercentW = (CSng(size.Width) / CSng(sourceWidth))
         nPercentH = (CSng(size.Height) / CSng(sourceHeight))
 
-        If nPercentH < nPercentW Then
-            nPercent = nPercentH
-        Else
-            nPercent = nPercentW
-        End If
-
-        Dim destWidth As Integer = CInt(Math.Truncate(sourceWidth * nPercent))
-        Dim destHeight As Integer = CInt(Math.Truncate(sourceHeight * nPercent))
+        Dim destWidth As Integer = CInt(Math.Truncate(sourceWidth * nPercentW))
+        Dim destHeight As Integer = CInt(Math.Truncate(sourceHeight * nPercentH))
 
         Dim b As New Bitmap(destWidth, destHeight)
         Dim g As Graphics = Graphics.FromImage(DirectCast(b, Image))
@@ -290,6 +283,36 @@
 
         Return DirectCast(b, Image)
     End Function
+
+    'Public Shared Function resizeImage(ByVal imgToResize As Image, ByVal size As Size) As Image
+    '    Dim sourceWidth As Integer = imgToResize.Width
+    '    Dim sourceHeight As Integer = imgToResize.Height
+
+    '    Dim nPercent As Single = 0
+    '    Dim nPercentW As Single = 0
+    '    Dim nPercentH As Single = 0
+
+    '    nPercentW = (CSng(size.Width) / CSng(sourceWidth))
+    '    nPercentH = (CSng(size.Height) / CSng(sourceHeight))
+
+    '    If nPercentH < nPercentW Then
+    '        nPercent = nPercentH
+    '    Else
+    '        nPercent = nPercentW
+    '    End If
+
+    '    Dim destWidth As Integer = CInt(Math.Truncate(sourceWidth * nPercent))
+    '    Dim destHeight As Integer = CInt(Math.Truncate(sourceHeight * nPercent))
+
+    '    Dim b As New Bitmap(destWidth, destHeight)
+    '    Dim g As Graphics = Graphics.FromImage(DirectCast(b, Image))
+    '    g.InterpolationMode = Drawing2D.InterpolationMode.HighQualityBicubic
+
+    '    g.DrawImage(imgToResize, 0, 0, destWidth, destHeight)
+    '    g.Dispose()
+
+    '    Return DirectCast(b, Image)
+    'End Function
 
     Public Shared Function CreateThumbnail(ByVal Img As Image, ByVal sz As Size, Optional ByVal Zoom As Boolean = False) As Image
         Return CropablePictureBox.CreateThumbnail(Img, 0, 0, 0, 0, sz, Zoom)

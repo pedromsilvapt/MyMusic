@@ -27,7 +27,6 @@ Partial Class frm_edit_thumbnail
         Me.kbtn_set_crop_size = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_crop_reset = New ComponentFactory.Krypton.Toolkit.KryptonButton()
         Me.kbtn_make_square = New ComponentFactory.Krypton.Toolkit.KryptonButton()
-        Me.CropablePictureBox1 = New MyMusic.CropablePictureBox()
         Me.kpnl_preview_thumbnail = New ComponentFactory.Krypton.Toolkit.KryptonPanel()
         Me.kcbtn_link = New ComponentFactory.Krypton.Toolkit.KryptonCheckButton()
         Me.kcbx_smart_scale = New ComponentFactory.Krypton.Toolkit.KryptonCheckBox()
@@ -54,6 +53,7 @@ Partial Class frm_edit_thumbnail
         Me.pcb_preview = New System.Windows.Forms.PictureBox()
         Me.KryptonManager = New ComponentFactory.Krypton.Toolkit.KryptonManager(Me.components)
         Me.kcks_align = New ComponentFactory.Krypton.Toolkit.KryptonCheckSet(Me.components)
+        Me.CropablePictureBox1 = New MyMusic.CropablePictureBox()
         CType(Me.KryptonPanel, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.KryptonPanel.SuspendLayout()
         CType(Me.kpnl_crop, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -94,12 +94,12 @@ Partial Class frm_edit_thumbnail
         Me.kpnl_crop_buttons.Controls.Add(Me.kbtn_make_square)
         Me.kpnl_crop_buttons.Location = New System.Drawing.Point(3, 388)
         Me.kpnl_crop_buttons.Name = "kpnl_crop_buttons"
-        Me.kpnl_crop_buttons.Size = New System.Drawing.Size(342, 24)
+        Me.kpnl_crop_buttons.Size = New System.Drawing.Size(357, 24)
         Me.kpnl_crop_buttons.TabIndex = 13
         '
         'kbtn_set_crop_size
         '
-        Me.kbtn_set_crop_size.Location = New System.Drawing.Point(238, 0)
+        Me.kbtn_set_crop_size.Location = New System.Drawing.Point(249, 0)
         Me.kbtn_set_crop_size.Name = "kbtn_set_crop_size"
         Me.kbtn_set_crop_size.Size = New System.Drawing.Size(103, 25)
         Me.kbtn_set_crop_size.TabIndex = 13
@@ -119,32 +119,10 @@ Partial Class frm_edit_thumbnail
         '
         Me.kbtn_make_square.Location = New System.Drawing.Point(105, 0)
         Me.kbtn_make_square.Name = "kbtn_make_square"
-        Me.kbtn_make_square.Size = New System.Drawing.Size(127, 25)
+        Me.kbtn_make_square.Size = New System.Drawing.Size(138, 25)
         Me.kbtn_make_square.TabIndex = 12
         Me.kbtn_make_square.Values.Image = CType(resources.GetObject("kbtn_make_square.Values.Image"), System.Drawing.Image)
-        Me.kbtn_make_square.Values.Text = "Formar Quadrado"
-        '
-        'CropablePictureBox1
-        '
-        Me.CropablePictureBox1.AllowCrop = True
-        Me.CropablePictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.CropablePictureBox1.CropBottom = 0
-        Me.CropablePictureBox1.CropLeft = 0
-        Me.CropablePictureBox1.CropLocation = New System.Drawing.Point(0, 0)
-        Me.CropablePictureBox1.CropRight = 0
-        Me.CropablePictureBox1.CropSize = New System.Drawing.Size(100, 100)
-        Me.CropablePictureBox1.CropTop = 0
-        Me.CropablePictureBox1.Location = New System.Drawing.Point(0, 0)
-        Me.CropablePictureBox1.MaxSize = New System.Drawing.Size(382, 382)
-        Me.CropablePictureBox1.Name = "CropablePictureBox1"
-        Me.CropablePictureBox1.RealCropBottom = 0
-        Me.CropablePictureBox1.RealCropLeft = 0
-        Me.CropablePictureBox1.RealCropLocation = New System.Drawing.Point(0, 0)
-        Me.CropablePictureBox1.RealCropRight = 0
-        Me.CropablePictureBox1.RealCropSize = New System.Drawing.Size(0, 0)
-        Me.CropablePictureBox1.RealCropTop = 0
-        Me.CropablePictureBox1.Size = New System.Drawing.Size(382, 382)
-        Me.CropablePictureBox1.TabIndex = 0
+        Me.kbtn_make_square.Values.Text = "Formar Rectângulo"
         '
         'kpnl_preview_thumbnail
         '
@@ -413,6 +391,28 @@ Partial Class frm_edit_thumbnail
         Me.kcks_align.CheckButtons.Add(Me.kbtn_align_centerdown)
         Me.kcks_align.CheckButtons.Add(Me.kbtn_align_rightdown)
         Me.kcks_align.CheckedButton = Me.kbtn_align_leftup
+        '
+        'CropablePictureBox1
+        '
+        Me.CropablePictureBox1.AllowCrop = True
+        Me.CropablePictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.CropablePictureBox1.CropBottom = 0
+        Me.CropablePictureBox1.CropLeft = 0
+        Me.CropablePictureBox1.CropLocation = New System.Drawing.Point(0, 0)
+        Me.CropablePictureBox1.CropRight = 0
+        Me.CropablePictureBox1.CropSize = New System.Drawing.Size(100, 100)
+        Me.CropablePictureBox1.CropTop = 0
+        Me.CropablePictureBox1.Location = New System.Drawing.Point(0, 0)
+        Me.CropablePictureBox1.MaxSize = New System.Drawing.Size(382, 382)
+        Me.CropablePictureBox1.Name = "CropablePictureBox1"
+        Me.CropablePictureBox1.RealCropBottom = 0
+        Me.CropablePictureBox1.RealCropLeft = 0
+        Me.CropablePictureBox1.RealCropLocation = New System.Drawing.Point(0, 0)
+        Me.CropablePictureBox1.RealCropRight = 0
+        Me.CropablePictureBox1.RealCropSize = New System.Drawing.Size(0, 0)
+        Me.CropablePictureBox1.RealCropTop = 0
+        Me.CropablePictureBox1.Size = New System.Drawing.Size(382, 382)
+        Me.CropablePictureBox1.TabIndex = 0
         '
         'frm_edit_thumbnail
         '
