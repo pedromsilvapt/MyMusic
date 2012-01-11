@@ -215,7 +215,6 @@ Partial Class frm_main
         '
         'kpnl_editing_music
         '
-        Me.kpnl_editing_music.Controls.Add(Me.kpnl_history_interface)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_close_music)
         Me.kpnl_editing_music.Controls.Add(Me.kbtn_info)
         Me.kpnl_editing_music.Controls.Add(Me.kpnl_rloading_music)
@@ -834,6 +833,7 @@ Partial Class frm_main
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(821, 298)
+        Me.Controls.Add(Me.kpnl_history_interface)
         Me.Controls.Add(Me.kpnl_editing_music)
         Me.Controls.Add(Me.kpnl_loading_music)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D

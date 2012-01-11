@@ -27,6 +27,8 @@ Public Class frm_main
     Private history As List(Of String) = New List(Of String)
     Private history_pos As Integer = -1
 
+    Private looking_file As String
+
     Private WithEvents kpnl_transition_loading_error As Transition = New Transition(New TransitionType_Flash(1, 500))
     Private WithEvents kpnl_transition_loading_editing As Transition = New Transition(New TransitionType_EaseInEaseOut(200))
     Private WithEvents kpnl_transition_loading_color As Transition = New Transition(New TransitionType_EaseInEaseOut(500))
@@ -340,8 +342,8 @@ Public Class frm_main
     Private Sub kpnl_loading_music_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_loading_music.DragEnter
         Dim paths As DragFiles = Me.CheckFileDrags(sender, e)
         If (paths.InvalidDrag = False) Then
-            Me.klbl_loading_drag_files.Visible = False
             Me.ShowLoadingPanel(paths.Music, paths.Image)
+            Me.klbl_loading_drag_files.Visible = False
         End If
     End Sub
 
@@ -357,12 +359,26 @@ Public Class frm_main
             Me.music_path = paths.Music
             Me.image_path = paths.Image
             Me.OpenFile(paths.Music, paths.Image)
+            Me.kpnl_history_interface.Visible = True
         End If
     End Sub
 
 #End Region
 
 #Region "Runtime Loading Panel"
+
+    Public Sub HideRLoadingPanel()
+        Me.RHideLoadingItems()
+
+        Me.kpnl_rloading_music.StateCommon.Image = My.Resources.application_get
+
+        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(200))
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Top", 48)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Left", 727)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Height", 174)
+        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Width", 94)
+        Me.kpnl_transition_loading_color.run()
+    End Sub
 
     Private Sub kpnl_transition_loading_error_TransitionCompletedEvent(ByVal sender As Object, ByVal e As Transitions.Transition.Args) Handles kpnl_transition_loading_error.TransitionCompletedEvent
         Me.terror_showing = False
@@ -405,29 +421,11 @@ Public Class frm_main
             End If
         End If
 
-        Me.RHideLoadingItems()
-
-        Me.kpnl_rloading_music.StateCommon.Image = My.Resources.application_get
-
-        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(200))
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Top", 14)
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Left", 727)
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Height", 235)
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Width", 94)
-        Me.kpnl_transition_loading_color.run()
+        Me.HideRLoadingPanel()
     End Sub
 
     Private Sub kpnl_rloading_music_DragLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles kpnl_rloading_music.DragLeave
-        Me.RHideLoadingItems()
-
-        Me.kpnl_rloading_music.StateCommon.Image = My.Resources.application_get
-
-        Me.kpnl_transition_loading_color = New Transition(New TransitionType_EaseInEaseOut(200))
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Top", 14)
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Left", 727)
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Height", 235)
-        Me.kpnl_transition_loading_color.add(Me.kpnl_rloading_music, "Width", 94)
-        Me.kpnl_transition_loading_color.run()
+        Me.HideRLoadingPanel()
     End Sub
 
     Private Sub kpnl_runtime_loading_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles kpnl_rloading_music.DragEnter
@@ -592,15 +590,38 @@ Public Class frm_main
         End If
     End Sub
 
+    Public Function SameFile(ByVal file As String) As Boolean
+        Return (file = Me.looking_file)
+    End Function
+
     Public Sub AddToHistory(ByVal file As String)
+        'Delets the file we're opening from the history if it is there
+        Me.looking_file = file
+        If (Me.history.Exists(AddressOf SameFile)) Then
+            Dim index As Integer = Me.history.FindIndex(AddressOf SameFile)
+            Me.history.RemoveAt(index)
+            If (index <= Me.history_pos) Then
+                Me.history_pos -= 1
+            End If
+        End If
+
+        'Clears the rest of the history list from our current position on
         If (Me.history.Count - 1 > Me.history_pos + 1) Then
-            Dim l As Integer = Me.history.Count
-            For i As Integer = Me.history_pos To l Step 1
+            Dim l As Integer = Me.history.Count - 1
+            For i As Integer = l To Me.history_pos + 1 Step -1
                 Me.history.RemoveAt(i)
             Next
         End If
         Me.history.Add(file)
         Me.history_pos += 1
+
+        Me.RefreshHistoryButtons()
+    End Sub
+
+    Public Sub RefreshHistoryButtons()
+        'Changes the buttons states
+        Me.kbtn_history_back.Enabled = (Me.history_pos > 0)
+        Me.kbtn_history_forward.Enabled = (Me.history_pos < Me.history.Count - 1)
     End Sub
 
     Public Sub CloseFile(Optional ByVal ShowLoadingPanel As Boolean = True)
@@ -880,6 +901,7 @@ Public Class frm_main
     End Sub
 
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        Me.kpnl_history_interface.Visible = False
         frm_main.ImageFormats.Add(".jpg")
         frm_main.ImageFormats.Add(".jpeg")
         frm_main.ImageFormats.Add(".png")
@@ -970,6 +992,8 @@ Public Class frm_main
 
     Private Sub kbtn_close_music_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_close_music.Click
         Me.CloseFile(True)
+        Me.history_pos += 1
+        Me.RefreshHistoryButtons()
     End Sub
 
     Private Sub kbtn_history_back_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_history_back.Click
@@ -977,6 +1001,7 @@ Public Class frm_main
             Me.history_pos -= 1
             Me.OpenFile(Me.history(Me.history_pos), "", False)
         End If
+        Me.RefreshHistoryButtons()
     End Sub
 
     Private Sub kbtn_history_forward_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_history_forward.Click
@@ -984,5 +1009,6 @@ Public Class frm_main
             Me.history_pos += 1
             Me.OpenFile(Me.history(Me.history_pos), "", False)
         End If
+        Me.RefreshHistoryButtons()
     End Sub
 End Class
