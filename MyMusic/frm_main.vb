@@ -10,7 +10,7 @@ Public Class frm_main
         Public Image As String
     End Structure
 
-    Public _MusicFile As MusicFile
+    Public WithEvents _MusicFile As MusicFile
 
     Public music_path As String = ""
     Public image_path As String = ""
@@ -359,7 +359,6 @@ Public Class frm_main
             Me.music_path = paths.Music
             Me.image_path = paths.Image
             Me.OpenFile(paths.Music, paths.Image)
-            Me.kpnl_history_interface.Visible = True
         End If
     End Sub
 
@@ -620,8 +619,17 @@ Public Class frm_main
 
     Public Sub RefreshHistoryButtons()
         'Changes the buttons states
-        Me.kbtn_history_back.Enabled = (Me.history_pos > 0)
-        Me.kbtn_history_forward.Enabled = (Me.history_pos < Me.history.Count - 1)
+        If Me.history_pos > 0 Then
+            Me.btn_history_backward.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.True
+        Else
+            Me.btn_history_backward.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.False
+        End If
+
+        If Me.history_pos < Me.history.Count - 1 Then
+            Me.btn_history_forwards.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.True
+        Else
+            Me.btn_history_forwards.Enabled = ComponentFactory.Krypton.Toolkit.ButtonEnabled.False
+        End If
     End Sub
 
     Public Sub CloseFile(Optional ByVal ShowLoadingPanel As Boolean = True)
@@ -901,7 +909,6 @@ Public Class frm_main
     End Sub
 
     Private Sub frm_main_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Me.kpnl_history_interface.Visible = False
         frm_main.ImageFormats.Add(".jpg")
         frm_main.ImageFormats.Add(".jpeg")
         frm_main.ImageFormats.Add(".png")
@@ -996,7 +1003,7 @@ Public Class frm_main
         Me.RefreshHistoryButtons()
     End Sub
 
-    Private Sub kbtn_history_back_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_history_back.Click
+    Private Sub kbtn_history_back_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         If (Me.history_pos > 0) Then
             Me.history_pos -= 1
             Me.OpenFile(Me.history(Me.history_pos), "", False)
@@ -1004,11 +1011,35 @@ Public Class frm_main
         Me.RefreshHistoryButtons()
     End Sub
 
-    Private Sub kbtn_history_forward_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles kbtn_history_forward.Click
+    Private Sub kbtn_history_forward_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         If (Me.history_pos < Me.history.Count - 1) Then
             Me.history_pos += 1
             Me.OpenFile(Me.history(Me.history_pos), "", False)
         End If
         Me.RefreshHistoryButtons()
+    End Sub
+
+    Private Sub btn_history_backward_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btn_history_backward.Click
+        If (Me.history_pos > 0) Then
+            Me.history_pos -= 1
+            Me.OpenFile(Me.history(Me.history_pos), "", False)
+        End If
+        Me.RefreshHistoryButtons()
+    End Sub
+
+    Private Sub btn_history_forwards_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btn_history_forwards.Click
+        If (Me.history_pos < Me.history.Count - 1) Then
+            Me.history_pos += 1
+            Me.OpenFile(Me.history(Me.history_pos), "", False)
+        End If
+        Me.RefreshHistoryButtons()
+    End Sub
+
+    Private Sub _MusicFile_EditedChanged() Handles _MusicFile.EditedChanged
+        If (Me._MusicFile.Edited) Then
+            Me.kbtn_editing_save.Text = "Aplicar *"
+        Else
+            Me.kbtn_editing_save.Text = "Aplicar"
+        End If
     End Sub
 End Class

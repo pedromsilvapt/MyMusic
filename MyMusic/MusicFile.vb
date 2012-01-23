@@ -7,6 +7,9 @@ Public Class MusicFile
 
     Public _Thumbnail As Image
     Public MusicTags As TagLib.File
+
+    Public Event EditedChanged()
+
     Private __Edited As Boolean = False
 
     Private tag As TagLib.Tag
@@ -20,7 +23,10 @@ Public Class MusicFile
             Return Me.__Edited
         End Get
         Set(ByVal value As Boolean)
-            Me.__Edited = value
+            If (Me.__Edited <> value) Then
+                Me.__Edited = value
+                RaiseEvent EditedChanged()
+            End If
         End Set
     End Property
 
